@@ -1,0 +1,75 @@
+{
+  "status": "approved_video_generated",
+  "createdAt": "2026-10-12",
+  "provider": "Higgsfield MCP",
+  "creditsSpent": 3,
+  "balanceAfter": 71,
+  "originalHeroMediaId": "ef7dcbbd-ef50-4163-88a0-11aeaa540105",
+  "frames": [
+    {
+      "id": "hero-start",
+      "method": "Exact original artwork composited in Higgsfield sandbox",
+      "file": "design/generated/cinematic/01-hero-start.png",
+      "preview": "design/generated/cinematic/01-hero-start-preview.webp",
+      "mediaId": "31970a70-c72a-451e-b653-81c8882a974a",
+      "width": 3840,
+      "height": 2160,
+      "splitX": 3072,
+      "tan": "#D0AB7B",
+      "chocolate": "#2E0E0B",
+      "heroImageBox": {
+        "x": 2492,
+        "y": 399,
+        "width": 1160,
+        "height": 1361
+      },
+      "credits": 0
+    },
+    {
+      "id": "milk-impact",
+      "method": "Reference-based generation",
+      "file": "design/generated/cinematic/02-milk-impact-original.png",
+      "preview": "design/generated/cinematic/02-milk-impact-preview.webp",
+      "jobId": "7e251352-5720-4f13-891b-4df47ae05f88",
+      "resultUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3KaKP7qeBPzaLBxVoolxeZcaBHb/hf_20261012_145042_7e251352-5720-4f13-891b-4df47ae05f88.png",
+      "width": 5504,
+      "height": 3072,
+      "credits": 3,
+      "params": {
+        "model": "nano_banana_2_1",
+        "resolution": "4k",
+        "thinking_level": "high",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "medias": [
+          {
+            "role": "image_references",
+            "value": "31970a70-c72a-451e-b653-81c8882a974a"
+          },
+          {
+            "role": "image_references",
+            "value": "ef7dcbbd-ef50-4163-88a0-11aeaa540105"
+          }
+        ],
+        "prompt": "Create the MILK IMPACT storyboard frame for a luxury cookie website scroll film, using image 1 as the exact composition and background reference and image 2 as the exact cookie identity reference. Fixed camera, landscape 16:9. Maintain a perfectly flat solid tan #D0AB7B background across precisely the left 80% of the canvas, and perfectly flat very dark chocolate #2E0E0B across precisely the right 20%, a sharp vertical boundary at x=80%, no horizon, gradients, texture or floor. Preserve very generous untouched negative space across the left 55% for live website typography, but do NOT render any text. At the colour boundary near the right side, show one elegant clear cylindrical milk tumbler with its base at 90% image height, centre at x=80%, glass height about 38% image height and width about 17% image width. Show the EXACT thick two-tone vanilla and cocoa pinwheel cookie from references falling upright diagonally into milk, lower third entering milk inside the glass. Its irregular baked vanilla/cocoa swirled profile, almonds and dark chocolate centre must remain recognisable. It is ONE original hero cookie, not generic chocolate-chip cookies, no other cookies. At impact a beautiful photorealistic ivory milk crown erupts upwards and opens outward, elegant sculptural fluid sheets and several sharply frozen droplets. Let the splash bridge the colour boundary, occupying x=59%-96%, y=24%-65%, fully contained within frame. Glass base fully visible. Scale cookie to fit physically inside glass rim, around 15% image width. The original decorative chocolate ribbon is absent in this later motion beat, only genuine milk splash at collision. Premium high-speed food advertising photograph, tactile crumb texture, rich warm cocoa and cream tones, soft light from upper left, convincing glass refraction and milk fluid physics. No new cookie flavour, no copy, no letters, no logo, no watermark, no checkerboard, no extra props, no hands. Keep the split at EXACTLY 80% across the whole frame. This is one impact moment, not a collage or website screenshot."
+      }
+    }
+  ],
+  "review": {
+    "opening": "Original hero artwork preserved; exact 80/20 split.",
+    "impact": "Recognisable two-tone pinwheel, whole glass visible, broad milk crown, open left copy area.",
+    "productionIssues": [
+      "Generated background has texture and colour drift; it does not pixel-match the CSS background.",
+      "Glass centre is slightly left of the 80% boundary; match anchor and cookie scale before motion production.",
+      "Output aspect ratio is 5504:3072 rather than exact 16:9; normalise production framing.",
+      "Edge droplets approach the right frame edge; add safe margin before final video.",
+      "Hero decorative ribbons need a designed handoff into moving cookie-only action.",
+      "These storyboard beats are not matched interpolation keyframes: prepare a still-milk start with identical glass and camera after creative approval."
+    ],
+    "alpha": "Opaque plates; no transparent video or foreground extraction delivered."
+  },
+  "applicationCodeChanged": false,
+  "videoGenerated": true,
+  "videoManifest": "design/generated/cinematic/video/video-manifest.json"
+}

@@ -1,315 +1,367 @@
 <script setup>
-import BaseButton from "../../components/ui/BaseButton.vue";
+/**
+ * CookieShowcase — "Hot picks this week". Alternating full-width cards with
+ * an oversized cookie breaking out of the bottom edge; the card floods with
+ * that cookie's colour on hover. Shows one live cookie from each range and
+ * falls back to the signature flavours if the catalogue can't be reached.
+ */
+import { computed, onMounted } from "vue";
+import { RouterLink } from "vue-router";
+import { ArrowRightIcon } from "@heroicons/vue/20/solid";
+import BaseButton from "../ui/BaseButton.vue";
+import { useCatalog, cookieImage, cookieName, imageFallback, onePerCategory } from "../../composables/useCatalog";
+import { useFormat } from "../../composables/useFormat";
+import { useScrollReveal } from "../../composables/useScrollReveal";
+import { formatCategoryLabel, categoryBlurb } from "../../constants/cookieCategories";
 
-const cookies = [
+const { cookies: catalog, load } = useCatalog();
+const { rand } = useFormat();
+const { vReveal } = useScrollReveal();
+
+onMounted(load);
+
+// Hover washes. Dark enough that white text stays above 4.5:1.
+const washes = ["#8A4B12", "#8E2440", "#9A5310", "#3D1F17"];
+
+const signature = [
   {
-    id: 1,
-    title: "Chocolate Chip",
+    title: "Double Chocolate Chunk",
+    description: "Deep cocoa dough, generous dark chocolate chunks and a crackled top, with crisp edges and a soft chocolate centre.",
+    image: "/img/cookies/double-chocolate-chunk.webp",
+  },
+  {
+    title: "Cinnamon Pecan",
+    description: "A warmly spiced cookie with a soft middle, gently crisp edges and toasted pecan pieces baked through the dough.",
+    image: "/img/cookies/cinnamon-pecan.webp",
+  },
+  {
+    title: "Lemon Almond",
+    description: "Bright lemon zest lifts a tender almond cookie, while toasted almond flakes bring a delicate crunch to its golden top.",
+    image: "/img/cookies/lemon-almond.webp",
+  },
+  {
+    title: "Raspberry Coconut",
+    description: "Tart raspberry pieces and toasted coconut brighten a soft vanilla cookie with lightly crisp edges.",
+    image: "/img/cookies/raspberry-coconut.webp",
+  },
+].map((c, i) => ({
+  ...c,
+  key: `signature-${i}`,
+  badge: "Freshly baked",
+  price: null,
+  to: { name: "Products" },
+  secondary: null,
+}));
+
+const cards = computed(() => {
+  const live = onePerCategory(catalog.value).slice(0, 4).map((c) => ({
+    key: c.cookieId,
+    title: cookieName(c),
     description:
-      "Our signature chocolate chip cookie made with Belgian chocolate and real butter.",
-    image: "/cookie.png",
-    color: "#E8992D",
-  },
-  {
-    id: 2,
-    title: "Red Velvet",
-    description: "A rich red velvet cookie with creamy white chocolate chunks.",
-    image: "/cookie2.png",
-    color: "#C24164",
-  },
-  {
-    id: 3,
-    title: "Caramel Crunch",
-    description:
-      "Golden caramel with crunchy biscuit pieces baked to perfection.",
-    image: "/cookie3.png",
-    color: "#D97706",
-  },
-  {
-    id: 4,
-    title: "Double Chocolate",
-    description: "For serious chocolate lovers with a soft gooey centre.",
-    image: "/cookie4.png",
-    color: "#5B3A29",
-  },
-];
+      c.longDescription ||
+      [categoryBlurb(c.category), c.ingredients && `Made with ${c.ingredients.toLowerCase()}.`]
+        .filter(Boolean)
+        .join(" "),
+    image: cookieImage(c),
+    onError: imageFallback(c),
+    badge: formatCategoryLabel(c.category),
+    price: c.price,
+    to: { name: "ProductDetail", params: { id: c.cookieId } },
+    secondary: { name: "Products", query: { category: c.category } },
+  }));
+  return (live.length ? live : signature).map((c, i) => ({ ...c, wash: washes[i % washes.length] }));
+});
 </script>
 
 <template>
-  <section class="py-1 bg-[#d0ab7b]">
-    <h2
-      class="text-[#35150D] text-center font-semibold leading-tight text-3xl sm:text-4xl lg:text-5xl py-16"
-    >
-      Hot Picks This Week
-    </h2>
-    <div class="mx-auto max-w-7xl px-6 lg:px-12">
-      <article
-        v-for="(cookie, index) in cookies"
-        :key="cookie.id"
-        class="cookie-card"
-        :class="{ reverse: index % 2 === 1 }"
-        :style="{ '--hover-color': cookie.color }"
-      >
-        <!-- Text -->
-        <div class="cookie-content">
-          <span class="cookie-badge">Freshly Baked</span>
+  <section class="bg-tan pt-20 md:pt-28 pb-20 sm:pb-36 lg:pb-44 overflow-hidden" aria-labelledby="showcase-title">
+    <div class="container-magic">
+      <h2 id="showcase-title" v-reveal class="font-display text-center text-display mb-16 sm:mb-28 lg:mb-40">
+        Hot picks this week
+      </h2>
 
-          <h2 class="cookie-title">
-            {{ cookie.title }}
-          </h2>
+      <div class="showcase-list">
+        <article
+          v-for="(cookie, index) in cards"
+          :key="cookie.key"
+          v-reveal
+          class="showcase-card group"
+          :class="{ reverse: index % 2 === 1 }"
+          :style="{ '--wash': cookie.wash }"
+        >
+          <!-- Text -->
+          <div class="showcase-content">
+            <span class="showcase-badge">{{ cookie.badge }}</span>
 
-          <p class="cookie-desc">
-            {{ cookie.description }}
-          </p>
-          <div class="cookie-buttons">
-            <!-- Desktop -->
-            <BaseButton variant="outline" class="hidden md:inline-flex"
-              >Learn More</BaseButton
-            >
+            <h3 class="showcase-title display">
+              <!-- On mobile this link stretches over the whole card -->
+              <RouterLink :to="cookie.to" class="showcase-title-link">{{ cookie.title }}</RouterLink>
+            </h3>
 
-            <!-- Desktop -->
-            <BaseButton variant="primary" class="hidden md:inline-flex"
-              >Order Now</BaseButton
-            >
+            <p class="showcase-desc">{{ cookie.description }}</p>
 
-            <!-- Mobile -->
-            <button class="md:hidden order-link">Order Now →</button>
+            <div class="showcase-actions">
+              <BaseButton :to="cookie.to" variant="primary" class="showcase-primary">
+                View cookie
+                <ArrowRightIcon class="h-5 w-5" />
+              </BaseButton>
+              <RouterLink v-if="cookie.secondary" :to="cookie.secondary" class="showcase-link">
+                More {{ cookie.badge.toLowerCase() }}
+              </RouterLink>
+              <span v-if="cookie.price" class="showcase-price tabular">{{ rand(cookie.price) }}</span>
+            </div>
           </div>
-        </div>
 
-        <!-- Image -->
-        <div class="cookie-image-wrap">
-          <img :src="cookie.image" :alt="cookie.title" class="cookie-big" />
-        </div>
-      </article>
+          <!-- Image -->
+          <div class="showcase-image-wrap" aria-hidden="true">
+            <img
+              :src="cookie.image"
+              alt=""
+              loading="lazy"
+              class="showcase-image"
+              @error="cookie.onError && cookie.onError($event)"
+            />
+          </div>
+        </article>
+      </div>
     </div>
   </section>
 </template>
 
 <style scoped>
-.cookie-card {
+/* ---------- Desktop / tablet: every card like the first. Short card,
+   cookie centred on it and taller than it, so it bursts out top and bottom ---------- */
+.showcase-list {
+  display: flex;
+  flex-direction: column;
+  gap: 17.6rem;
+}
+
+.showcase-card {
   position: relative;
   display: flex;
   align-items: center;
+  /* Same height for every card so each cookie bursts out the same way */
+  height: 45.6rem;
+  padding: 4.8rem 5.6rem;
+  border-radius: 28px;
   background: #e3d9c8;
-  border-radius: 40px;
-  width: 100%;
-  height: 420px;
-  margin-bottom: 250px;
-  padding: 50px;
-  overflow: visible;
-  transition: 0.35s;
+  transition: background-color 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.showcase-card:hover {
+  background: var(--wash);
 }
 
-.cookie-card:hover {
-  background: var(--hover-color);
-}
-
+/* Every other card is mirrored: text right, cookie left */
 .reverse {
   flex-direction: row-reverse;
 }
 
-.cookie-content {
-  flex: 1;
+.showcase-content {
+  position: relative;
   z-index: 2;
-  max-width: 55%;
+  max-width: 54%;
 }
-
-/* Reverse cards */
-.reverse .cookie-content {
+.reverse .showcase-content {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   text-align: right;
-  margin-left: auto;
 }
 
-.cookie-title {
-  font-size: clamp(2.5rem, 5vw, 5rem);
-  font-weight: 800;
-  line-height: 0.95;
-  color: #23130f;
-  margin: 12px 0;
-  transition: 0.3s;
-}
-
-.reverse .cookie-title {
-  text-align: right;
-}
-
-.cookie-card:hover .cookie-title {
-  color: white;
-}
-
-.cookie-desc {
-  max-width: 550px;
-  font-size: 1.15rem;
-  line-height: 1.8;
-  color: #555;
-  transition: 0.3s;
-}
-
-.reverse .cookie-desc {
-  text-align: right;
-}
-
-.cookie-card:hover .cookie-desc {
-  color: white;
-}
-
-.cookie-badge {
+.showcase-badge {
   display: inline-block;
-  background: #ffe3ef;
-  color: #c24164;
-  padding: 0.45rem 0.9rem;
+  padding: 0.64rem 1.44rem;
   border-radius: 999px;
-  font-size: 0.8rem;
-  font-weight: 600;
+  background: #2e0e0b;
+  color: #fbf9f4;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  transition: background-color 0.3s, color 0.3s;
+}
+.showcase-card:hover .showcase-badge {
+  background: #fbf9f4;
+  color: #2e0e0b;
 }
 
-.cookie-buttons {
+.showcase-title {
+  margin: 1.44rem 0 0.96rem;
+  font-size: var(--fs-display);
+  line-height: 1.1;
+  color: #2e0e0b;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+  transition: color 0.3s;
+}
+.showcase-title-link {
+  color: inherit;
+}
+
+.showcase-desc {
+  max-width: 54.4rem;
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  color: rgba(46, 14, 11, 0.8);
+  transition: color 0.3s;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.showcase-card:hover .showcase-title,
+.showcase-card:hover .showcase-desc,
+.showcase-card:hover .showcase-link,
+.showcase-card:hover .showcase-price {
+  color: #fbf9f4;
+}
+
+.showcase-actions {
   display: flex;
-  gap: 16px;
-  margin-top: 32px;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.2rem 2.4rem;
+  margin-top: 2.4rem;
+}
+.reverse .showcase-actions {
+  flex-direction: row-reverse;
+}
+.showcase-card:hover .showcase-primary {
+  background: #fbf9f4;
+  color: #2e0e0b;
 }
 
-.reverse .cookie-buttons {
-  justify-content: flex-end;
+.showcase-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 4.4rem;
+  font-weight: 700;
+  color: #2e0e0b;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  transition: color 0.3s;
 }
 
-.cookie-image-wrap {
+.showcase-price {
+  font-size: var(--fs-base);
+  font-weight: 800;
+  color: #2e0e0b;
+  transition: color 0.3s;
+}
+
+.showcase-image-wrap {
   position: absolute;
-  right: 20px;
-  bottom: -80px;
-  width: 550px;
+  top: 50%;
+  right: 3.2rem;
+  width: min(42%, 52.8rem);
+  transform: translateY(-50%);
+  pointer-events: none;
 }
-
-.reverse .cookie-image-wrap {
+.reverse .showcase-image-wrap {
   right: auto;
-  left: 20px;
-  justify-content: flex-start;
-  transform: scaleX(1);
+  left: 3.2rem;
 }
 
-.cookie-big {
+.showcase-image {
   width: 100%;
-  transition: 0.4s;
+  filter: drop-shadow(0 30px 30px rgba(46, 14, 11, 0.35));
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
-.cookie-card:hover .cookie-big {
-  transform: rotate(-5deg) scale(1.05);
+.showcase-card:hover .showcase-image {
+  transform: rotate(-3deg) scale(1.04);
 }
-
-.reverse .cookie-big {
+.reverse .showcase-image {
   transform: scaleX(-1);
 }
-
-.reverse:hover .cookie-big {
-  transform: scaleX(-1) rotate(-5deg) scale(1.05);
+.reverse:hover .showcase-image {
+  transform: scaleX(-1) rotate(-3deg) scale(1.04);
 }
 
-/* Mobile */
-@media (max-width: 768px) {
-  .cookie-card {
-    background: transparent;
-    height: 180px;
-    padding: 20px;
-    margin-bottom: 50px;
-    border-radius: 24px;
-    flex-direction: row;
-    overflow: visible;
+/* Tablet */
+@media (max-width: 1023px) {
+  .showcase-list {
+    gap: 12.8rem;
   }
-
-  .reverse {
-    flex-direction: row-reverse;
+  .showcase-card {
+    height: auto;
+    min-height: 25.6rem;
+    padding: 3.6rem 4rem;
   }
-
-  .cookie-content {
-    max-width: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  .showcase-content {
+    max-width: 58%;
   }
-
-  .reverse .cookie-content {
-    margin-left: auto;
-    align-items: flex-end;
-    text-align: right;
+  .showcase-image-wrap {
+    width: 38%;
+    right: 2rem;
   }
-
-  /* Hide badge */
-  .cookie-badge {
-    display: none;
-  }
-
-  /* Smaller title */
-  .cookie-title {
-    font-size: 2rem;
-    line-height: 1;
-    margin: 0 0 16px;
-  }
-
-  /* Hide description */
-  .cookie-desc {
-    display: none;
-  }
-
-  /* Hide Learn More button */
-  .cookie-buttons .outline,
-  .cookie-buttons > :first-child {
-    display: none;
-  }
-
-  .cookie-buttons {
-    margin-top: 0;
-  }
-
-  /* Make Order Now smaller */
-  .cookie-buttons :last-child {
-    transform: scale(0.9);
-    transform-origin: left center;
-  }
-
-  .reverse .cookie-buttons :last-child {
-    transform-origin: right center;
-  }
-
-  /* Smaller cookie */
-  .cookie-image-wrap {
-    width: 220px;
-    right: -35px;
-    bottom: -15px;
-  }
-
-  .reverse .cookie-image-wrap {
-    left: -45px;
+  .reverse .showcase-image-wrap {
     right: auto;
+    left: 2rem;
+  }
+}
+
+/* ---------- Mobile: slim card in the hover colour, alternating sides,
+   cookie much taller than the card so it bursts out like desktop ---------- */
+@media (max-width: 639px) {
+  .showcase-list {
+    gap: 7.2rem;
+  }
+  .showcase-card,
+  .showcase-card:hover {
+    height: auto;
+    min-height: 12.8rem;
+    padding: 2rem 2.4rem;
+    border-radius: 24px;
+    background: var(--wash);
+  }
+  .showcase-content {
+    position: static;
+    max-width: calc(100% - 16.8rem);
   }
 
-  .cookie-big {
-    width: 100%;
+  .showcase-badge,
+  .showcase-desc,
+  .showcase-actions {
+    display: none;
   }
 
-  .order-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: transparent;
-    border: none;
-    padding: 0;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #35150d;
-    cursor: pointer;
-    transition: all 0.25s ease;
+  .showcase-title,
+  .showcase-card:hover .showcase-title {
+    margin: 0;
+    font-size: var(--fs-base);
+    line-height: 1.1;
+    color: #fbf9f4;
+  }
+  /* Whole card is the tap target */
+  .showcase-title-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    border-radius: inherit;
   }
 
-  .order-link:hover {
-    transform: translateX(4px);
+  /* ~20rem tall cookie on an 12.8rem card */
+  .showcase-image-wrap {
+    width: 17.6rem;
+    right: 0.4rem;
   }
-
-  .cookie-card:hover .order-link {
-    color: white;
+  .reverse .showcase-image-wrap {
+    right: auto;
+    left: 0.4rem;
+  }
+  .reverse .showcase-image {
+    transform: scaleX(-1);
+  }
+  .showcase-card:hover .showcase-image {
+    transform: none;
+  }
+  .reverse:hover .showcase-image {
+    transform: scaleX(-1);
+  }
+  .showcase-image {
+    filter: drop-shadow(0 18px 20px rgba(0, 0, 0, 0.4));
   }
 }
 </style>

@@ -20,18 +20,18 @@ defineProps({
     ]"
   >
     <!-- Quote mark -->
-    <div class="text-primary text-6xl leading-none font-serif mb-2 select-none">"</div>
+    <div class="font-display text-primary text-display mb-2 select-none">"</div>
 
     <!-- Stars -->
     <RatingStars :rating="testimonial.rating" :show-value="false" size="md" class="mb-4" />
 
     <!-- Body -->
-    <p class="text-chocolate/80 text-card leading-relaxed flex-1 mb-6">
+    <p class="text-chocolate/80 text-base leading-relaxed flex-1 mb-6">
       {{ testimonial.text }}
     </p>
 
     <!-- Author -->
-    <div class="flex items-center gap-4 pt-5 border-t border-cream-300">
+    <div class="flex items-center gap-4 pt-5 border-t border-chocolate/15">
       <img
         :src="testimonial.avatar"
         :alt="testimonial.name"

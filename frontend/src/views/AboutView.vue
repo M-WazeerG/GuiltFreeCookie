@@ -1,139 +1,67 @@
-
 <script setup>
 /**
  * AboutView — brand story page.
- * Hero quote → story split → values grid → stats band → CTA.
+ * Story hero → ingredients split → why us → who we bake for → CTA.
  */
-import { useScrollReveal } from "../composables/useScrollReveal";
+import { ArrowRightIcon } from "@heroicons/vue/20/solid";
 import BaseButton from "../components/ui/BaseButton.vue";
+import PageHero from "../components/sections/PageHero.vue";
 import AboutSection from "../components/sections/AboutSection.vue";
 import WhyChooseUs from "../components/sections/WhyChooseUs.vue";
+import MadeForSection from "../components/sections/MadeForSection.vue";
 import CtaBanner from "../components/sections/CtaBanner.vue";
-import { ArrowRightIcon } from "@heroicons/vue/24/solid";
+import { useScrollReveal } from "../composables/useScrollReveal";
 
 const { vReveal } = useScrollReveal();
-
-const stats = [
-  { value: "2018", label: "Founded in Colombo" },
-  { value: "15K+", label: "Cookies baked weekly" },
-  { value: "4.9★", label: "Average customer rating" },
-  { value: "24hr", label: "Fresh delivery promise" },
-];
-
-const values = [
-  {
-    title: "Slow-crafted, never rushed",
-    description:
-      "Our dough rests overnight for deeper flavour. We bake in small batches every morning — never frozen, never stale.",
-    icon: "⏳",
-  },
-  {
-    title: "Transparent sourcing",
-    description:
-      "Every ingredient is traceable to its origin. We publish our supplier list yearly because integrity matters.",
-    icon: "🌿",
-  },
-  {
-    title: "Packaged with intention",
-    description:
-      "Plastic-free, compostable packaging. Beautiful enough to gift, sustainable enough to feel good about.",
-    icon: "🎁",
-  },
-];
 </script>
 
 <template>
-  <div class="pt-24">
-    <!-- Hero -->
-    <section
-      class="section bg-chocolate text-cream relative overflow-hidden texture-dark"
+  <div>
+    <PageHero
+      image="/img/banners/about-banner.webp"
+      :image-width="1400"
+      :image-height="788"
+      text="GuiltFreeCookie started with one question: why should a cookie come with guilt? So we rebuilt the classics with smarter ingredients and kept baking until nobody could tell the difference."
     >
-      <div
-        class="pointer-events-none absolute -top-32 -right-32 w-96 h-96 rounded-full bg-primary/15 blur-3xl"
-      />
-      <div
-        class="pointer-events-none absolute -bottom-32 -left-32 w-96 h-96 rounded-full bg-primary/15 blur-3xl"
-      />
+      Cookies that <span class="sticker">love you back</span>
+      <template #actions>
+        <BaseButton :to="{ name: 'Products' }" size="lg">
+          Shop cookies
+          <ArrowRightIcon class="h-5 w-5" />
+        </BaseButton>
+      </template>
+    </PageHero>
 
-      <div
-        class="container-max-w-5xl mx-auto px-6 text-center max-w-4xl relative"
-      >
-        <div v-reveal>
-          <span
-            class="inline-block text-sm font-medium uppercase tracking-[0.2em] text-primary mb-5"
-          >
-            Our Story
-          </span>
-          <h1
-            class="text-cream font-medium leading-tight mb-6 text-4xl lg:text-6xl"
-          >
-            We bake cookies the way <br />
-            <span class="text-primary">grandma used to</span> — only better.
-          </h1>
-          <p class="text-cream/70 text-body max-w-2xl mx-auto leading-relaxed">
-            What started in a tiny Colombo home kitchen in 2018 has grown into a
-            cult-favourite bakery serving cookie lovers across the island. Our
-            recipe hasn't changed — only the number of ovens has.
+    <!-- Story -->
+    <section class="section bg-background" aria-labelledby="story-title">
+      <div class="container-magic grid lg:grid-cols-[0.9fr_1.1fr] gap-10 lg:gap-20">
+        <h2 id="story-title" v-reveal class="font-display text-display lg:sticky lg:top-[calc(var(--nav-h)+3.2rem)] self-start">
+          Sweet first.<br />
+          <span class="text-primary-700">Smart underneath.</span>
+        </h2>
+        <div v-reveal data-reveal-delay="100" class="space-y-6">
+          <p class="prose-copy !text-base !leading-relaxed !text-chocolate">
+            Most "healthy" cookies taste like a compromise. We wanted the
+            opposite: a cookie you'd pick for the chocolate, that also happens
+            to work for the way you eat.
+          </p>
+          <p class="prose-copy">
+            That means low-GI sweeteners instead of sugar, almond flour instead
+            of refined wheat, and real dark chocolate instead of compound
+            coating. It means ranges for people managing diabetes, people
+            training hard, and people avoiding gluten or dairy.
+          </p>
+          <p class="prose-copy">
+            And it means we taste every batch the same way you will. If it isn't
+            a cookie we'd reach for twice, it doesn't go in the box.
           </p>
         </div>
       </div>
     </section>
 
-    <!-- Stats band -->
-    <section class="py-14 bg-background border-b border-cream-300">
-      <div class="container-magic">
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
-          <div
-            v-for="(s, i) in stats"
-            :key="s.label"
-            v-reveal
-            :data-reveal-delay="i * 80"
-            class="text-center"
-          >
-            <div class="text-4xl lg:text-5xl font-bold text-primary mb-1">
-              {{ s.value }}
-            </div>
-            <div class="text-chocolate/60 text-card">{{ s.label }}</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Story split -->
     <AboutSection />
-
-    <!-- Values -->
-    <section class="section bg-cream-50/60">
-      <div class="container-magic">
-        <div v-reveal class="text-center max-w-2xl mx-auto mb-14">
-          <span class="eyebrow">What We Stand For</span>
-          <h2 class="text-chocolate leading-tight">
-            Three values we
-            <span class="text-primary">never compromise</span> on
-          </h2>
-        </div>
-        <div class="grid md:grid-cols-3 gap-6">
-          <div
-            v-for="(v, i) in values"
-            :key="v.title"
-            v-reveal
-            :data-reveal-delay="i * 100"
-            class="bg-surface rounded-4xl p-8 shadow-soft hover:shadow-soft-lg hover:-translate-y-1.5 transition-all duration-500"
-          >
-            <div class="text-5xl mb-5">{{ v.icon }}</div>
-            <h3 class="text-xl font-semibold text-chocolate mb-3">
-              {{ v.title }}
-            </h3>
-            <p class="text-chocolate/70 text-card leading-relaxed">
-              {{ v.description }}
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <WhyChooseUs />
+    <MadeForSection />
     <CtaBanner />
   </div>
 </template>
-

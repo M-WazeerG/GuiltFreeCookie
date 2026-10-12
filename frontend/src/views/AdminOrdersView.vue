@@ -1,15 +1,18 @@
 <script setup>
 import { ClipboardDocumentListIcon } from "@heroicons/vue/24/outline";
+import AdminPageHeader from "../components/admin/AdminPageHeader.vue";
 </script>
 
 <template>
-  <div class="container-magic pt-28 pb-10">
-    <h1 class="text-h2 mb-8">Admin Dashboard</h1>
+  <div>
+    <AdminPageHeader title="Orders" description="Track and fulfil customer orders." />
 
-    <div class="card flex flex-col items-center justify-center text-center py-24 px-6">
-      <ClipboardDocumentListIcon class="h-12 w-12 text-chocolate/30 mb-4" />
-      <h3 class="text-xl font-semibold text-chocolate mb-2">Orders</h3>
-      <p class="text-chocolate/60">Order management is coming soon.</p>
+    <div class="card py-20 px-6 text-center">
+      <ClipboardDocumentListIcon class="mx-auto h-10 w-10 text-chocolate/35" />
+      <h2 class="mt-3 font-sans text-base font-semibold">No orders to show yet</h2>
+      <p class="mt-1 text-chocolate/70 max-w-sm mx-auto">
+        Orders will appear here once checkout goes live.
+      </p>
     </div>
   </div>
 </template>

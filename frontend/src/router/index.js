@@ -19,6 +19,7 @@ const routes = [
     path: "/products",
     name: "Products",
     component: ProductListView,
+    meta: { title: "Our cookies" },
   },
   {
     path: "/product/:id",
@@ -29,11 +30,39 @@ const routes = [
     path: "/contact",
     name: "Contact",
     component: () => import("../views/ContactView.vue"),
+    meta: { title: "Contact" },
   },
   {
     path: "/about",
     name: "About",
     component: () => import("../views/AboutView.vue"),
+    meta: { title: "About" },
+  },
+
+  // Legal
+  {
+    path: "/privacy-policy",
+    name: "PrivacyPolicy",
+    component: () => import("../views/legal/PrivacyPolicyView.vue"),
+    meta: { title: "Privacy Policy" },
+  },
+  {
+    path: "/terms",
+    name: "Terms",
+    component: () => import("../views/legal/TermsView.vue"),
+    meta: { title: "Terms and Conditions" },
+  },
+  {
+    path: "/cookie-policy",
+    name: "CookiePolicy",
+    component: () => import("../views/legal/CookiePolicyView.vue"),
+    meta: { title: "Cookie Policy" },
+  },
+  {
+    path: "/refund-policy",
+    name: "RefundPolicy",
+    component: () => import("../views/legal/RefundPolicyView.vue"),
+    meta: { title: "Refund Policy" },
   },
 
   // Admin Routes
@@ -77,7 +106,11 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior() {
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) return savedPosition;
+    if (to.hash) return { el: to.hash, top: 96, behavior: "smooth" };
+    // Query-only changes (product list filters) keep the scroll position.
+    if (to.path === from.path) return false;
     return { top: 0 };
   },
 });
@@ -90,6 +123,11 @@ router.beforeEach((to) => {
   if (to.name === "AdminLogin" && isAdminLoggedIn()) {
     return { name: "AdminDashboard" };
   }
+});
+
+const DEFAULT_TITLE = "GuiltFreeCookie | Chocolate cookies that love you back";
+router.afterEach((to) => {
+  document.title = to.meta.title ? `${to.meta.title} | GuiltFreeCookie` : DEFAULT_TITLE;
 });
 
 export default router;

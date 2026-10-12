@@ -1,0 +1,114 @@
+{
+  "createdAt": "2026-10-12",
+  "status": "generated_cutouts_delivered",
+  "provider": "Higgsfield MCP",
+  "modelRequested": "nano_banana_pro",
+  "modelReportedByJobs": "nano_banana_2",
+  "creditsSpent": 6,
+  "balanceAfter": 42,
+  "applicationCodeChanged": false,
+  "transferApproved": true,
+  "processing": "White connected backdrop removal at 7% fuzz; alpha eroded one source pixel and feathered 0.35px, original RGB preserved; trimmed and fitted within 1352px, 24px padding, WebP quality 88. Originals retained.",
+  "review": "Originals and transparent cutouts visually checked on brand tan and dark chocolate at preview scale. No baked text. These are grouped illustrations of the product range, not exact catalogue SKU photographs.",
+  "assets": [
+    {
+      "index": 0,
+      "page": "Products",
+      "slug": "products-banner",
+      "originalPath": "design/generated/banners/products-banner-original.png",
+      "webPath": "frontend/public/img/banners/products-banner.webp",
+      "publicImageUrl": "/img/banners/products-banner.webp",
+      "jobId": "019b5617-3ca2-41dd-8364-13ab814d0dd1",
+      "resultUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3KaKP7qeBPzaLBxVoolxeZcaBHb/hf_20261012_152020_019b5617-3ca2-41dd-8364-13ab814d0dd1.png",
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "medias": [
+          {
+            "role": "image_references",
+            "value": "bdbc3ffd-31b9-490a-b7f1-a84c41b2f42b"
+          },
+          {
+            "role": "image_references",
+            "value": "99aa6bc7-0a8c-4f20-9965-ce84695f6ef0"
+          },
+          {
+            "role": "image_references",
+            "value": "c77d851e-9f40-4f76-8dbc-da1ee37cbc23"
+          },
+          {
+            "role": "image_references",
+            "value": "5bdef8c1-d5d2-430b-9e91-6c7d857924df"
+          }
+        ],
+        "prompt": "[FORMAT]\nWide 16:9 photographic asset for the right-hand artwork slot of a cookie website header. This is an isolated cutout source, not a full website screenshot.\n[LIGHTING]\nLarge softbox at 45 degrees camera-left, 5000K neutral-warm light, gentle wraparound and a restrained right rim. Internal self-shadows reveal thickness; absolutely no cast shadow on the backdrop.\n[LENS & CAMERA]\n85mm lens, f/8, three-quarter front view, deep focus across every cookie, true baked texture and uneven handmade edges.\n[COLOR PALETTE]\nGolden biscuit, toasted almond cream, deep cocoa and restrained raspberry tones; appetising warm colour, no colour cast on white.\n[STYLE REFERENCE]\nSculptural asymmetrical food still life, precise editorial staging, tactile crumb and real chocolate texture, controlled studio food photography.\n[QUALITY MARKERS]\nTack-sharp commercial photography, hyper-detailed photorealistic rendering, editorial commercial standard, ultra-realistic textures and materials.\n[BACKGROUND AND DELIVERY]\nAll subjects isolated against one perfectly clean pure white #FFFFFF background. No surface, no horizon, no backdrop gradient, no contact shadow; this white is a removable matte for transparent website artwork. Every object fully within frame, generous 12% safe margin on all sides. No typography, logo, package branding or watermark.\n[FOCAL SUBJECT]\nAn exuberant but carefully balanced floating assortment of FIVE thick artisan cookies: two dark double-chocolate chunk cookies, one golden toasted almond vanilla, one pale vanilla white-chocolate chunk, one raspberry coconut with recognisable deep pink raspberry pieces. Match the baked cookie forms, thickness and toppings in the supplied product references; these are flavour references, not layouts. No pinwheel hero cookie.\n[COMPOSITION]\nA compact diagonal oval cluster offset just right of centre. One large dark cookie anchors the lower middle facing camera, the almond cookie above-left, raspberry cookie upper-right, white chocolate cookie lower-right, smaller dark cookie at back-left. Different subtle rotations and depths; limited overlap preserves recognition of every flavour. A few large dark chocolate chunks between cookies, no overwhelming debris. Freeze a cinematic mid-air moment, grouped into a single clear silhouette occupying 72% of canvas width and 74% height.\n[AVOID]\nNo AI artifacts, warped or smeared text, fake words, plastic look, waxy surfaces, cartoon rendering, people, fingers, melted geometry, doubled subjects, oversaturated HDR, halos, oversharpening, fluorescent flat lighting, harsh on-camera flash, generic stock compositions, unrelated logos, signatures, airbrush look, unrelated flat bands or fake panels, dull gradient zones, clipart, over-staged perfect symmetry, motion blur, haze, flour dust, tiny disconnected crumb clouds or cropped cookies.\nresolution: 2k"
+      },
+      "credits": 2
+    },
+    {
+      "index": 1,
+      "page": "About",
+      "slug": "about-banner",
+      "originalPath": "design/generated/banners/about-banner-original.png",
+      "webPath": "frontend/public/img/banners/about-banner.webp",
+      "publicImageUrl": "/img/banners/about-banner.webp",
+      "jobId": "deb0f82e-da71-4b66-a5f3-9452948f39ab",
+      "resultUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3KaKP7qeBPzaLBxVoolxeZcaBHb/hf_20261012_152017_deb0f82e-da71-4b66-a5f3-9452948f39ab.png",
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "medias": [
+          {
+            "role": "image_references",
+            "value": "bdbc3ffd-31b9-490a-b7f1-a84c41b2f42b"
+          },
+          {
+            "role": "image_references",
+            "value": "99aa6bc7-0a8c-4f20-9965-ce84695f6ef0"
+          }
+        ],
+        "prompt": "[FORMAT]\nWide 16:9 photographic asset for the right-hand artwork slot of a cookie website header. This is an isolated cutout source, not a full website screenshot.\n[LIGHTING]\nLarge softbox at 45 degrees camera-left, 5000K neutral-warm light, gentle wraparound and a restrained right rim. Internal self-shadows reveal thickness; absolutely no cast shadow on the backdrop.\n[LENS & CAMERA]\n85mm lens, f/8, three-quarter front view, deep focus across every cookie, true baked texture and uneven handmade edges.\n[COLOR PALETTE]\nGolden biscuit, toasted almond cream, deep cocoa and restrained raspberry tones; appetising warm colour, no colour cast on white.\n[STYLE REFERENCE]\nSculptural asymmetrical food still life, precise editorial staging, tactile crumb and real chocolate texture, controlled studio food photography.\n[QUALITY MARKERS]\nTack-sharp commercial photography, hyper-detailed photorealistic rendering, editorial commercial standard, ultra-realistic textures and materials.\n[BACKGROUND AND DELIVERY]\nAll subjects isolated against one perfectly clean pure white #FFFFFF background. No surface, no horizon, no backdrop gradient, no contact shadow; this white is a removable matte for transparent website artwork. Every object fully within frame, generous 12% safe margin on all sides. No typography, logo, package branding or watermark.\n[FOCAL SUBJECT]\nAn ingredient-led cookie still life: one thick double chocolate chunk cookie broken into two generous halves revealing a tender cocoa crumb and dark chocolate chunks, alongside one intact golden toasted almond vanilla cookie. Faithfully use the two supplied cookie references for baked dough, toppings and thickness. Include only a small polished dark walnut measuring spoon holding whole almonds, three almond flakes and two large dark chocolate chunks; these are conceptual flavour cues, not a recipe diagram.\n[COMPOSITION]\nCompact asymmetrical sculptural arrangement: intact almond cookie standing tilted behind at right, two broken dark cookie halves opening outward at front left, small walnut spoon diagonal along lower right. Cookie pieces are dominant, spoon is subordinate. The arrangement floats cleanly without a table or floor, with generous pure-white border, occupies 70% width and 70% height. Clear tactile cut surfaces and natural imperfect crumb. Calm craft mood; no person, kitchen or flour cloud.\n[AVOID]\nNo AI artifacts, warped or smeared text, fake words, plastic look, waxy surfaces, cartoon rendering, people, fingers, melted geometry, doubled subjects, oversaturated HDR, halos, oversharpening, fluorescent flat lighting, harsh on-camera flash, generic stock compositions, unrelated logos, signatures, airbrush look, unrelated flat bands or fake panels, dull gradient zones, clipart, over-staged perfect symmetry, motion blur, haze, flour dust, tiny disconnected crumb clouds or cropped cookies.\nresolution: 2k"
+      },
+      "credits": 2
+    },
+    {
+      "index": 2,
+      "page": "Contact",
+      "slug": "contact-banner",
+      "originalPath": "design/generated/banners/contact-banner-original.png",
+      "webPath": "frontend/public/img/banners/contact-banner.webp",
+      "publicImageUrl": "/img/banners/contact-banner.webp",
+      "jobId": "e17ee0bd-59f5-4ae2-8cae-5f08c074cb49",
+      "resultUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3KaKP7qeBPzaLBxVoolxeZcaBHb/hf_20261012_152018_e17ee0bd-59f5-4ae2-8cae-5f08c074cb49.png",
+      "params": {
+        "model": "nano_banana_pro",
+        "resolution": "2k",
+        "aspect_ratio": "16:9",
+        "count": 1,
+        "use_unlim": false,
+        "medias": [
+          {
+            "role": "image_references",
+            "value": "bdbc3ffd-31b9-490a-b7f1-a84c41b2f42b"
+          },
+          {
+            "role": "image_references",
+            "value": "99aa6bc7-0a8c-4f20-9965-ce84695f6ef0"
+          },
+          {
+            "role": "image_references",
+            "value": "c77d851e-9f40-4f76-8dbc-da1ee37cbc23"
+          }
+        ],
+        "prompt": "[FORMAT]\nWide 16:9 photographic asset for the right-hand artwork slot of a cookie website header. This is an isolated cutout source, not a full website screenshot.\n[LIGHTING]\nLarge softbox at 45 degrees camera-left, 5000K neutral-warm light, gentle wraparound and a restrained right rim. Internal self-shadows reveal thickness; absolutely no cast shadow on the backdrop.\n[LENS & CAMERA]\n85mm lens, f/8, three-quarter front view, deep focus across every cookie, true baked texture and uneven handmade edges.\n[COLOR PALETTE]\nGolden biscuit, toasted almond cream, deep cocoa and restrained raspberry tones; appetising warm colour, no colour cast on white.\n[STYLE REFERENCE]\nSculptural asymmetrical food still life, precise editorial staging, tactile crumb and real chocolate texture, controlled studio food photography.\n[QUALITY MARKERS]\nTack-sharp commercial photography, hyper-detailed photorealistic rendering, editorial commercial standard, ultra-realistic textures and materials.\n[BACKGROUND AND DELIVERY]\nAll subjects isolated against one perfectly clean pure white #FFFFFF background. No surface, no horizon, no backdrop gradient, no contact shadow; this white is a removable matte for transparent website artwork. Every object fully within frame, generous 12% safe margin on all sides. No typography, logo, package branding or watermark.\n[FOCAL SUBJECT]\nA welcoming small arrangement of FOUR artisan cookies ready to share: two thick dark chocolate chunk cookies stacked casually, a golden toasted almond vanilla cookie leaning against the stack, and one pale vanilla white-chocolate cookie tipped toward the viewer. Match the real baked forms, thickness and toppings from the supplied references. No plate, no cup, no gift box, no stationery or invented packaging.\n[COMPOSITION]\nOne cohesive intimate sculptural cluster slightly right of centre, taking 62% of frame width and 70% of height. The two-cookie stack sits lower-right, the almond cookie leans behind at upper-right, and the vanilla cookie tilts in front-left. Uneven handmade edges, appetising visible chocolate. Two large chocolate chunks near the base only. Warm convivial mood and visual suggestion of sharing without people. Isolate the entire grouped arrangement, with no supporting surface or backdrop shadow.\n[AVOID]\nNo AI artifacts, warped or smeared text, fake words, plastic look, waxy surfaces, cartoon rendering, people, fingers, melted geometry, doubled subjects, oversaturated HDR, halos, oversharpening, fluorescent flat lighting, harsh on-camera flash, generic stock compositions, unrelated logos, signatures, airbrush look, unrelated flat bands or fake panels, dull gradient zones, clipart, over-staged perfect symmetry, motion blur, haze, flour dust, tiny disconnected crumb clouds or cropped cookies.\nresolution: 2k"
+      },
+      "credits": 2
+    }
+  ]
+}

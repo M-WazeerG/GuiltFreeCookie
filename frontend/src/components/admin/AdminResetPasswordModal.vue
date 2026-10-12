@@ -76,14 +76,14 @@ const copyPassword = async () => {
 
     <template v-else>
       <p class="text-chocolate/70 mb-3">
-        Share this temporary password with {{ admin?.firstName }} securely — it won't be shown
+        Share this temporary password with {{ admin?.firstName }} securely. It won't be shown
         again and expires in 24 hours.
       </p>
-      <div class="flex items-center gap-2 bg-cream-100 rounded-2xl px-4 py-3 mb-6">
-        <code class="flex-1 font-mono text-lg text-chocolate tracking-wide">{{ tempPassword }}</code>
+      <div class="flex items-center gap-2 bg-chocolate/[0.06] rounded-2xl px-4 py-3 mb-6">
+        <code class="flex-1 font-mono text-base text-chocolate tracking-wide">{{ tempPassword }}</code>
         <button
           type="button"
-          class="h-9 w-9 flex items-center justify-center rounded-full text-chocolate/60 hover:text-chocolate hover:bg-cream-200 transition-colors"
+          class="h-9 w-9 flex items-center justify-center rounded-full text-chocolate/60 hover:text-chocolate hover:bg-chocolate/[0.07] transition-colors"
           aria-label="Copy password"
           @click="copyPassword"
         >

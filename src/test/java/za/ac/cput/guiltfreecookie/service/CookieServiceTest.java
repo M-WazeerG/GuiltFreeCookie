@@ -85,6 +85,7 @@ class CookieServiceTest {
                 .setCookieId("CK001")
                 .setCategory(CookieCategory.VEGAN)
                 .setDescription("Updated Description")
+                .setLongDescription("Updated long description")
                 .setIngredients("Updated Ingredients")
                 .setAllergies("Updated Allergies")
                 .setPrice(40.00)
@@ -99,6 +100,7 @@ class CookieServiceTest {
         assertEquals("CK001", result.getCookieId());
         assertEquals(CookieCategory.VEGAN, result.getCategory());
         assertEquals("Updated Description", result.getDescription());
+        assertEquals("Updated long description", result.getLongDescription());
         assertEquals("Updated Ingredients", result.getIngredients());
         assertEquals("Updated Allergies", result.getAllergies());
         assertEquals(40.00, result.getPrice());

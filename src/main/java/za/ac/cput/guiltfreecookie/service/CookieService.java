@@ -41,6 +41,7 @@ public class CookieService implements IService<Cookie, String> {
                 .copy(existing)
                 .setCategory(cookie.getCategory())
                 .setDescription(cookie.getDescription())
+                .setLongDescription(cookie.getLongDescription())
                 .setIngredients(cookie.getIngredients())
                 .setAllergies(cookie.getAllergies())
                 .setPrice(cookie.getPrice())

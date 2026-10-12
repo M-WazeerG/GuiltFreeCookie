@@ -15,6 +15,10 @@ public class Cookie {
     private CookieCategory category;
 
     private String description;
+
+    @Column(name = "long_description", length = 1000)
+    private String longDescription;
+
     private String ingredients;
     private String allergies;
     private Double price;
@@ -28,6 +32,7 @@ public class Cookie {
         this.cookieId = builder.cookieId;
         this.category = builder.category;
         this.description = builder.description;
+        this.longDescription = builder.longDescription;
         this.ingredients = builder.ingredients;
         this.allergies = builder.allergies;
         this.price = builder.price;
@@ -45,6 +50,10 @@ public class Cookie {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getLongDescription() {
+        return longDescription;
     }
 
     public String getIngredients() {
@@ -73,6 +82,7 @@ public class Cookie {
                 "cookieId='" + cookieId + '\'' +
                 ", category=" + category +
                 ", description='" + description + '\'' +
+                ", longDescription='" + longDescription + '\'' +
                 ", ingredients='" + ingredients + '\'' +
                 ", allergies='" + allergies + '\'' +
                 ", price=" + price +
@@ -85,6 +95,7 @@ public class Cookie {
         private String cookieId;
         private CookieCategory category;
         private String description;
+        private String longDescription;
         private String ingredients;
         private String allergies;
         private Double price;
@@ -103,6 +114,11 @@ public class Cookie {
 
         public Builder setDescription(String description) {
             this.description = description;
+            return this;
+        }
+
+        public Builder setLongDescription(String longDescription) {
+            this.longDescription = longDescription;
             return this;
         }
 
@@ -135,6 +151,7 @@ public class Cookie {
             this.cookieId = cookie.cookieId;
             this.category = cookie.category;
             this.description = cookie.description;
+            this.longDescription = cookie.longDescription;
             this.ingredients = cookie.ingredients;
             this.allergies = cookie.allergies;
             this.price = cookie.price;

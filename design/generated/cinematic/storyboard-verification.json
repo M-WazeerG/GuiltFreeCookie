@@ -1,0 +1,34 @@
+[
+  {
+    "file": "01-hero-start.png",
+    "width": 3840,
+    "height": 2160,
+    "mode": "RGBA",
+    "bytes": 5227090,
+    "sha256": "d753d481d4d21a17cc173b398476b0fe3d8f2a415d829fe835b68f575010fc04"
+  },
+  {
+    "file": "02-milk-impact-original.png",
+    "width": 5504,
+    "height": 3072,
+    "mode": "RGBA",
+    "bytes": 23671841,
+    "sha256": "d25f66e8f8063b96485383eb106235758f9f55a324e37d5edf7c76148d0d1abb"
+  },
+  {
+    "file": "01-hero-start-preview.webp",
+    "width": 1600,
+    "height": 900,
+    "mode": "RGB",
+    "bytes": 54150,
+    "sha256": "47860bb5687031adb22d8cc0b1e707bd31da50894a06559fc5a92ce4ab5b1f8b"
+  },
+  {
+    "file": "02-milk-impact-preview.webp",
+    "width": 1600,
+    "height": 893,
+    "mode": "RGB",
+    "bytes": 40166,
+    "sha256": "3ac0e42d4b54516b33f36616a295c4e8fe4e7f8c3ab724233c46df8e42087574"
+  }
+]

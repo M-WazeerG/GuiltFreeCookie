@@ -1,13 +1,17 @@
 <script setup>
+/**
+ * CookieGrid — admin cookie list. A table from md up, stacked rows below.
+ */
 import {
   PencilSquareIcon,
   TrashIcon,
   ArchiveBoxIcon,
-  ArchiveBoxXMarkIcon,
+  ArrowUturnLeftIcon,
 } from "@heroicons/vue/24/outline";
-import cookieApi from "../../api/cookieApi";
+import { cookieImage, imageFallback } from "../../composables/useCatalog";
+import { useFormat } from "../../composables/useFormat";
 import { formatCategoryLabel } from "../../constants/cookieCategories";
-import BaseBadge from "../ui/BaseBadge.vue";
+import IconAction from "./IconAction.vue";
 
 defineProps({
   cookies: {
@@ -17,79 +21,81 @@ defineProps({
 });
 
 const emit = defineEmits(["edit", "delete", "archive"]);
-
-const displayImage = (cookie) =>
-  cookieApi.getImageUrl(cookie.image) || "/cookie.png";
+const { rand } = useFormat();
 </script>
 
 <template>
-  <div
-    class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-  >
-    <article
-      v-for="cookie in cookies"
-      :key="cookie.cookieId"
-      class="card p-5 flex flex-col gap-4"
-      :class="{ 'opacity-60': cookie.archived }"
-    >
-      <div
-        class="relative w-full aspect-square rounded-2xl overflow-hidden bg-cream-100"
-      >
-        <img
-          :src="displayImage(cookie)"
-          :alt="cookie.description"
-          class="w-full h-full object-cover"
-        />
-        <BaseBadge
-          v-if="cookie.archived"
-          variant="cream"
-          size="sm"
-          class="absolute top-3 left-3"
+  <div class="card overflow-hidden">
+    <table class="w-full text-left">
+      <thead class="hidden md:table-header-group bg-cream-400/40 text-sm font-semibold text-chocolate/70">
+        <tr>
+          <th scope="col" class="py-3 pl-5 pr-3 font-semibold">Cookie</th>
+          <th scope="col" class="py-3 px-3 font-semibold">Range</th>
+          <th scope="col" class="py-3 px-3 font-semibold text-right">Price</th>
+          <th scope="col" class="py-3 px-3 font-semibold">Status</th>
+          <th scope="col" class="py-3 pl-3 pr-5 font-semibold text-right"><span class="sr-only">Actions</span></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-chocolate/10">
+        <tr
+          v-for="cookie in cookies"
+          :key="cookie.cookieId"
+          class="grid grid-cols-[auto_1fr_auto] items-center gap-x-3 gap-y-1 p-4 md:table-row md:p-0 hover:bg-cream-400/25 transition-colors"
         >
-          Archived
-        </BaseBadge>
-      </div>
+          <!-- Cookie -->
+          <td class="col-span-2 md:py-3 md:pl-5 md:pr-3">
+            <div class="flex items-center gap-3.5 min-w-0">
+              <div
+                class="h-14 w-14 shrink-0 rounded-xl bg-chocolate/[0.06] flex items-center justify-center overflow-hidden"
+                :class="{ 'grayscale opacity-60': cookie.archived }"
+              >
+                <img :src="cookieImage(cookie)" @error="imageFallback(cookie)($event)" alt="" class="h-[85%] w-[85%] object-contain" loading="lazy" />
+              </div>
+              <div class="min-w-0">
+                <p class="font-semibold text-chocolate truncate" :class="{ 'text-chocolate/60': cookie.archived }">
+                  {{ cookie.description }}
+                </p>
+                <p class="text-sm text-chocolate/65 truncate max-w-[44.8rem]">{{ cookie.ingredients }}</p>
+              </div>
+            </div>
+          </td>
 
-      <div class="flex-1 space-y-2">
-        <BaseBadge variant="primary" size="sm">{{
-          formatCategoryLabel(cookie.category)
-        }}</BaseBadge>
-        <h3 class="text-lg font-semibold text-chocolate leading-snug">
-          {{ cookie.description }}
-        </h3>
-        <p class="text-2xl font-bold text-chocolate">R{{ cookie.price }}</p>
-      </div>
+          <!-- Range -->
+          <td class="hidden md:table-cell px-3 text-sm text-chocolate/85 whitespace-nowrap">
+            {{ formatCategoryLabel(cookie.category) }}
+          </td>
 
-      <div class="flex gap-2">
-        <button
-          type="button"
-          class="flex-1 inline-flex items-center justify-center gap-1.5 rounded-full bg-primary/15 text-primary-700 text-sm font-medium py-2.5 hover:bg-primary/25 transition-colors duration-300"
-          @click="emit('archive', cookie)"
-        >
-          <ArchiveBoxXMarkIcon v-if="cookie.archived" class="h-4 w-4" />
-          <ArchiveBoxIcon v-else class="h-4 w-4" />
-          {{ cookie.archived ? "Restore" : "Archive" }}
-        </button>
-        <button
-          type="button"
-          class="h-10 w-10 shrink-0 inline-flex items-center justify-center rounded-full bg-cream-100 text-chocolate hover:bg-cream-200 transition-colors duration-300"
-          aria-label="Edit"
-          title="Edit"
-          @click="emit('edit', cookie)"
-        >
-          <PencilSquareIcon class="h-4 w-4" />
-        </button>
+          <!-- Price -->
+          <td class="row-start-1 col-start-3 text-right md:px-3 font-semibold tabular whitespace-nowrap">
+            {{ rand(cookie.price) }}
+          </td>
 
-        <button
-          type="button"
-          class="h-10 w-10 shrink-0 inline-flex items-center justify-center rounded-full bg-red-50 text-red-600 hover:bg-red-100 transition-colors duration-300"
-          aria-label="Delete"
-          title="Delete"
-          @click="emit('delete', cookie)"
-        >
-          <TrashIcon class="h-4 w-4" />
-        </button>
-      </div>
-    </article>
+          <!-- Status -->
+          <td class="col-span-2 md:col-span-1 md:px-3 flex md:table-cell items-center gap-2 text-sm">
+            <span
+              class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-sm font-semibold whitespace-nowrap"
+              :class="cookie.archived ? 'bg-chocolate/[0.08] text-chocolate/75' : 'bg-emerald-800/15 text-emerald-900'"
+            >
+              <span class="h-1.5 w-1.5 rounded-full" :class="cookie.archived ? 'bg-chocolate/40' : 'bg-emerald-600'" />
+              {{ cookie.archived ? "Archived" : "On menu" }}
+            </span>
+            <span class="md:hidden text-chocolate/65 truncate">{{ formatCategoryLabel(cookie.category) }}</span>
+          </td>
+
+          <!-- Actions -->
+          <td class="row-start-2 col-start-3 md:pl-3 md:pr-5">
+            <div class="flex justify-end gap-0.5">
+              <IconAction label="Edit" :icon="PencilSquareIcon" @click="emit('edit', cookie)" />
+              <IconAction
+                :label="cookie.archived ? 'Put back on menu' : 'Archive'"
+                :icon="cookie.archived ? ArrowUturnLeftIcon : ArchiveBoxIcon"
+                @click="emit('archive', cookie)"
+              />
+              <IconAction label="Delete" tone="danger" :icon="TrashIcon" @click="emit('delete', cookie)" />
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>

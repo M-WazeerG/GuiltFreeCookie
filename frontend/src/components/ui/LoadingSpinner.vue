@@ -34,14 +34,14 @@ const sizeClass = computed(() => {
   >
     <div
       :class="sizeClass"
-      class="rounded-full border-4 border-cream-300 border-t-primary animate-spin"
+      class="rounded-full border-4 border-chocolate/15 border-t-primary animate-spin"
     />
-    <p v-if="label" class="mt-4 text-chocolate/70 text-card animate-pulse">{{ label }}</p>
+    <p v-if="label" class="mt-4 text-chocolate/70 text-base animate-pulse">{{ label }}</p>
   </div>
   <div v-else class="inline-flex flex-col items-center justify-center gap-3">
     <div
       :class="sizeClass"
-      class="rounded-full border-4 border-cream-300 border-t-primary animate-spin"
+      class="rounded-full border-4 border-chocolate/15 border-t-primary animate-spin"
     />
     <p v-if="label" class="text-chocolate/60 text-sm animate-pulse">{{ label }}</p>
   </div>

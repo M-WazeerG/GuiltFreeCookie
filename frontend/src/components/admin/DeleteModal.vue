@@ -18,7 +18,7 @@ const emit = defineEmits(["confirm", "close"]);
 
 <template>
   <BaseModal :open="open" title="Delete cookie?" size="sm" @close="emit('close')">
-    <p class="text-chocolate/70 mb-6">
+    <p class="text-chocolate/80 mb-6">
       Are you sure you want to delete
       <span class="font-semibold text-chocolate">{{ cookie?.description }}</span>? This
       can't be undone.
@@ -26,13 +26,7 @@ const emit = defineEmits(["confirm", "close"]);
 
     <div class="flex justify-end gap-3">
       <BaseButton variant="outline" size="sm" @click="emit('close')">Cancel</BaseButton>
-      <button
-        type="button"
-        class="btn text-sm px-5 py-2.5 bg-red-600 text-white hover:bg-red-700 hover:-translate-y-0.5 active:translate-y-0"
-        @click="emit('confirm')"
-      >
-        Delete
-      </button>
+      <BaseButton variant="danger" size="sm" @click="emit('confirm')">Delete</BaseButton>
     </div>
   </BaseModal>
 </template>

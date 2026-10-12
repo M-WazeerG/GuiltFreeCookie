@@ -1,0 +1,95 @@
+{
+  "status": "generated_verified_handoff_ready",
+  "createdAt": "2026-10-12",
+  "provider": "Higgsfield MCP",
+  "jobId": "14b057a2-2efe-45a6-8e86-a1e9b08ddea0",
+  "model": "wan3_0",
+  "params": {
+    "model": "wan3_0",
+    "duration": 6,
+    "resolution": "1080p",
+    "aspect_ratio": "16:9",
+    "generate_audio": false,
+    "enable_thinking": true,
+    "use_unlim": false,
+    "count": 1,
+    "medias": [
+      {
+        "role": "start_image",
+        "value": "48715e80-1ddb-477d-b61e-a218d77e8ebd"
+      },
+      {
+        "role": "end_image",
+        "value": "9d21b123-5108-44e5-b747-8a9f77ff14a3"
+      }
+    ],
+    "prompt": "One continuous six-second premium food advertising shot. Use the supplied first and last frames as exact composition guides. Absolutely locked camera, no pan, no zoom, no cuts. A single thick vanilla-and-cocoa pinwheel cookie with an irregular missing wedge and dark centre hangs above a stationary clear tumbler of milk, centred at the 80-percent vertical colour boundary. Keep the cookie's distinctive baked swirl identity consistent. 0 to 1 seconds: brief suspended anticipation above perfectly still milk. 1 to 3 seconds: the cookie drops straight down under gravity, with only a tiny natural tilt, into the centre of the glass. 3 to 5 seconds: the lower cookie enters the milk and displaces it into a beautiful expanding ivory crown splash, elegant fluid sheets opening upward and outward, several suspended droplets. 5 to 6 seconds: cinematic slowed peak splash approaching the supplied end-frame pose. The glass stays absolutely fixed in location, scale and shape; preserve its base and rim, realistic milk refraction. Keep the cookie one piece, no morphing, no extra cookies. Preserve the exact flat tan left 80% and flat dark chocolate right 20% backdrop, a sharp vertical boundary fixed at 80% of frame width. Leave left half empty for website copy. No background movement, no ground plane, no changes of light, no text, logos, hands, sound or watermark. Full glass visible throughout. Milk crown stays within frame. This is a physically coherent downward cookie impact, never the cookie rising out of milk."
+  },
+  "credits": {
+    "startFrame": 2,
+    "video": 21,
+    "totalThisStep": 23,
+    "previousStoryboard": 3
+  },
+  "sourceStartGeneration": {
+    "jobId": "41502d19-e8d3-4fea-ba14-35872f858cee",
+    "params": {
+      "model": "nano_banana_2_1",
+      "resolution": "2k",
+      "thinking_level": "high",
+      "aspect_ratio": "16:9",
+      "count": 1,
+      "use_unlim": false,
+      "medias": [
+        {
+          "role": "image_references",
+          "value": "9d21b123-5108-44e5-b747-8a9f77ff14a3"
+        }
+      ],
+      "prompt": "Edit this exact image into the BEFORE-IMPACT first frame of the same locked-off video. Preserve the exact canvas composition, perfectly flat tan left 80% and dark chocolate right 20% background, exact glass position and size, glass shape, refraction and warm studio light. The glass MUST remain in precisely the same pixel location as the reference. Remove ALL splash sheets and ALL airborne milk droplets. Show a clean intact oval glass rim and calm flat milk surface inside the same glass, milk level 85% full. Lift the SAME single vanilla-and-cocoa pinwheel cookie straight vertically up, keeping its size and orientation and exact distinctive irregular partial-circle silhouette, swirl wedges, crumb and dark filling. Cookie centre should be around x=80%,y=24% of image, its lowest point at y=36%, leaving a clear empty-air gap above glass rim which remains near y=55%. Only one cookie. This is the instant before it drops. No liquid in air, no chocolate ribbons, no ground shadows, no crumbs, no text, no watermark, no camera reframing, no zoom, no new objects, no changes in the background split. Match reference identically everywhere except the removal of splash and upward position of the cookie. Full glass base visible. Photorealistic product photography."
+    }
+  },
+  "keyframes": {
+    "start": "design/generated/cinematic/video/start-keyframe.png",
+    "end": "design/generated/cinematic/video/impact-keyframe.png",
+    "width": 1920,
+    "height": 1080,
+    "splitX": 1536,
+    "notes": "Matched plates in Higgsfield sandbox: exterior background replaced with exact flat brand colours, impact scaled/repositioned to boundary, start glass height aligned to impact glass. Opaque plates; not transparent foregrounds."
+  },
+  "applicationCodeChanged": false,
+  "balanceAfter": 48,
+  "sourceVideo": {
+    "file": "cookie-drop-original.mp4",
+    "width": 1920,
+    "height": 1080,
+    "durationSeconds": 6,
+    "fps": 30,
+    "frameCount": 180,
+    "audio": false,
+    "alpha": false
+  },
+  "deliverables": {
+    "web": "cookie-drop-web.mp4",
+    "scroll": "cookie-drop-scroll.mp4",
+    "poster": "first-frame.webp",
+    "splashPoster": "splash-frame.webp",
+    "contactSheet": "motion-contact-timed.jpg"
+  },
+  "timing": {
+    "impactWindowSeconds": [
+      2.4,
+      2.7
+    ],
+    "revealStartSeconds": 3.3,
+    "lateReboundWindowSeconds": [
+      4,
+      6
+    ]
+  },
+  "review": {
+    "method": "12 sampled frames at 0.5-second intervals",
+    "limitation": "Late upward rebound; use the eight-cookie reveal around 3.3 seconds to take over. Mobile framing and browser integration untested."
+  },
+  "transferApproved": true
+}

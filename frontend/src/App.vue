@@ -1,37 +1,62 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-background">
+  <!-- Admin area: its own shell, no store chrome -->
+  <AdminShell v-if="route.meta.requiresAdmin">
+    <RouterView v-slot="{ Component, route: currentRoute }">
+      <Transition name="page" mode="out-in">
+        <component :is="Component" :key="currentRoute.path" />
+      </Transition>
+    </RouterView>
+  </AdminShell>
+
+  <div v-else class="min-h-[100dvh] flex flex-col bg-background">
+    <!-- Sentinel the navbar watches to know when the page has scrolled -->
+    <div id="top-sentinel" class="absolute top-0 left-0 h-6 w-px" aria-hidden="true" />
+
     <TheNavbar v-if="!route.meta.hideChrome" />
 
     <main class="flex-1">
       <RouterView v-slot="{ Component, route: currentRoute }">
         <Transition name="page" mode="out-in">
-          <component :is="Component" :key="currentRoute.fullPath" />
+          <component :is="Component" :key="currentRoute.path" />
         </Transition>
       </RouterView>
     </main>
 
     <TheFooter v-if="!route.meta.hideChrome" />
-    <ToastContainer />
   </div>
+
+  <ToastContainer />
 </template>
 
 <script setup>
+import { onMounted, onUnmounted } from "vue";
 import { RouterView, useRoute } from "vue-router";
 import TheNavbar from "./layout/TheNavbar.vue";
 import TheFooter from "./layout/TheFooter.vue";
+import AdminShell from "./layout/AdminShell.vue";
 import ToastContainer from "./components/ui/ToastContainer.vue";
+import { useToast } from "./composables/useToast";
 
 const route = useRoute();
+const { showToast } = useToast();
+
+// Tell people when they've lost connection instead of letting requests
+// fail silently, and again when it comes back.
+const onOffline = () =>
+  showToast("You're offline. We'll keep what's on screen until you reconnect.", "error", 6000);
+const onOnline = () => showToast("Back online.", "success");
+onMounted(() => {
+  window.addEventListener("offline", onOffline);
+  window.addEventListener("online", onOnline);
+});
+onUnmounted(() => {
+  window.removeEventListener("offline", onOffline);
+  window.removeEventListener("online", onOnline);
+});
 </script>
 
 <style>
 #app {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-main {
-  flex: 1;
+  min-height: 100dvh;
 }
 </style>

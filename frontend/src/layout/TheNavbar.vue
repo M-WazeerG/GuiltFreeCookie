@@ -1,266 +1,140 @@
 <script setup>
 /**
- * TheNavbar — sticky top navigation.
+ * TheNavbar — fixed storefront navigation.
  *
- * - Sticky with backdrop blur, transparent on hero, solid after scroll.
- * - Desktop: logo + nav links + cart icon + count badge.
- * - Mobile: hamburger that toggles a slide-in sidebar.
+ * - Transparent over the home hero, solid cream once the page scrolls
+ *   (an IntersectionObserver on #top-sentinel, no scroll listener). Stays
+ *   transparent while the hero's pinned cookie-drop sequence is on screen.
+ * - Desktop: wordmark + links + search / account / cart.
+ * - Mobile: hamburger that opens a slide-in drawer.
  */
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, watch, onMounted, onUnmounted } from "vue";
 import { RouterLink, useRouter, useRoute } from "vue-router";
+import { cookieDropPinned } from "../composables/useCookieDropScroll";
 import {
   Bars3Icon,
   XMarkIcon,
   ShoppingBagIcon,
-  UserIcon,
   MagnifyingGlassIcon,
-  HomeIcon,
-  CubeIcon,
-  InformationCircleIcon,
-  PhoneIcon,
-  ClipboardDocumentListIcon,
-  ArrowRightOnRectangleIcon,
-  UserCircleIcon,
-  BuildingStorefrontIcon,
 } from "@heroicons/vue/24/outline";
-import { useAdminAuth } from "../composables/useAdminAuth";
 
-const { logout } = useAdminAuth();
+const router = useRouter();
+const route = useRoute();
 
 const sidebarOpen = ref(false);
+const scrolled = ref(false);
 
 const isHomePage = computed(() => route.name === "Home");
-const isAdminPage = computed(() => route.path.startsWith("/admindashboard"));
+const overHero = computed(() => isHomePage.value && (!scrolled.value || cookieDropPinned.value));
 
-const adminLogout = () => {
-  logout();
-  router.push({ name: "AdminLogin" });
-};
-
-const toggleSidebar = () => {
-  sidebarOpen.value = !sidebarOpen.value;
-};
+let observer = null;
+onMounted(() => {
+  const sentinel = document.getElementById("top-sentinel");
+  if (!sentinel || typeof IntersectionObserver === "undefined") return;
+  observer = new IntersectionObserver(([entry]) => {
+    scrolled.value = !entry.isIntersecting;
+  });
+  observer.observe(sentinel);
+});
+onUnmounted(() => observer?.disconnect());
 
 const closeSidebar = () => {
   sidebarOpen.value = false;
 };
-const router = useRouter();
-const route = useRoute();
-const scrolled = ref(false);
 
-const onScroll = () => {
-  scrolled.value = window.scrollY > 30;
-};
+watch(sidebarOpen, (open) => {
+  document.body.style.overflow = open ? "hidden" : "";
+});
+watch(() => route.fullPath, closeSidebar);
 
-onMounted(() => window.addEventListener("scroll", onScroll, { passive: true }));
-onUnmounted(() => window.removeEventListener("scroll", onScroll));
-
-const customerNavLinks = [
-  {
-    label: "Home",
-    to: { name: "Home" },
-    icon: HomeIcon,
-  },
-  {
-    label: "Products",
-    to: { name: "Products" },
-    icon: CubeIcon,
-  },
-  {
-    label: "About",
-    to: { name: "About" },
-    icon: InformationCircleIcon,
-  },
-  {
-    label: "Contact",
-    to: { name: "Contact" },
-    icon: PhoneIcon,
-  },
+const navLinks = [
+  { label: "Home", to: { name: "Home" } },
+  { label: "Products", to: { name: "Products" } },
+  { label: "About", to: { name: "About" } },
+  { label: "Contact", to: { name: "Contact" } },
 ];
 
-const adminNavLinks = [
-  {
-    label: "Cookies",
-    to: { name: "AdminDashboard" },
-    icon: CubeIcon,
-  },
-  {
-    label: "Users",
-    to: { name: "AdminUsers" },
-    icon: UserIcon,
-  },
-  {
-    label: "Orders",
-    to: { name: "AdminOrders" },
-    icon: ClipboardDocumentListIcon,
-  },
-];
-
-const navLinks = computed(() => (isAdminPage.value ? adminNavLinks : customerNavLinks));
-
-const onCartClick = () => {
-  router.push({ name: "Products" });
+const goSearch = () => {
+  router.push({ name: "Products", query: { focus: "search" } });
 };
 </script>
 
 <template>
   <header
     :class="[
-      'fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-cookie',
-      isHomePage && !scrolled
-        ? 'bg-transparent py-5'
-        : 'bg-[#e3d9c8] backdrop-blur-3xl shadow-soft py-3',
+      'fixed inset-x-0 top-0 z-50 transition-[background-color,box-shadow,backdrop-filter] duration-500 ease-cookie',
+      overHero
+        ? 'bg-transparent'
+        : 'bg-background/90 backdrop-blur-xl shadow-[0_1px_0_rgba(46,14,11,0.08),0_10px_30px_-18px_rgba(46,14,11,0.35)]',
     ]"
   >
-    <div class="container-magic flex items-center justify-between">
-      <!-- Logo -->
+    <div class="container-magic flex h-[var(--nav-h)] items-center justify-between gap-6">
+      <div class="flex items-center gap-12">
+      <!-- Wordmark -->
       <RouterLink
-        :to="isAdminPage ? { name: 'AdminDashboard' } : { name: 'Home' }"
-        class="flex items-center gap-2 group"
-        @click="closeSidebar"
+        :to="{ name: 'Home' }"
+        class="wordmark text-chocolate pt-1 shrink-0"
+        aria-label="GuiltFreeCookie home"
       >
-        <span class="font-bold text-2xl lg:text-4xl tracking-tight transition-colors luckiest-guy text-chocolate">
-          GuiltFree<span
-            :class="[
-              'transition-colors duration-300',
-              isHomePage && !scrolled ? 'text-white' : 'text-primary',
-            ]"
-            >Cookie
-          </span>
-        </span>
-        <span
-          v-if="isAdminPage"
-          class="text-xs font-semibold uppercase tracking-widest text-chocolate/60 border border-chocolate/20 rounded-full px-2.5 py-1"
-        >
-          Admin
-        </span>
+        GuiltFree<span :class="overHero ? 'sticker sticker-sm' : 'text-primary-600'">Cookie</span>
       </RouterLink>
 
       <!-- Desktop nav -->
-      <nav class="hidden lg:flex items-center gap-10">
-        <template v-for="link in navLinks" :key="link.label">
-          <RouterLink
-            v-if="link.to"
-            :to="link.to"
-            class="nav-link text-card font-medium"
-            active-class="router-link-active"
-          >
-            {{ link.label }}
-          </RouterLink>
-          <span
-            v-else
-            class="text-card font-medium text-chocolate/40 cursor-default select-none"
-            title="Coming soon"
-          >
-            {{ link.label }}
-          </span>
-        </template>
+      <nav class="hidden lg:flex items-center gap-8" aria-label="Main">
+        <RouterLink
+          v-for="link in navLinks"
+          :key="link.label"
+          :to="link.to"
+          class="nav-link inline-flex items-center min-h-11 text-base font-semibold text-chocolate"
+          active-class="router-link-active"
+        >
+          {{ link.label }}
+        </RouterLink>
       </nav>
+      </div>
 
       <!-- Right actions -->
-      <div class="flex items-center gap-3">
-        <template v-if="!isAdminPage">
-          <button
-            type="button"
-            :class="[
-              'hidden sm:flex h-11 w-11 items-center justify-center rounded-full transition-all',
-              isHomePage && !scrolled
-                ? 'text-white hover:bg-white/10'
-                : 'text-chocolate hover:bg-cream-100',
-            ]"
-            aria-label="Search"
-            @click="router.push({ name: 'Products' })"
-          >
-            <MagnifyingGlassIcon class="h-5 w-5" />
-          </button>
-          <button
-            type="button"
-            :class="[
-              'hidden sm:flex h-11 w-11 items-center justify-center rounded-full transition-all',
-              isHomePage && !scrolled
-                ? 'text-white hover:bg-white/10'
-                : 'text-chocolate hover:bg-cream-100',
-            ]"
-            aria-label="Account"
-          >
-            <UserIcon class="h-5 w-5" />
-          </button>
-
-          <!-- Cart with badge -->
-          <button
-            type="button"
-            class="relative h-11 w-11 flex items-center justify-center rounded-full bg-chocolate text-cream hover:bg-chocolate-600 hover:shadow-soft transition-all hover:-translate-y-0.5"
-            aria-label="Open cart"
-          >
-            <ShoppingBagIcon class="h-5 w-5" />
-          </button>
-        </template>
-
-        <template v-else>
-          <div class="hidden sm:block relative group">
-            <RouterLink
-              :to="{ name: 'Home' }"
-              class="flex h-11 w-11 items-center justify-center rounded-full text-chocolate/70 hover:text-chocolate hover:bg-cream-100 transition-all"
-              aria-label="Back to Store"
-            >
-              <BuildingStorefrontIcon class="h-5 w-5" />
-            </RouterLink>
-            <span
-              class="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-full bg-chocolate px-3 py-1.5 text-xs font-medium text-cream opacity-0 shadow-soft transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100"
-            >
-              Back to Store
-            </span>
-          </div>
-
-          <div class="relative group">
-            <RouterLink
-              :to="{ name: 'AdminProfile' }"
-              class="h-11 w-11 flex items-center justify-center rounded-full text-chocolate/70 hover:text-chocolate hover:bg-cream-100 transition-all"
-              aria-label="My Profile"
-            >
-              <UserCircleIcon class="h-6 w-6" />
-            </RouterLink>
-            <span
-              class="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-full bg-chocolate px-3 py-1.5 text-xs font-medium text-cream opacity-0 shadow-soft transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100"
-            >
-              My Profile
-            </span>
-          </div>
-
-          <div class="hidden sm:block relative group">
-            <button
-              type="button"
-              class="flex h-11 w-11 items-center justify-center rounded-full text-chocolate/70 hover:text-chocolate hover:bg-cream-100 transition-all"
-              aria-label="Log out"
-              @click="adminLogout"
-            >
-              <ArrowRightOnRectangleIcon class="h-5 w-5" />
-            </button>
-            <span
-              class="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-full bg-chocolate px-3 py-1.5 text-xs font-medium text-cream opacity-0 shadow-soft transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100"
-            >
-              Log out
-            </span>
-          </div>
-        </template>
+      <div class="flex items-center gap-1.5 sm:gap-2">
+        <button
+          type="button"
+          :class="[
+            'hidden sm:flex h-11 w-11 items-center justify-center rounded-full transition-colors',
+            overHero ? 'text-chocolate hover:bg-chocolate/5 lg:text-cream-50 lg:hover:bg-cream-50/10' : 'text-chocolate hover:bg-chocolate/[0.07]',
+          ]"
+          aria-label="Search cookies"
+          @click="goSearch"
+        >
+          <MagnifyingGlassIcon class="h-[22px] w-[22px]" />
+        </button>
+        <!-- Cart (wired up by the cart feature) -->
+        <button
+          type="button"
+          :class="[
+            'relative h-11 w-11 flex items-center justify-center rounded-full transition-all hover:-translate-y-0.5',
+            overHero
+              ? 'bg-primary text-chocolate hover:bg-primary-300'
+              : 'bg-chocolate text-cream-50 hover:bg-chocolate-300',
+          ]"
+          aria-label="Open cart"
+        >
+          <ShoppingBagIcon class="h-5 w-5" />
+        </button>
 
         <!-- Hamburger (mobile) -->
         <button
           type="button"
-          :class="[
-            'lg:hidden h-11 w-11 flex items-center justify-center rounded-full transition-all',
-            isHomePage && !scrolled ? 'text-chocolate' : 'text-chocolate',
-          ]"
+          class="lg:hidden h-11 w-11 flex items-center justify-center rounded-full text-chocolate hover:bg-chocolate/5 transition-colors"
+          :aria-expanded="sidebarOpen"
+          aria-controls="mobile-menu"
           aria-label="Open menu"
-          @click="toggleSidebar"
+          @click="sidebarOpen = true"
         >
-          <Bars3Icon v-if="!sidebarOpen" class="h-6 w-6" />
-          <XMarkIcon v-else class="h-6 w-6" />
+          <Bars3Icon class="h-7 w-7" />
         </button>
       </div>
     </div>
 
-    <!-- Mobile sidebar -->
+    <!-- Mobile drawer -->
     <Teleport to="body">
       <Transition name="overlay">
         <div
@@ -272,81 +146,48 @@ const onCartClick = () => {
       <Transition name="drawer">
         <aside
           v-if="sidebarOpen"
-          class="fixed top-0 right-0 z-[71] h-full w-80 max-w-[85vw] bg-background shadow-soft-xl flex flex-col lg:hidden"
+          id="mobile-menu"
+          class="fixed top-0 right-0 z-[71] h-full w-[35.2rem] max-w-[88vw] bg-chocolate text-cream-50 flex flex-col lg:hidden"
+          aria-label="Menu"
         >
-          <div
-            class="flex items-center justify-between px-6 py-5 border-b border-cream-300"
-          >
-            <span class="flex items-center gap-2">
-              <span class="font-bold text-2xl text-chocolate">
-                GuiltFree<span class="text-primary">Cookie</span>
-              </span>
-              <span
-                v-if="isAdminPage"
-                class="text-[10px] font-semibold uppercase tracking-widest text-chocolate/60 border border-chocolate/20 rounded-full px-2 py-0.5"
-              >
-                Admin
-              </span>
+          <div class="flex items-center justify-between px-6 h-[var(--nav-h)]">
+            <span class="wordmark pt-1">
+              GuiltFree<span class="text-primary">Cookie</span>
             </span>
             <button
               type="button"
-              class="p-2 rounded-full text-chocolate/60 hover:text-chocolate hover:bg-cream-100 transition-colors"
+              class="h-11 w-11 flex items-center justify-center rounded-full text-cream-50/80 hover:text-cream-50 hover:bg-cream-50/10 transition-colors"
               aria-label="Close menu"
               @click="closeSidebar"
             >
-              <XMarkIcon class="h-6 w-6" />
+              <XMarkIcon class="h-7 w-7" />
             </button>
           </div>
-          <nav class="flex-1 px-6 py-8 flex flex-col gap-2">
-            <template v-for="link in navLinks" :key="link.label">
-              <RouterLink
-                v-if="link.to"
-                :to="link.to"
-                class="flex items-center gap-4 px-4 py-4 rounded-2xl text-lg font-medium text-chocolate hover:bg-cream-100 transition-all"
-                active-class="bg-primary/15 text-chocolate"
-                @click="closeSidebar"
-              >
-                <component :is="link.icon" class="h-6 w-6 text-primary" />
 
-                <span>
-                  {{ link.label }}
-                </span>
-              </RouterLink>
-              <div
-                v-else
-                class="flex items-center gap-4 px-4 py-4 rounded-2xl text-lg font-medium text-chocolate/40"
-                title="Coming soon"
-              >
-                <component :is="link.icon" class="h-6 w-6 text-chocolate/30" />
-
-                <span>
-                  {{ link.label }}
-                </span>
-              </div>
-            </template>
+          <nav class="flex-1 px-6 pt-6 flex flex-col" aria-label="Mobile">
+            <RouterLink
+              v-for="link in navLinks"
+              :key="link.label"
+              :to="link.to"
+              class="text-base font-bold text-cream-50/85 hover:text-primary transition-colors py-3 border-b border-cream-50/10"
+              active-class="!text-primary"
+            >
+              {{ link.label }}
+            </RouterLink>
           </nav>
-          <div class="px-6 py-6 border-t border-cream-300 space-y-3">
+
+          <div class="px-6 pb-8 pt-6 space-y-3 border-t border-cream-50/10">
             <button
-              class="w-full flex items-center gap-3 rounded-xl px-4 py-3 hover:bg-cream-100 transition"
+              type="button"
+              class="w-full flex items-center gap-3 rounded-xl px-3 py-3 text-cream-50/85 hover:bg-cream-50/10 transition"
+              @click="goSearch"
             >
               <MagnifyingGlassIcon class="h-5 w-5 text-primary" />
-              <span>Search</span>
+              Search cookies
             </button>
-
-            <button
-              class="w-full flex items-center gap-3 rounded-xl px-4 py-3 hover:bg-cream-100 transition"
-            >
-              <UserIcon class="h-5 w-5 text-primary" />
-              <span>My Account</span>
-            </button>
-
-            <RouterLink
-              :to="{ name: 'Products' }"
-              class="btn-primary btn-block flex items-center justify-center gap-2"
-              @click="closeSidebar"
-            >
+            <RouterLink :to="{ name: 'Products' }" class="btn-secondary btn-block mt-2">
               <ShoppingBagIcon class="h-5 w-5" />
-              Order Now
+              Shop cookies
             </RouterLink>
           </div>
         </aside>

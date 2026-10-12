@@ -24,10 +24,10 @@ const sizeClass = computed(() => {
     case 'sm':
       return { wrap: 'h-10', btn: 'h-10 w-10', text: 'text-sm', icon: 'h-4 w-4' }
     case 'lg':
-      return { wrap: 'h-16', btn: 'h-16 w-16', text: 'text-xl', icon: 'h-6 w-6' }
+      return { wrap: 'h-16', btn: 'h-16 w-16', text: 'text-base', icon: 'h-6 w-6' }
     case 'md':
     default:
-      return { wrap: 'h-14', btn: 'h-14 w-14', text: 'text-lg', icon: 'h-5 w-5' }
+      return { wrap: 'h-14', btn: 'h-14 w-14', text: 'text-base', icon: 'h-5 w-5' }
   }
 })
 
@@ -48,7 +48,7 @@ const increment = () => {
       sizeClass.wrap,
       isDark
         ? 'bg-chocolate-400/60 border-cream/15'
-        : 'bg-cream-50 border-cream-400/60',
+        : 'bg-surface border-cream-400/60',
     ]"
   >
     <button
