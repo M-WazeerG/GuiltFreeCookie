@@ -1,54 +1,63 @@
 <script setup>
 /**
- * SearchBar — controlled search input with optional icon-only mode and clear button.
+ * SearchBar — controlled search input with a clear button.
+ * Exposes focus() so pages can focus it (e.g. from the navbar search icon).
  */
-import { computed } from 'vue'
-import { MagnifyingGlassIcon, XCircleIcon } from '@heroicons/vue/24/solid'
+import { computed, ref } from 'vue'
+import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/vue/20/solid'
 
 const props = defineProps({
   modelValue: { type: String, default: '' },
-  placeholder: { type: String, default: 'Search cookies...' },
+  placeholder: { type: String, default: 'Search cookies' },
+  label: { type: String, default: 'Search' },
   size: { type: String, default: 'md' }, // sm | md | lg
   variant: { type: String, default: 'light' }, // light | dark
 })
 
 const emit = defineEmits(['update:modelValue', 'submit'])
+const input = ref(null)
 
 const sizeClass = computed(() => {
   switch (props.size) {
     case 'sm':
-      return 'h-11 text-sm'
+      return 'h-11 text-base'
     case 'lg':
-      return 'h-16 text-lg'
+      return 'h-14 text-base'
     case 'md':
     default:
-      return 'h-14 text-base'
+      return 'h-12 text-base'
   }
 })
 
 const isDark = computed(() => props.variant === 'dark')
 
 const onSubmit = () => emit('submit', props.modelValue)
-const clear = () => emit('update:modelValue', '')
+const clear = () => {
+  emit('update:modelValue', '')
+  input.value?.focus()
+}
+
+defineExpose({ focus: () => input.value?.focus() })
 </script>
 
 <template>
   <div class="relative w-full">
-    <span
-      class="absolute left-5 top-1/2 -translate-y-1/2 pointer-events-none"
-      :class="isDark ? 'text-cream/40' : 'text-chocolate/40'"
-    >
-      <MagnifyingGlassIcon class="h-5 w-5" />
-    </span>
+    <MagnifyingGlassIcon
+      class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 pointer-events-none"
+      :class="isDark ? 'text-cream/60' : 'text-chocolate/55'"
+    />
     <input
+      ref="input"
+      type="search"
       :value="modelValue"
       :placeholder="placeholder"
+      :aria-label="label"
       :class="[
-        'w-full rounded-full pl-14 pr-12 transition-all duration-300 focus:outline-none focus:ring-2',
+        'w-full rounded-full pl-11 pr-11 transition-colors duration-200 focus:outline-none focus:ring-2 [&::-webkit-search-cancel-button]:hidden',
         sizeClass,
         isDark
-          ? 'bg-chocolate-400/60 border border-cream/15 text-cream placeholder:text-cream/40 focus:ring-primary/50'
-          : 'bg-surface border border-cream-400/60 text-chocolate placeholder:text-chocolate/40 focus:ring-primary/40 shadow-soft',
+          ? 'bg-chocolate-400/60 border border-cream/15 text-cream placeholder:text-cream/50 focus:ring-primary/50'
+          : 'bg-surface border border-cream-500/60 text-chocolate placeholder:text-chocolate/[0.66] focus:ring-chocolate/20 focus:border-chocolate/50',
       ]"
       @input="$emit('update:modelValue', $event.target.value)"
       @keyup.enter="onSubmit"
@@ -57,13 +66,13 @@ const clear = () => emit('update:modelValue', '')
       v-if="modelValue"
       type="button"
       :class="[
-        'absolute right-5 top-1/2 -translate-y-1/2 transition-colors',
-        isDark ? 'text-cream/60 hover:text-cream' : 'text-chocolate/40 hover:text-chocolate',
+        'absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 flex items-center justify-center rounded-full transition-colors',
+        isDark ? 'text-cream/70 hover:text-cream hover:bg-cream/10' : 'text-chocolate/60 hover:text-chocolate hover:bg-chocolate/[0.07]',
       ]"
       aria-label="Clear search"
       @click="clear"
     >
-      <XCircleIcon class="h-5 w-5" />
+      <XMarkIcon class="h-5 w-5" />
     </button>
   </div>
 </template>

@@ -1,6 +1,8 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { UsersIcon } from "@heroicons/vue/24/outline";
+import { PlusIcon, ArrowPathIcon } from "@heroicons/vue/20/solid";
+import AdminPageHeader from "../components/admin/AdminPageHeader.vue";
 import adminApi from "../api/adminApi";
 import { useToast } from "../composables/useToast";
 import { useAdminAuth } from "../composables/useAdminAuth";
@@ -9,7 +11,6 @@ import AdminList from "../components/admin/AdminList.vue";
 import AdminDeleteModal from "../components/admin/AdminDeleteModal.vue";
 import AdminResetPasswordModal from "../components/admin/AdminResetPasswordModal.vue";
 import BaseButton from "../components/ui/BaseButton.vue";
-import LoadingSpinner from "../components/ui/LoadingSpinner.vue";
 import ConfirmModal from "../components/ui/ConfirmModal.vue";
 
 const { showToast } = useToast();
@@ -19,6 +20,7 @@ const tab = ref("users");
 
 const admins = ref([]);
 const loading = ref(false);
+const loadError = ref(false);
 const showForm = ref(false);
 const selectedAdmin = ref(null);
 const deleteTarget = ref(null);
@@ -39,11 +41,12 @@ const closeForm = () => {
 
 const loadAdmins = async () => {
   loading.value = true;
+  loadError.value = false;
   try {
     admins.value = await adminApi.getAll();
   } catch (error) {
     console.error("Failed to load admins:", error);
-    showToast("Couldn't load admins.", "error");
+    loadError.value = true;
   } finally {
     loading.value = false;
   }
@@ -127,65 +130,57 @@ onMounted(loadAdmins);
 </script>
 
 <template>
-  <div class="container-magic pt-28 pb-10">
-    <div
-      class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8"
-    >
-      <h1 class="text-h2">Admin Dashboard</h1>
-      <BaseButton v-if="tab === 'users'" variant="primary" @click="openForm()">
-        Add Admin
+  <div>
+    <AdminPageHeader title="Users" description="Who can manage the store, and the customers who shop it.">
+      <BaseButton v-if="tab === 'users'" variant="primary" size="sm" @click="openForm()">
+        <PlusIcon class="h-5 w-5 -ml-1" />
+        Add admin
       </BaseButton>
-    </div>
+    </AdminPageHeader>
 
-    <div class="flex gap-2.5 mb-8">
+    <div class="flex gap-1 p-1 mb-5 rounded-xl bg-chocolate/[0.06] w-fit" role="group" aria-label="User type">
       <button
+        v-for="t in [{ id: 'users', label: 'Admins' }, { id: 'customers', label: 'Customers' }]"
+        :key="t.id"
         type="button"
-        :class="[
-          'rounded-full px-5 py-2.5 text-card font-medium transition-all duration-300 ease-cookie',
-          tab === 'customers'
-            ? 'bg-chocolate text-cream shadow-soft'
-            : 'bg-surface text-chocolate/70 border border-cream-400/60 hover:border-primary hover:text-chocolate',
-        ]"
-        @click="tab = 'customers'"
+        :aria-pressed="tab === t.id"
+        :class="[ 'flex items-center gap-2 rounded-lg h-11 px-4 text-sm font-semibold transition-colors', tab === t.id ? 'bg-surface text-chocolate shadow-soft' : 'text-chocolate/70 hover:text-chocolate', ]"
+        @click="tab = t.id"
       >
-        Customers
-      </button>
-      <button
-        type="button"
-        :class="[
-          'rounded-full px-5 py-2.5 text-card font-medium transition-all duration-300 ease-cookie',
-          tab === 'users'
-            ? 'bg-chocolate text-cream shadow-soft'
-            : 'bg-surface text-chocolate/70 border border-cream-400/60 hover:border-primary hover:text-chocolate',
-        ]"
-        @click="tab = 'users'"
-      >
-        Admins
+        {{ t.label }}
+        <span v-if="t.id === 'users' && admins.length" class="tabular text-sm text-chocolate/55">{{ admins.length }}</span>
       </button>
     </div>
 
-    <div
-      v-if="tab === 'customers'"
-      class="card flex flex-col items-center justify-center text-center py-24 px-6"
-    >
-      <UsersIcon class="h-12 w-12 text-chocolate/30 mb-4" />
-      <h3 class="text-xl font-semibold text-chocolate mb-2">Customers</h3>
-      <p class="text-chocolate/60">Customer management is coming soon.</p>
+    <div v-if="tab === 'customers'" class="card py-16 px-6 text-center">
+      <UsersIcon class="mx-auto h-10 w-10 text-chocolate/35" />
+      <h2 class="mt-3 font-sans text-base font-semibold">Customer accounts are on the way</h2>
+      <p class="mt-1 text-chocolate/70">Once customers can sign up, you'll see and manage them here.</p>
     </div>
 
     <template v-else>
-      <div
-        v-if="loading"
-        class="flex flex-col items-center justify-center py-24"
-      >
-        <LoadingSpinner label="Loading admins..." />
+      <div v-if="loading && !admins.length" class="card divide-y divide-chocolate/10" aria-busy="true" aria-label="Loading admins">
+        <div v-for="n in 3" :key="n" class="flex items-center gap-4 p-4">
+          <div class="shimmer h-10 w-10 rounded-full" />
+          <div class="flex-1 space-y-2">
+            <div class="shimmer h-4 w-40 rounded-full" />
+            <div class="shimmer h-3 w-56 rounded-full" />
+          </div>
+        </div>
       </div>
 
-      <div
-        v-else-if="admins.length === 0"
-        class="flex flex-col items-center justify-center py-24 text-center"
-      >
-        <p class="text-chocolate/60">No admins found.</p>
+      <div v-else-if="loadError" class="card py-16 px-6 text-center" role="alert">
+        <h2 class="text-base font-semibold">Couldn't load admins</h2>
+        <p class="mt-1 text-chocolate/70">Check the API is running, then try again.</p>
+        <BaseButton variant="outline" size="sm" class="mt-5" @click="loadAdmins">
+          <ArrowPathIcon class="h-4 w-4" />
+          Try again
+        </BaseButton>
+      </div>
+
+      <div v-else-if="admins.length === 0" class="card py-16 px-6 text-center">
+        <h2 class="text-base font-semibold">No admins yet</h2>
+        <p class="mt-1 text-chocolate/70">Add someone to help run the store.</p>
       </div>
 
       <AdminList

@@ -3,46 +3,53 @@
  * AccordionItem — single expandable FAQ row.
  * Designed to be used by parent AccordionList which manages open state.
  */
-import { PlusIcon, MinusIcon } from '@heroicons/vue/24/outline'
+import { PlusIcon } from '@heroicons/vue/24/outline'
 
-defineProps({
+const props = defineProps({
   question: { type: String, required: true },
   answer: { type: String, required: true },
   isOpen: { type: Boolean, default: false },
 })
 
 defineEmits(['toggle'])
+
+const uid = `acc-${Math.random().toString(36).slice(2, 8)}`
 </script>
 
 <template>
-  <div
-    :class="[
-      'rounded-3xl border transition-all duration-300 overflow-hidden',
-      isOpen
-        ? 'bg-cream-50 border-primary/40 shadow-soft'
-        : 'bg-surface border-cream-400/60 hover:border-primary/30',
-    ]"
-  >
-    <button
-      type="button"
-      class="w-full flex items-center justify-between gap-4 px-6 py-5 text-left"
-      :aria-expanded="isOpen"
-      @click="$emit('toggle')"
-    >
-      <span class="text-lg font-medium text-chocolate">{{ question }}</span>
-      <span
-        :class="[
-          'shrink-0 flex items-center justify-center h-8 w-8 rounded-full transition-all duration-300',
-          isOpen ? 'bg-primary text-chocolate rotate-180' : 'bg-cream-100 text-chocolate/70',
-        ]"
+  <div class="border-b border-chocolate/15">
+    <h3 class="m-0 text-base">
+      <button
+        :id="`${uid}-btn`"
+        type="button"
+        class="group w-full flex items-center justify-between gap-6 py-6 text-left"
+        :aria-expanded="props.isOpen"
+        :aria-controls="`${uid}-panel`"
+        @click="$emit('toggle')"
       >
-        <MinusIcon v-if="isOpen" class="h-5 w-5" />
-        <PlusIcon v-else class="h-5 w-5" />
-      </span>
-    </button>
+        <span class="text-base font-semibold text-chocolate group-hover:text-primary-700 transition-colors">
+          {{ question }}
+        </span>
+        <span
+          :class="[
+            'shrink-0 flex items-center justify-center h-10 w-10 rounded-full transition-all duration-300 ease-cookie',
+            props.isOpen ? 'bg-chocolate text-cream-50 rotate-45' : 'bg-chocolate/[0.08] text-chocolate group-hover:bg-primary',
+          ]"
+          aria-hidden="true"
+        >
+          <PlusIcon class="h-5 w-5" />
+        </span>
+      </button>
+    </h3>
     <Transition name="accordion">
-      <div v-if="isOpen" class="px-6 pb-6">
-        <p class="text-chocolate/70 leading-relaxed">{{ answer }}</p>
+      <div
+        v-if="props.isOpen"
+        :id="`${uid}-panel`"
+        role="region"
+        :aria-labelledby="`${uid}-btn`"
+        class="pb-7 pr-14"
+      >
+        <p class="text-chocolate/80 text-base leading-relaxed max-w-[62ch]">{{ answer }}</p>
       </div>
     </Transition>
   </div>

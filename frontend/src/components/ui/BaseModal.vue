@@ -18,6 +18,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close'])
+const titleId = `modal-${Math.random().toString(36).slice(2, 8)}`
 
 const sizeClass = {
   sm: 'max-w-md',
@@ -56,23 +57,27 @@ onUnmounted(() => {
         <Transition name="modal" appear>
           <div
             v-if="open"
-            :class="['w-full max-h-[90vh] flex flex-col bg-background rounded-4xl shadow-soft-xl', sizeClass]"
+            role="dialog"
+            aria-modal="true"
+            :aria-labelledby="title ? titleId : undefined"
+            :class="['w-full max-h-[90dvh] flex flex-col bg-background rounded-[20px] shadow-soft-xl', sizeClass]"
           >
             <div
               v-if="title || $slots.header"
-              class="flex items-start justify-between p-8 pb-6 shrink-0"
+              class="flex items-start justify-between gap-4 px-6 pt-6 pb-4 sm:px-7 sm:pt-7 shrink-0"
             >
-              <h3 v-if="title" class="text-2xl font-medium text-chocolate">{{ title }}</h3>
+              <h2 v-if="title" :id="titleId" class="text-base font-semibold tracking-[-0.015em] text-chocolate">{{ title }}</h2>
               <slot name="header" />
               <button
-                class="text-chocolate/50 hover:text-chocolate transition-colors p-1 rounded-full hover:bg-cream-100"
+                type="button"
+                class="-mr-2 -mt-1 h-10 w-10 shrink-0 flex items-center justify-center text-chocolate/60 hover:text-chocolate transition-colors rounded-full hover:bg-chocolate/[0.07]"
                 aria-label="Close"
                 @click="emit('close')"
               >
-                <XMarkIcon class="h-6 w-6" />
+                <XMarkIcon class="h-5 w-5" />
               </button>
             </div>
-            <div class="overflow-y-auto px-8 pb-8" :class="{ 'pt-8': !title && !$slots.header }">
+            <div class="overflow-y-auto px-6 pb-6 sm:px-7 sm:pb-7" :class="{ 'pt-7': !title && !$slots.header }">
               <slot />
             </div>
           </div>

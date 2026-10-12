@@ -1,11 +1,13 @@
 <script setup>
 import { ref, watch } from "vue";
 import adminApi from "../api/adminApi";
+import { cleanEmail, cleanText } from "../utils/normalize";
 import { useAdminAuth } from "../composables/useAdminAuth";
 import { useToast } from "../composables/useToast";
 import BaseInput from "../components/ui/BaseInput.vue";
 import BaseButton from "../components/ui/BaseButton.vue";
 import ConfirmModal from "../components/ui/ConfirmModal.vue";
+import AdminPageHeader from "../components/admin/AdminPageHeader.vue";
 
 const { admin, updateAdmin } = useAdminAuth();
 const { showToast } = useToast();
@@ -36,7 +38,12 @@ const confirmSaveProfile = async () => {
   showProfileConfirm.value = false;
   savingProfile.value = true;
   try {
-    const updated = await adminApi.update({ ...admin.value, ...profileForm.value });
+    const updated = await adminApi.update({
+      ...admin.value,
+      firstName: cleanText(profileForm.value.firstName),
+      lastName: cleanText(profileForm.value.lastName),
+      email: cleanEmail(profileForm.value.email),
+    });
     updateAdmin(updated);
     showToast("Profile updated.");
   } catch (error) {
@@ -87,66 +94,81 @@ const confirmChangePassword = async () => {
 </script>
 
 <template>
-  <div class="container-magic pt-28 pb-10 max-w-2xl">
-    <h1 class="text-h2 mb-8">My Profile</h1>
+  <div>
+    <AdminPageHeader title="Your profile" description="Your name, login email and password." />
 
-    <div class="card p-8 mb-8">
-      <h2 class="text-xl font-semibold text-chocolate mb-6">Profile Details</h2>
-      <div class="space-y-4">
-        <div class="grid sm:grid-cols-2 gap-4">
-          <BaseInput v-model="profileForm.firstName" label="First Name" required />
-          <BaseInput v-model="profileForm.lastName" label="Last Name" required />
+    <div class="space-y-6">
+      <section class="card grid md:grid-cols-[25.6rem_1fr] gap-6 md:gap-10 p-6 md:p-8" aria-labelledby="profile-details">
+        <div>
+          <h2 id="profile-details" class="text-base font-semibold tracking-[-0.01em]">Details</h2>
+          <p class="mt-1 text-sm text-chocolate/70">This is the email you log in with.</p>
         </div>
-        <BaseInput v-model="profileForm.email" type="email" label="Email" required />
-      </div>
-      <div class="flex justify-end mt-6">
-        <BaseButton
-          variant="primary"
-          size="sm"
-          :loading="savingProfile"
-          :disabled="!profileForm.firstName || !profileForm.lastName || !profileForm.email"
-          @click="showProfileConfirm = true"
-        >
-          Save Changes
-        </BaseButton>
-      </div>
-    </div>
+        <form class="space-y-4" @submit.prevent="profileForm.firstName && profileForm.lastName && profileForm.email && (showProfileConfirm = true)">
+          <div class="grid sm:grid-cols-2 gap-4">
+            <BaseInput v-model="profileForm.firstName" label="First name" autocomplete="given-name" required />
+            <BaseInput v-model="profileForm.lastName" label="Last name" autocomplete="family-name" required />
+          </div>
+          <BaseInput v-model="profileForm.email" type="email" label="Email" autocomplete="email" required />
+          <div class="flex justify-end pt-2">
+            <BaseButton
+              type="submit"
+              variant="primary"
+              size="sm"
+              :loading="savingProfile"
+              :disabled="!profileForm.firstName || !profileForm.lastName || !profileForm.email"
+            >
+              Save changes
+            </BaseButton>
+          </div>
+        </form>
+      </section>
 
-    <div class="card p-8">
-      <h2 class="text-xl font-semibold text-chocolate mb-6">Change Password</h2>
-      <div class="space-y-4">
-        <BaseInput
-          v-model="passwordForm.currentPassword"
-          type="password"
-          label="Current Password"
-          required
-        />
-        <BaseInput
-          v-model="passwordForm.newPassword"
-          type="password"
-          label="New Password"
-          required
-        />
-        <BaseInput
-          v-model="passwordForm.confirmPassword"
-          type="password"
-          label="Confirm New Password"
-          required
-        />
+      <section class="card grid md:grid-cols-[25.6rem_1fr] gap-6 md:gap-10 p-6 md:p-8" aria-labelledby="profile-password">
+        <div>
+          <h2 id="profile-password" class="text-base font-semibold tracking-[-0.01em]">Password</h2>
+          <p class="mt-1 text-sm text-chocolate/70">You'll need the new password the next time you log in.</p>
+        </div>
+        <form class="space-y-4" @submit.prevent="canChangePassword() && openPasswordConfirm()">
+          <BaseInput
+            v-model="passwordForm.currentPassword"
+            type="password"
+            label="Current password"
+            autocomplete="current-password"
+            required
+          />
+          <div class="grid sm:grid-cols-2 gap-4">
+            <BaseInput
+              v-model="passwordForm.newPassword"
+              type="password"
+              label="New password"
+              autocomplete="new-password"
+              required
+            />
+            <BaseInput
+              v-model="passwordForm.confirmPassword"
+              type="password"
+              label="Confirm new password"
+              autocomplete="new-password"
+              required
+              :error="passwordForm.confirmPassword && passwordForm.newPassword !== passwordForm.confirmPassword ? 'Passwords don\'t match yet.' : ''"
+            />
+          </div>
 
-        <p v-if="passwordError" class="text-sm text-red-600">{{ passwordError }}</p>
-      </div>
-      <div class="flex justify-end mt-6">
-        <BaseButton
-          variant="primary"
-          size="sm"
-          :loading="changingPassword"
-          :disabled="!canChangePassword()"
-          @click="openPasswordConfirm"
-        >
-          Change Password
-        </BaseButton>
-      </div>
+          <p v-if="passwordError" class="text-sm font-medium text-red-700" role="alert">{{ passwordError }}</p>
+
+          <div class="flex justify-end pt-2">
+            <BaseButton
+              type="submit"
+              variant="primary"
+              size="sm"
+              :loading="changingPassword"
+              :disabled="!canChangePassword()"
+            >
+              Change password
+            </BaseButton>
+          </div>
+        </form>
+      </section>
     </div>
 
     <ConfirmModal
@@ -163,7 +185,7 @@ const confirmChangePassword = async () => {
       :open="showPasswordConfirm"
       title="Change password?"
       message="You'll need your new password the next time you log in."
-      confirm-text="Change Password"
+      confirm-text="Change password"
       variant="danger"
       :loading="changingPassword"
       @confirm="confirmChangePassword"

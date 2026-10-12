@@ -1,0 +1,416 @@
+[
+  {
+    "slug": "toasted-almond-vanilla",
+    "original": {
+      "width": 3712,
+      "height": 4608,
+      "bytes": 23633223,
+      "sha256": "62ddd6dbc7c25c4edda9cef808fb42da0f5c2aec1a004cb628f5ce79d044fbfe",
+      "alphaExtrema": [
+        255,
+        255
+      ]
+    },
+    "web": {
+      "width": 819,
+      "height": 900,
+      "bytes": 104432,
+      "sha256": "830b2d43c8c16f0ff572ea19492a44188d6c22e1714c6de1552a84eb4beececb",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "subjectBounds": [
+        24,
+        24,
+        795,
+        876
+      ],
+      "margins": [
+        24,
+        24,
+        24,
+        24
+      ]
+    }
+  },
+  {
+    "slug": "cinnamon-pecan",
+    "original": {
+      "width": 3712,
+      "height": 4608,
+      "bytes": 24344511,
+      "sha256": "8290883b224baa613497d50c971a7817b7a7cc01e955c43c7c4ba2aa9a176d3d",
+      "alphaExtrema": [
+        255,
+        255
+      ]
+    },
+    "web": {
+      "width": 815,
+      "height": 900,
+      "bytes": 128840,
+      "sha256": "abac44f6e53d67f7bb7e9b1ebe7c65016e6fc23b29fac5227428d7a568d0c8d7",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "subjectBounds": [
+        24,
+        24,
+        791,
+        876
+      ],
+      "margins": [
+        24,
+        24,
+        24,
+        24
+      ]
+    }
+  },
+  {
+    "slug": "espresso-dark-chocolate",
+    "original": {
+      "width": 3712,
+      "height": 4608,
+      "bytes": 25138332,
+      "sha256": "8c29f5f1e89b2c08dc861fc76e9c0f0928662043930c2f65093f080f87a41f8d",
+      "alphaExtrema": [
+        255,
+        255
+      ]
+    },
+    "web": {
+      "width": 816,
+      "height": 900,
+      "bytes": 145992,
+      "sha256": "0cc767a1878d2f09a2d6638dd8d4064bcba1f90a0e9401c62b5b9f2f50ea0c37",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "subjectBounds": [
+        24,
+        24,
+        792,
+        876
+      ],
+      "margins": [
+        24,
+        24,
+        24,
+        24
+      ]
+    }
+  },
+  {
+    "slug": "double-chocolate-chunk",
+    "original": {
+      "width": 3712,
+      "height": 4608,
+      "bytes": 25510363,
+      "sha256": "c7ad35f6163f7a4a63db647aade81d9aecba9c7eff2cf4d846bdde0c53fd56bb",
+      "alphaExtrema": [
+        255,
+        255
+      ]
+    },
+    "web": {
+      "width": 817,
+      "height": 900,
+      "bytes": 137010,
+      "sha256": "37b49ac2d2883e9d0dc5eb66900468a2ca8f7e2473dc1bc98ff2d6c9d99e235d",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "subjectBounds": [
+        24,
+        24,
+        793,
+        876
+      ],
+      "margins": [
+        24,
+        24,
+        24,
+        24
+      ]
+    }
+  },
+  {
+    "slug": "peanut-butter-crunch",
+    "original": {
+      "width": 3712,
+      "height": 4608,
+      "bytes": 25000226,
+      "sha256": "4b3632a247a4bf9f2a48674979b9492c1d0acd25b4c2952584a0d2d25dfa24cb",
+      "alphaExtrema": null
+    },
+    "web": {
+      "width": 812,
+      "height": 900,
+      "bytes": 121722,
+      "sha256": "2d6bc10314a5a29fd08e1b728cc8692ba2471cf2059417a712871251b5233181",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "subjectBounds": [
+        24,
+        24,
+        788,
+        876
+      ],
+      "margins": [
+        24,
+        24,
+        24,
+        24
+      ]
+    }
+  },
+  {
+    "slug": "vanilla-white-chocolate",
+    "original": {
+      "width": 3712,
+      "height": 4608,
+      "bytes": 23877910,
+      "sha256": "c51c79ba2227cd7d171f98939c86624ad3e80eb4677060a2a1488c396e22de22",
+      "alphaExtrema": [
+        255,
+        255
+      ]
+    },
+    "web": {
+      "width": 816,
+      "height": 900,
+      "bytes": 107698,
+      "sha256": "6abbc1ddfb1c1a4dbf9cd1cb1634c4c7a1fc6a0d0fc4546e1e8b51e8bbf41a32",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "subjectBounds": [
+        24,
+        24,
+        792,
+        876
+      ],
+      "margins": [
+        24,
+        24,
+        24,
+        24
+      ]
+    }
+  },
+  {
+    "slug": "lemon-almond",
+    "original": {
+      "width": 3712,
+      "height": 4608,
+      "bytes": 24418185,
+      "sha256": "3380e2726e92102d4a59c0564db7d7f4cd894c348da9182c21679912807f5fca",
+      "alphaExtrema": null
+    },
+    "web": {
+      "width": 815,
+      "height": 900,
+      "bytes": 106604,
+      "sha256": "f3af8303a114eb26808e1124200ef4416fa276f1a8e4ce0d609967d423d85b68",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "subjectBounds": [
+        24,
+        24,
+        791,
+        876
+      ],
+      "margins": [
+        24,
+        24,
+        24,
+        24
+      ]
+    }
+  },
+  {
+    "slug": "salted-chocolate-buckwheat",
+    "original": {
+      "width": 3712,
+      "height": 4608,
+      "bytes": 25081659,
+      "sha256": "3d2d0b183ba2a72b9a3e9181aa8792b7d1dfecc6050dfc4014ca291a5d6e2b7f",
+      "alphaExtrema": [
+        255,
+        255
+      ]
+    },
+    "web": {
+      "width": 816,
+      "height": 900,
+      "bytes": 141628,
+      "sha256": "9c1fb5c903e16cc37e1f95da12fe902d060e06236f0c11fb198d6041cdef0407",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "subjectBounds": [
+        24,
+        24,
+        792,
+        876
+      ],
+      "margins": [
+        24,
+        24,
+        24,
+        24
+      ]
+    }
+  },
+  {
+    "slug": "coconut-macadamia",
+    "original": {
+      "width": 3712,
+      "height": 4608,
+      "bytes": 23134230,
+      "sha256": "7e62ed24afef8949d6a848bd4d8192e6b9523b8a9115d7e27c5ff2069f8c854d",
+      "alphaExtrema": [
+        255,
+        255
+      ]
+    },
+    "web": {
+      "width": 818,
+      "height": 900,
+      "bytes": 98430,
+      "sha256": "2921d87964d57fb07834dd2aa878dba35eb83d994d6cd267bfb148421645e813",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "subjectBounds": [
+        24,
+        24,
+        794,
+        876
+      ],
+      "margins": [
+        24,
+        24,
+        24,
+        24
+      ]
+    }
+  },
+  {
+    "slug": "dark-chocolate-orange",
+    "original": {
+      "width": 3712,
+      "height": 4608,
+      "bytes": 25431764,
+      "sha256": "fea2621ca0b8d13fc85d310809e376b237ba08893dcf06c48083feb27c1e4e07",
+      "alphaExtrema": [
+        255,
+        255
+      ]
+    },
+    "web": {
+      "width": 816,
+      "height": 900,
+      "bytes": 134622,
+      "sha256": "69d5f27995f92717f6bfbfe343bb72c2859b9ffbc9af72b16d90e7f3c493ce59",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "subjectBounds": [
+        24,
+        24,
+        792,
+        876
+      ],
+      "margins": [
+        24,
+        24,
+        24,
+        24
+      ]
+    }
+  },
+  {
+    "slug": "raspberry-coconut",
+    "original": {
+      "width": 3712,
+      "height": 4608,
+      "bytes": 24510348,
+      "sha256": "5481daec5e2138144340a94978efe84ab55a26005d52eeaca85bfa411e654806",
+      "alphaExtrema": [
+        255,
+        255
+      ]
+    },
+    "web": {
+      "width": 814,
+      "height": 900,
+      "bytes": 124264,
+      "sha256": "1659d4093afe6a79aa73cc5a769b64721ffbc5274b3fc71b0e1f52605d61ed35",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "subjectBounds": [
+        24,
+        24,
+        790,
+        876
+      ],
+      "margins": [
+        24,
+        24,
+        24,
+        24
+      ]
+    }
+  },
+  {
+    "slug": "peanut-chocolate-ripple",
+    "original": {
+      "width": 3712,
+      "height": 4608,
+      "bytes": 24362901,
+      "sha256": "9e36f28e1d6e02865562f8bc74832c3988a1107b1809a9f140f2d3ae4672668d",
+      "alphaExtrema": [
+        255,
+        255
+      ]
+    },
+    "web": {
+      "width": 813,
+      "height": 900,
+      "bytes": 130328,
+      "sha256": "620a7ce522eb8f1742fe475c556584b8d64a729bf25fc88d23879a8f24aef8e6",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "subjectBounds": [
+        24,
+        24,
+        789,
+        876
+      ],
+      "margins": [
+        24,
+        24,
+        24,
+        24
+      ]
+    }
+  }
+]

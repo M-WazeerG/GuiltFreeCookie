@@ -34,7 +34,7 @@ const variantClass = computed(() => {
 })
 
 const sizeClass = computed(() =>
-  props.size === 'sm' ? 'text-xs px-2.5 py-1' : 'text-sm px-3 py-1.5',
+  props.size === 'sm' ? 'text-sm px-2.5 py-1' : 'text-sm px-3 py-1.5',
 )
 </script>
 

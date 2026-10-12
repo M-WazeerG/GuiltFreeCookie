@@ -35,6 +35,9 @@ axios.interceptors.response.use(
   },
 );
 
+// Opt in to scroll-reveal hiding only once JS is running (see main.css).
+document.documentElement.classList.add("js-reveal");
+
 const app = createApp(App);
 app.use(router);
 app.mount("#app");

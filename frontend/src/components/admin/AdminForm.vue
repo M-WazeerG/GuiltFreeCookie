@@ -4,6 +4,7 @@ import BaseModal from "../ui/BaseModal.vue";
 import BaseInput from "../ui/BaseInput.vue";
 import BaseButton from "../ui/BaseButton.vue";
 import ConfirmModal from "../ui/ConfirmModal.vue";
+import { cleanEmail, cleanText } from "../../utils/normalize";
 
 const props = defineProps({
   open: {
@@ -55,20 +56,27 @@ const openConfirm = () => {
 
 const confirmSubmit = () => {
   showConfirm.value = false;
-  emit("save", form.value);
+  emit("save", {
+    ...form.value,
+    firstName: cleanText(form.value.firstName),
+    lastName: cleanText(form.value.lastName),
+    email: cleanEmail(form.value.email),
+  });
 };
 </script>
 
 <template>
-  <BaseModal :open="open" :title="admin ? 'Edit Admin' : 'Add Admin'" @close="emit('close')">
+  <BaseModal :open="open" :title="admin ? 'Edit admin' : 'Add admin'" @close="emit('close')">
     <div class="space-y-4">
-      <BaseInput v-model="form.firstName" label="First Name" placeholder="Jane" required />
-      <BaseInput v-model="form.lastName" label="Last Name" placeholder="Doe" required />
+      <div class="grid sm:grid-cols-2 gap-4">
+        <BaseInput v-model="form.firstName" label="First name" placeholder="Thandiwe" required />
+        <BaseInput v-model="form.lastName" label="Last name" placeholder="Mokoena" required />
+      </div>
       <BaseInput
         v-model="form.email"
         type="email"
         label="Email"
-        placeholder="jane@guiltfreecookie.com"
+        placeholder="thandiwe@guiltfreecookie.co.za"
         required
       />
 
@@ -77,11 +85,12 @@ const confirmSubmit = () => {
         v-model="form.password"
         type="password"
         label="Password"
-        placeholder="••••••••"
+        autocomplete="new-password"
+        help="They can change it from their profile after logging in."
         required
       />
-      <p v-else class="text-sm text-chocolate/50">
-        Use "Reset Password" from the list to issue a new temporary password.
+      <p v-else class="text-sm text-chocolate/70">
+        To give them a new password, use "Reset password" in the admin list.
       </p>
     </div>
 

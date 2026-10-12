@@ -32,7 +32,7 @@ const isOpen = (id) => openIds.value.has(id);
 </script>
 
 <template>
-  <div class="flex flex-col gap-3">
+  <div class="flex flex-col border-t border-chocolate/15">
     <AccordionItem
       v-for="item in items"
       :key="item.id"

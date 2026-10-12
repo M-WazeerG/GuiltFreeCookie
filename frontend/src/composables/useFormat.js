@@ -8,6 +8,9 @@ export function useFormat() {
       currency,
     }).format(Number(value || 0))
 
+  // Rand prices as shown across the store: "R35.00"
+  const rand = (value) => `R${Number(value || 0).toFixed(2)}`
+
   const date = (value, locale = 'en-US') =>
     new Intl.DateTimeFormat(locale, {
       year: 'numeric',
@@ -18,5 +21,5 @@ export function useFormat() {
   const truncate = (str, n = 90) =>
     !str ? '' : str.length > n ? `${str.slice(0, n).trimEnd()}…` : str
 
-  return { currency, date, truncate }
+  return { currency, rand, date, truncate }
 }

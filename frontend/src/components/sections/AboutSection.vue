@@ -1,104 +1,92 @@
 <script setup>
 /**
- * AboutSection — split layout: left = cookie splash illustration,
- * right = "Only the Finest Go Into Our Crumble" copy + ingredient list.
+ * AboutSection — split layout: left = hero cookie on a tan panel with a
+ * floating "no added sugar" card, right = "Only the finest" copy + the
+ * ingredient checklist. Ingredients mirror the FAQ in data/cookies.js.
  */
-import { CheckIcon, ArrowRightIcon } from "@heroicons/vue/24/solid";
+import { CheckIcon, ArrowRightIcon } from "@heroicons/vue/20/solid";
+import { SparklesIcon } from "@heroicons/vue/24/outline";
 import BaseButton from "../../components/ui/BaseButton.vue";
 import { useScrollReveal } from "../../composables/useScrollReveal";
 
 const { vReveal } = useScrollReveal();
 
-const aboutImage =
-  "https://images.unsplash.com/photo-1606312619070-d48b4c652a52?w=900&q=85&auto=format&fit=crop";
-
 const ingredients = [
-  { name: "Belgian Chocolate", note: "70% Valrhona, stone-ground" },
-  { name: "French Butter", note: "Cultured, churned in Normandy" },
-  { name: "Madagascan Vanilla", note: "Hand-podded, 18% vanillin" },
-  { name: "Flaked Sea Salt", note: "Maldon, hand-harvested" },
+  { name: "Almond flour", note: "Grain-free nut flour instead of refined wheat" },
+  { name: "Stevia and erythritol", note: "Low-GI sweeteners, no added sugar" },
+  { name: "100% cocoa dark chocolate", note: "The real thing, nothing compound" },
+  { name: "Grass-fed butter or coconut oil", note: "Cold-pressed coconut oil in our vegan bakes" },
 ];
 </script>
 
 <template>
-  <section class="section bg-cream-50/60 relative overflow-hidden">
-    <div class="container-magic">
-      <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-        <!-- Left: image splash -->
-        <div v-reveal class="relative order-2 lg:order-1">
+  <section class="section bg-background relative overflow-hidden" aria-labelledby="about-title">
+    <div class="container-magic grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">
+      <!-- Left: cookie panel -->
+      <div v-reveal class="relative order-2 lg:order-1">
+        <div class="relative isolate aspect-[4/4.4] overflow-hidden rounded-[28px] bg-tan flex items-center justify-center">
           <div
-            class="absolute inset-0 -m-6 rounded-[3rem] bg-primary/15 blur-2xl"
+            class="absolute inset-0 -z-10 bg-[radial-gradient(55%_45%_at_50%_45%,rgba(255,255,255,0.35),transparent_70%)]"
+            aria-hidden="true"
           />
-          <div class="relative rounded-[2.5rem] overflow-hidden shadow-soft-lg">
-            <img
-              :src="aboutImage"
-              alt="A stack of freshly baked CrumbleMagic cookies"
-              class="w-full h-[28rem] lg:h-[36rem] object-cover"
-            />
-            <!-- Floating ingredient pill -->
-            <div
-              class="absolute bottom-6 left-6 right-6 lg:left-8 lg:right-auto lg:max-w-xs bg-surface/95 backdrop-blur rounded-3xl p-5 shadow-soft-lg"
-            >
-              <div class="flex items-center gap-3 mb-2">
-                <span
-                  class="flex items-center justify-center h-10 w-10 rounded-full bg-primary/15 text-primary-700 text-xl"
-                  >🌿</span
-                >
-                <div>
-                  <div class="font-semibold text-chocolate">100% Natural</div>
-                  <div class="text-xs text-chocolate/60">
-                    No preservatives, ever
-                  </div>
-                </div>
-              </div>
-              <p class="text-sm text-chocolate/70 leading-relaxed">
-                Every ingredient is traceable to a single trusted farm or
-                producer. Quality you can taste in every crumble.
-              </p>
+          <img
+            src="/img/cookieHome.webp"
+            alt="A swirl cookie with milk and chocolate splashing around it"
+            loading="lazy"
+            class="w-[82%] -mt-12 drop-shadow-cookie"
+          />
+        </div>
+
+        <!-- Floating card -->
+        <div
+          class="absolute bottom-5 left-5 right-5 sm:right-auto sm:max-w-xs rounded-2xl bg-surface p-5 shadow-soft-lg"
+        >
+          <div class="flex items-center gap-3">
+            <span class="h-10 w-10 shrink-0 rounded-full bg-chocolate text-primary flex items-center justify-center">
+              <SparklesIcon class="h-5 w-5" />
+            </span>
+            <div>
+              <p class="font-semibold leading-tight">No added sugar</p>
+              <p class="text-sm text-chocolate/70">Still properly sweet</p>
             </div>
           </div>
-        </div>
-
-        <!-- Right: copy -->
-        <div v-reveal class="order-1 lg:order-2" data-reveal-delay="100">
-          <span class="eyebrow">Our Promise</span>
-          <h2 class="text-chocolate mb-6 leading-tight">
-            Only the Finest Go Into <br />
-            <span class="text-primary">Our Crumble</span>
-          </h2>
-          <p class="text-chocolate/70 text-body mb-8 leading-relaxed">
-            We don't cut corners, and we don't compromise. Each cookie begins
-            with a slow-creamed brown butter base, folded with single-origin
-            chocolate, fresh eggs, and a whisper of flaked sea salt. Nothing
-            artificial, nothing fake — just honest, exceptional cookies that
-            taste like they were made by someone who loves you.
+          <p class="mt-3 text-sm leading-relaxed text-chocolate/80">
+            Every ingredient earns its place. You can taste it in every crumble.
           </p>
-
-          <ul class="space-y-4 mb-9">
-            <li
-              v-for="ing in ingredients"
-              :key="ing.name"
-              class="flex items-start gap-4 group"
-            >
-              <span
-                class="flex items-center justify-center h-8 w-8 rounded-full bg-primary/15 text-primary-700 shrink-0 mt-0.5 transition-colors group-hover:bg-primary group-hover:text-cream"
-              >
-                <CheckIcon class="h-5 w-5" />
-              </span>
-              <div>
-                <div class="font-semibold text-chocolate text-lg">
-                  {{ ing.name }}
-                </div>
-                <div class="text-sm text-chocolate/60">{{ ing.note }}</div>
-              </div>
-            </li>
-          </ul>
-
-          <BaseButton :to="{ name: 'About' }" variant="outline" size="lg">
-            Read our story
-            <ArrowRightIcon class="h-5 w-5" />
-          </BaseButton>
         </div>
+      </div>
+
+      <!-- Right: copy -->
+      <div v-reveal class="order-1 lg:order-2" data-reveal-delay="100">
+        <h2 id="about-title" class="font-display text-display">
+          Only the finest go into
+          <span class="text-primary-700">our crumble</span>
+        </h2>
+        <p class="prose-copy mt-6">
+          We don't cut corners on taste. Each cookie starts with a nut-flour
+          dough, folded with real dark chocolate and sweetened without sugar.
+          Nothing artificial, nothing to hide. Just honest cookies that taste
+          like they came from someone who loves you.
+        </p>
+
+        <ul class="mt-9 grid sm:grid-cols-2 gap-x-8 gap-y-6">
+          <li v-for="ing in ingredients" :key="ing.name" class="flex items-start gap-3.5 group">
+            <span
+              class="flex items-center justify-center h-8 w-8 rounded-full bg-primary/20 text-primary-800 shrink-0 mt-0.5 transition-colors group-hover:bg-chocolate group-hover:text-cream-50"
+            >
+              <CheckIcon class="h-5 w-5" />
+            </span>
+            <div>
+              <p class="font-semibold text-base leading-snug">{{ ing.name }}</p>
+              <p class="mt-0.5 text-sm text-chocolate/75">{{ ing.note }}</p>
+            </div>
+          </li>
+        </ul>
+
+        <BaseButton :to="{ name: 'Products' }" variant="outline" size="lg" class="mt-10">
+          Shop cookies
+          <ArrowRightIcon class="h-5 w-5" />
+        </BaseButton>
       </div>
     </div>
   </section>

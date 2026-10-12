@@ -1,50 +1,33 @@
 <script setup>
-import { ref } from "vue";
 import { RouterLink } from "vue-router";
-import {
-  EnvelopeIcon,
-  PhoneIcon,
-  MapPinIcon,
-  ArrowRightIcon,
-} from "@heroicons/vue/24/outline";
+import { EnvelopeIcon, PhoneIcon, MapPinIcon } from "@heroicons/vue/24/outline";
+import NewsletterSection from "../components/sections/NewsletterSection.vue";
+import { LEGAL_PAGES } from "../constants/business";
 
-const email = ref("");
-const subscribed = ref(false);
+const year = new Date().getFullYear();
 
-const onSubscribe = () => {
-  if (!email.value || !/.+@.+\..+/.test(email.value)) return;
-  subscribed.value = true;
-  email.value = "";
-  setTimeout(() => (subscribed.value = false), 4000);
-};
-
+// Every link goes somewhere real; no two links share a destination's job.
 const columns = [
   {
-    title: "Navigation",
+    title: "Explore",
     links: [
       { label: "Home", to: "/" },
-      { label: "Menu", to: "/Products" },
+      { label: "Products", to: "/products" },
       { label: "About", to: "/about" },
       { label: "Contact", to: "/contact" },
     ],
   },
   {
-    title: "Legal",
+    title: "Help",
     links: [
-      { label: "Privacy Policy", to: "/contact" },
-      { label: "Terms of Use", to: "/contact" },
-      { label: "Cookie Policy", to: "/contact" },
-      { label: "Refunds", to: "/contact" },
+      { label: "FAQ", to: "/contact#faq-title" },
+      { label: "Bulk and event orders", to: "/contact" },
+      { label: "Ingredients and allergens", to: "/#inside" },
     ],
   },
   {
-    title: "Services",
-    links: [
-      { label: "Shop Cookies", to: "/Products" },
-      { label: "Order Ahead", to: "/Products" },
-      { label: "Bulk Orders", to: "/contact" },
-      { label: "Gift Cards", to: "/contact" },
-    ],
+    title: "Legal",
+    links: LEGAL_PAGES.map((p) => ({ label: p.label, to: p.path })),
   },
 ];
 
@@ -73,104 +56,48 @@ const socials = [
 </script>
 
 <template>
-  <footer class="bg-chocolate text-cream relative overflow-hidden texture-dark">
+  <footer class="bg-chocolate text-cream-100 relative overflow-hidden">
     <!-- Newsletter band -->
-    <div class="container-magic py-16 border-b border-cream/10">
-      <div class="grid lg:grid-cols-2 gap-8 items-center">
-        <div>
-          <h2 class="text-h2 text-cream font-medium leading-tight">
-            Sweet news, <span class="text-primary">straight to your inbox</span>
-          </h2>
-          <p class="text-cream/70 text-card mt-3 max-w-md">
-            New cookie drops, secret discount codes, and the occasional guilty of
-            bakery gossip. No spam, just the good stuff.
-          </p>
-        </div>
-        <form
-            class="flex flex-col sm:flex-row gap-3"
-            @submit.prevent="onSubscribe"
-        >
-          <div class="flex-1 relative">
-            <EnvelopeIcon
-                class="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-cream/40"
-            />
-            <input
-                v-model="email"
-                type="email"
-                required
-                placeholder="your@email.com"
-                class="w-full h-14 rounded-full pl-14 pr-5 bg-chocolate-400/60 border border-cream/15 text-cream placeholder:text-cream/40 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-            />
-          </div>
-          <button type="submit" class="btn-secondary h-14 px-7">
-            <span v-if="!subscribed">Subscribe</span>
-            <span v-else>Subscribed!</span>
-            <ArrowRightIcon v-if="!subscribed" class="h-5 w-5" />
-          </button>
-        </form>
-      </div>
-    </div>
+    <NewsletterSection tone="dark" />
 
     <!-- Main footer grid -->
-    <div
-        class="container-magic py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10"
-    >
+    <div class="container-magic py-14 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-[1.6fr_1fr_1fr_1fr] gap-x-8 gap-y-12">
       <!-- Brand col -->
-      <div class="lg:col-span-2">
-        <RouterLink to="/" class="flex items-center gap-2 mb-5">
-
-          <span class="font-bold text-2xl luckiest-guy"
-          >GuiltFree<span class="text-primary">Cookie</span></span
-          >
+      <div class="col-span-2 md:col-span-3 lg:col-span-1">
+        <RouterLink to="/" class="inline-block wordmark text-cream-50 mb-5">
+          GuiltFree<span class="text-primary">Cookie</span>
         </RouterLink>
-        <p class="text-cream/70 text-card max-w-sm mb-6">
-          Handmade cookies, baked fresh daily with the finest ingredients.
-          Craving cookies? We've got the crumble.
+        <p class="text-cream-100/75 text-base max-w-sm mb-7">
+          Sweet, chocolatey cookies with less of the stuff you'd rather skip.
+          Baked fresh in Cape Town.
         </p>
-        <ul class="space-y-3 text-cream/70">
+        <ul class="text-base text-cream-100/80">
           <li class="flex items-center gap-3">
-            <span
-                class="flex items-center justify-center h-9 w-9 rounded-full bg-cream/10 text-primary"
-            >
-              <PhoneIcon class="h-4 w-4" />
-            </span>
-           +27 82 851 3174
+            <PhoneIcon class="h-5 w-5 text-primary shrink-0" />
+            <a href="tel:+27828513174" class="inline-flex items-center min-h-11 hover:text-cream-50 transition-colors">+27 82 851 3174</a>
           </li>
           <li class="flex items-center gap-3">
-            <span
-                class="flex items-center justify-center h-9 w-9 rounded-full bg-cream/10 text-primary"
-            >
-              <EnvelopeIcon class="h-4 w-4" />
-            </span>
-            hello@guiltfreecookie.co.za
+            <EnvelopeIcon class="h-5 w-5 text-primary shrink-0" />
+            <a href="mailto:hello@guiltfreecookie.co.za" class="inline-flex items-center min-h-11 hover:text-cream-50 transition-colors">hello@guiltfreecookie.co.za</a>
           </li>
-          <li class="flex items-center gap-3">
-            <span
-                class="flex items-center justify-center h-9 w-9 rounded-full bg-cream/10 text-primary"
-            >
-              <MapPinIcon class="h-4 w-4" />
-            </span>
-            41 Caravel Road, Strandfontien, Cape Town City , 7798
+          <li class="flex items-start gap-3">
+            <MapPinIcon class="h-5 w-5 text-primary shrink-0 mt-0.5" />
+            41 Caravel Road, Strandfontein, Cape Town, 7798
           </li>
         </ul>
       </div>
 
       <!-- Link columns -->
       <div v-for="col in columns" :key="col.title">
-        <h4
-            class="font-semibold text-cream mb-4 text-card uppercase tracking-wider text-sm"
-        >
+        <h3 class="text-cream-50 text-base font-semibold mb-4">
           {{ col.title }}
-        </h4>
-        <ul class="space-y-2.5">
+        </h3>
+        <ul>
           <li v-for="link in col.links" :key="link.label">
             <RouterLink
-                :to="link.to"
-                class="text-cream/70 hover:text-primary transition-colors text-card inline-flex items-center group"
+              :to="link.to"
+              class="inline-flex items-center min-h-11 text-cream-100/75 hover:text-primary transition-colors text-base"
             >
-              <span
-                  class="w-0 group-hover:w-3 h-px bg-primary transition-all duration-300 mr-0 group-hover:mr-2"
-              />
               {{ link.label }}
             </RouterLink>
           </li>
@@ -179,41 +106,25 @@ const socials = [
     </div>
 
     <!-- Bottom bar -->
-    <div class="border-t border-cream/10">
-      <div
-          class="container-magic py-6 flex flex-col md:flex-row items-center justify-between gap-4"
-      >
-        <p class="text-cream/60 text-sm">
-          © {{ new Date().getFullYear() }} GuiltFreeCookie. Baked with 🤎 in
-          Cape Town.
+    <div class="border-t border-cream-50/10">
+      <div class="container-magic py-6 flex flex-col-reverse md:flex-row items-center justify-between gap-4">
+        <p class="text-cream-100/60 text-sm">
+          &copy; {{ year }} GuiltFreeCookie. Baked in Cape Town.
         </p>
-        <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2">
           <a
-              v-for="s in socials"
-              :key="s.name"
-              :href="s.href"
-              :aria-label="s.name"
-              class="flex items-center justify-center h-10 w-10 rounded-full bg-cream/10 text-cream/80 hover:bg-primary hover:text-chocolate transition-all hover:-translate-y-0.5"
+            v-for="s in socials"
+            :key="s.name"
+            :href="s.href"
+            :aria-label="s.name"
+            class="flex items-center justify-center h-11 w-11 rounded-full text-cream-100/75 hover:bg-primary hover:text-chocolate transition-colors"
           >
-            <svg
-                viewBox="0 0 24 24"
-                class="h-5 w-5"
-                fill="currentColor"
-                aria-hidden="true"
-            >
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor" aria-hidden="true">
               <path :d="s.path" />
             </svg>
           </a>
         </div>
       </div>
     </div>
-
-    <!-- Decorative cookie watermark -->
-    <div
-        class="pointer-events-none absolute -bottom-32 -right-32 w-96 h-96 rounded-full bg-primary/5 blur-3xl"
-    />
-    <div
-        class="pointer-events-none absolute -top-32 -left-32 w-80 h-80 rounded-full bg-primary/5 blur-3xl"
-    />
   </footer>
 </template>

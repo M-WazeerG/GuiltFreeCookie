@@ -1,0 +1,52 @@
+[
+  {
+    "file": "cookie-drop-original.mp4",
+    "bytes": 8128077,
+    "sha256": "6bf9b0d2ec70b79583240d1eff4db576fe838051250ccd382f6ce01c259ec75a"
+  },
+  {
+    "file": "cookie-drop-web.mp4",
+    "bytes": 2070478,
+    "sha256": "791cc6cf5be6690116524642c679fa165261edee1313d2c94febf7e617b3a3fc"
+  },
+  {
+    "file": "cookie-drop-scroll.mp4",
+    "bytes": 6278610,
+    "sha256": "b7d82262460b845274db9c7d08b194154ed6bd852a9e99ac497a1d748013ad27"
+  },
+  {
+    "file": "first-frame.webp",
+    "bytes": 34216,
+    "sha256": "dc047ee7660edfd3bdcaff90705f0ddd76b5c8244a7409e5a251cbbb06d2d426"
+  },
+  {
+    "file": "splash-frame.webp",
+    "bytes": 24240,
+    "sha256": "22e3f2a83d3bf21623119d7ed87f06b46cde99495d0a63114a0b4a2c0bb6b3b0"
+  },
+  {
+    "file": "motion-contact-timed.jpg",
+    "bytes": 83582,
+    "sha256": "5647accf15fed0189bbc75d9168c918cfdd0ac4d65ff52e12c926084b98f618b"
+  },
+  {
+    "file": "video-probe.json",
+    "bytes": 3480,
+    "sha256": "7e8673769c6c63dbaed789302a53fd474c639298ba0aa3a9a5d10742fd3218fa"
+  },
+  {
+    "file": "web-probe.json",
+    "bytes": 2553,
+    "sha256": "6c710c277b53717541e7f952ca5bc3a511649ac17984dae278f38118c2e29e96"
+  },
+  {
+    "file": "scroll-probe.json",
+    "bytes": 2556,
+    "sha256": "a597d0edf1fd209a136d9779ab458fcc9de934719c83e35d774d683d37325f62"
+  },
+  {
+    "file": "start-original.png",
+    "bytes": 4931048,
+    "sha256": "83742ddd196cd4aef279a74d0423631894f6c83606687ad5ca479d359b499d13"
+  }
+]

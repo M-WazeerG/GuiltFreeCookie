@@ -1,102 +1,196 @@
 <script setup>
-import BaseButton from "../../components/ui/BaseButton.vue";
+/**
+ * HeroBanner — tan / chocolate colour block with the hero cookie
+ * straddling the split. Desktop splits 80 / 20 left/right, mobile top/bottom.
+ *
+ * Desktop with motion allowed: scrolling pins the hero and plays the cookie
+ * drop. The cookie falls into a glass of milk and eight flavours fan out of
+ * the splash into a lineup (useCookieDropScroll). Everywhere else the hero
+ * stays still and the same lineup follows it as a normal section.
+ */
+import { nextTick, onBeforeUnmount, onMounted, ref } from "vue";
+import { ArrowRightIcon } from "@heroicons/vue/20/solid";
+import BaseButton from "../ui/BaseButton.vue";
+import CookieLineup from "./CookieLineup.vue";
+import { createCookieDrop } from "../../composables/useCookieDropScroll";
+import { COOKIE_DROP_VIDEO as CLIP, HERO_ARTWORK as ART } from "../../constants/cookieDrop";
+
+// lg, where the split turns vertical. No mobile framing of the clip exists.
+const cinematicQuery = window.matchMedia("(min-width: 1024px) and (prefers-reduced-motion: no-preference)");
+const cinematic = ref(cinematicQuery.matches);
+const videoReady = ref(false);
+const videoFailed = ref(false);
+const stage = ref(null);
+let drop = null;
+
+function startDrop() {
+  if (cinematic.value && stage.value && !drop) drop = createCookieDrop(stage.value);
+}
+function stopDrop() {
+  drop?.destroy();
+  drop = null;
+}
+
+// Unpin before Vue re-renders: the pin wraps the stage in a spacer element.
+async function onQueryChange(event) {
+  stopDrop();
+  videoReady.value = false;
+  cinematic.value = event.matches;
+  await nextTick();
+  startDrop();
+}
+
+onMounted(() => {
+  cinematicQuery.addEventListener("change", onQueryChange);
+  startDrop();
+});
+onBeforeUnmount(() => {
+  cinematicQuery.removeEventListener("change", onQueryChange);
+  stopDrop();
+});
 </script>
 
 <template>
-  <section
-    class="relative w-full overflow-hidden min-h-[750px] lg:min-h-screen flex items-center"
-  >
-    <!-- Mobile Background -->
-    <div class="absolute inset-0 bg-[#d0ab7b] lg:hidden"></div>
-
-    <!-- Desktop Background -->
+  <section class="relative" aria-labelledby="hero-title">
     <div
-      class="hidden lg:block absolute inset-y-0 left-0 w-[68%] bg-[#d0ab7b]"
-    ></div>
-    <div
-      class="hidden lg:block absolute inset-y-0 right-0 w-[32%] bg-[#2d0d08]"
-    ></div>
+      ref="stage"
+      class="relative isolate overflow-hidden bg-tan flex"
+      :class="cinematic ? 'h-screen' : 'min-h-[100dvh] lg:min-h-[min(100dvh,920px)]'"
+    >
+      <!-- Chocolate block: bottom band on mobile, right 20% on desktop -->
+      <div
+        class="absolute inset-x-0 bottom-0 h-[34%] lg:inset-y-0 lg:left-auto lg:right-0 lg:h-auto lg:w-[20%] bg-chocolate -z-10"
+        aria-hidden="true"
+      >
+        <div
+          data-drop="glow"
+          class="absolute inset-0 bg-[radial-gradient(60%_50%_at_30%_50%,rgba(197,159,113,0.28),transparent_70%)]"
+        />
+      </div>
 
-    <!-- Content -->
-    <div class="relative z-10 mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-0">
-      <div class="grid grid-cols-1 lg:grid-cols-2 items-center gap-12">
-        <!-- ================= LEFT ================= -->
-        <div class="max-w-xl text-center lg:text-left py-20 lg:py-0">
-          <!-- Main Heading -->
-          <h1
-            class="font-bold leading-tight text-white text-4xl sm:text-4xl md:text-8xl lg:text-7xl"
-          >
-            Why Feel <span class="text-chocolate">Guilty!?</span>
-          </h1>
-
-          <!-- Sub Heading -->
-          <h2
-            class="mt-3 text-2xl sm:text-3xl md:text-4xl lg:text-3xl font-light text-chocolate"
-          >
-            Our Cookies Love You Back
-          </h2>
-
-          <!-- Mobile Cookie -->
-          <div class="flex justify-center my-10 md:hidden">
-            <img
-              src="/cookieHome.png"
-              alt="Cookie"
-              class="w-72 sm:w-80 drop-shadow-[0_30px_45px_rgba(0,0,0,.35)] select-none pointer-events-none"
-            />
-          </div>
-
-          <!-- Description -->
-          <p
-            class="mt-0 lg:mt-5 text-base sm:text-lg leading-7 lg:leading-8 text-white/90 max-w-lg mx-auto lg:mx-0"
-          >
-            From low-sugar to high-protein, our cookies are baked with quality
-            ingredients so you can enjoy every bite with confidence.
-          </p>
-
-          <!-- Buttons -->
-          <div
-            class="mt-12 flex flex-col md:flex-row gap-4 justify-center lg:justify-start"
-          >
-            <BaseButton
-              class="luckiest-guy"
-              :to="{ name: 'Products' }"
-              variant="primary"
-              size="lg"
-              >Buy Now</BaseButton
-            >
-
-            <BaseButton
-              class="hidden md:inline-flex luckiest-guy"
-              :to="{ name: 'Products' }"
-              variant="outline"
-              size="lg"
-              >See Menu</BaseButton
-            >
-          </div>
-        </div>
-
-        <!-- ================= RIGHT ================= -->
-        <div class="relative hidden md:block h-[650px]">
-          <!-- Vertical Text -->
-          <div
-            class="hidden lg:block absolute top-1/2 right-[-380px] -translate-y-1/2 rotate-180"
-            style="writing-mode: vertical-rl"
-          >
-            <h2
-              class="text-[210px] font-bold text-[#D7B07D] opacity-90 leading-none text-center select-none pointer-events-none"
-            >
-              GuiltFree
-            </h2>
-          </div>
-
-          <!-- Desktop Cookie -->
-          <img
-            src="/cookieHome.png"
-            alt="Cookie"
-            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[430px] lg:w-[680px] lg:left-[-80px] lg:translate-x-0 drop-shadow-[0_35px_55px_rgba(0,0,0,.35)] select-none pointer-events-none"
+      <!-- The cookie-drop clip, laid over the split and sized by the timeline.
+           First-frame poster while it loads; both posters if it fails. -->
+      <div v-if="cinematic" data-drop="media" class="hero-media absolute z-0" aria-hidden="true">
+        <img :src="CLIP.poster" alt="" class="absolute inset-0 h-full w-full" />
+        <img data-drop="splash-poster" :src="CLIP.splashPoster" alt="" class="absolute inset-0 h-full w-full" />
+        <video
+          data-drop="video"
+          class="absolute inset-0 h-full w-full transition-opacity duration-300"
+          :class="videoReady && !videoFailed ? 'opacity-100' : 'opacity-0'"
+          :poster="CLIP.poster"
+          muted
+          playsinline
+          preload="auto"
+          disablepictureinpicture
+          disableremoteplayback
+          tabindex="-1"
+          @loadeddata="videoReady = true"
+          @error="videoFailed = true"
+        >
+          <source
+            v-for="(src, i) in CLIP.sources"
+            :key="src"
+            :src="src"
+            type="video/mp4"
+            @error="i === CLIP.sources.length - 1 && (videoFailed = true)"
           />
+        </video>
+      </div>
+
+      <!-- Mid-sequence line over the empty tan while the cookie falls -->
+      <div v-if="cinematic" class="absolute inset-0 z-10 flex items-center pointer-events-none" aria-hidden="true">
+        <div class="container-magic w-full">
+          <p data-drop="tagline" class="hero-tagline font-display text-display">
+            Make a <span class="sticker">splash.</span>
+          </p>
         </div>
       </div>
+
+      <div
+        class="container-magic w-full grid lg:grid-cols-[1.05fr_0.95fr] items-center gap-6 lg:gap-0 pt-[calc(var(--nav-h)+4rem)] pb-6 lg:pt-[var(--nav-h)] lg:pb-0"
+      >
+        <!-- Copy -->
+        <div data-drop="copy" class="relative z-10 max-w-xl">
+          <div class="animate-fade-up">
+            <h1 id="hero-title" class="font-display text-display">
+              Why feel <span class="sticker block">guilty?</span>
+            </h1>
+
+            <p class="mt-6 text-base leading-relaxed text-chocolate/85 max-w-md">
+              Our cookies love you back. Proper chocolate, less sugar, baked for
+              every kind of sweet tooth.
+            </p>
+
+            <div class="mt-9 flex flex-wrap items-center gap-3">
+              <BaseButton :to="{ name: 'Products' }" variant="primary" size="lg">
+                Shop cookies
+                <ArrowRightIcon class="h-5 w-5" />
+              </BaseButton>
+              <a href="#inside" class="btn-outline px-8 py-4 text-base border-chocolate/35">
+                What's inside
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero cookie: in the grid on mobile, centred on the split on desktop -->
+        <div data-drop="cookie-anchor" class="hero-cookie relative flex justify-center lg:block">
+          <div class="w-[78%] max-w-[35.2rem] sm:max-w-[41.6rem] lg:w-full lg:max-w-none animate-cookie-in">
+            <img
+              data-drop="cookie"
+              :src="ART.src"
+              alt="A half-chocolate, half-vanilla swirl cookie with milk and chocolate splashing around it"
+              :width="ART.width"
+              :height="ART.height"
+              fetchpriority="high"
+              class="block w-full h-auto drop-shadow-cookie select-none"
+            />
+          </div>
+        </div>
+      </div>
+
+      <CookieLineup v-if="cinematic" in-stage />
     </div>
+
+    <CookieLineup v-if="!cinematic" />
   </section>
 </template>
+
+<style scoped>
+@media (min-width: 1024px) {
+  /* Cookie centred on the 80% split, sized to the hero's height */
+  .hero-cookie {
+    position: absolute;
+    z-index: 5;
+    left: 80%;
+    top: calc(50% + var(--nav-h) / 2);
+    width: min(44vw, calc((min(100dvh, 92rem) - var(--nav-h)) * 0.73));
+    transform: translate(-48.9%, -47.6%);
+  }
+}
+
+/* Hidden until the timeline brings them in (it sets visibility inline). */
+.hero-media,
+.hero-tagline {
+  visibility: hidden;
+}
+
+.hero-media {
+  will-change: transform, opacity;
+}
+/* When the frame can't cover the stage (very wide windows), feather its
+   edges: browsers decode its flat backdrop a few levels off the CSS split.
+   The left of the frame is empty backdrop, so that fade can be long. */
+.hero-media.is-framed {
+  --feather: linear-gradient(to right, transparent, #000 30%, #000 92%, transparent),
+    linear-gradient(to bottom, transparent, #000 5%, #000 95%, transparent);
+  -webkit-mask-image: var(--feather);
+  -webkit-mask-composite: source-in;
+  mask-image: var(--feather);
+  mask-composite: intersect;
+}
+.hero-media video,
+.hero-media img {
+  object-fit: fill; /* the box is already exactly 16:9 */
+}
+</style>

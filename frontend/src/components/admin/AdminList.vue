@@ -1,4 +1,7 @@
 <script setup>
+/**
+ * AdminList — admin accounts. A table from md up, stacked rows below.
+ */
 import {
   PencilSquareIcon,
   TrashIcon,
@@ -6,7 +9,7 @@ import {
   NoSymbolIcon,
   CheckCircleIcon,
 } from "@heroicons/vue/24/outline";
-import BaseBadge from "../ui/BaseBadge.vue";
+import IconAction from "./IconAction.vue";
 
 defineProps({
   admins: {
@@ -20,74 +23,80 @@ defineProps({
 });
 
 const emit = defineEmits(["edit", "delete", "toggleActive", "resetPassword"]);
+
+const initials = (a) => `${a.firstName?.[0] ?? ""}${a.lastName?.[0] ?? ""}`.toUpperCase() || "?";
 </script>
 
 <template>
-  <div class="space-y-4">
-    <article
-      v-for="admin in admins"
-      :key="admin.adminId"
-      class="card p-5 flex flex-col sm:flex-row sm:items-center gap-4"
-      :class="{ 'opacity-60': !admin.active }"
-    >
-      <div class="flex-1 min-w-0">
-        <div class="flex items-center gap-2 mb-1 flex-wrap">
-          <h3 class="text-lg font-semibold text-chocolate truncate">
-            {{ admin.firstName }} {{ admin.lastName }}
-          </h3>
-          <BaseBadge :variant="admin.active ? 'success' : 'warning'" size="sm">
-            {{ admin.active ? "Active" : "Inactive" }}
-          </BaseBadge>
-          <BaseBadge v-if="admin.adminId === currentAdminId" variant="cream" size="sm">
-            You
-          </BaseBadge>
-        </div>
-        <p class="text-chocolate/60 text-sm truncate">{{ admin.email }}</p>
-      </div>
-
-      <div class="flex gap-2 shrink-0 flex-wrap">
-        <button
-          type="button"
-          class="h-10 w-10 shrink-0 inline-flex items-center justify-center rounded-full bg-cream-100 text-chocolate hover:bg-cream-200 transition-colors duration-300"
-          aria-label="Edit"
-          title="Edit"
-          @click="emit('edit', admin)"
+  <div class="card overflow-hidden">
+    <table class="w-full text-left">
+      <thead class="hidden md:table-header-group bg-cream-400/40 text-sm text-chocolate/70">
+        <tr>
+          <th scope="col" class="py-3 pl-5 pr-3 font-semibold">Name</th>
+          <th scope="col" class="py-3 px-3 font-semibold">Status</th>
+          <th scope="col" class="py-3 pl-3 pr-5 font-semibold text-right"><span class="sr-only">Actions</span></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-chocolate/10">
+        <tr
+          v-for="admin in admins"
+          :key="admin.adminId"
+          class="grid grid-cols-[1fr_auto] items-center gap-x-3 gap-y-2 p-4 md:table-row md:p-0 hover:bg-cream-400/25 transition-colors"
         >
-          <PencilSquareIcon class="h-4 w-4" />
-        </button>
+          <td class="md:py-3.5 md:pl-5 md:pr-3">
+            <div class="flex items-center gap-3.5 min-w-0">
+              <span
+                class="h-10 w-10 shrink-0 rounded-full text-sm font-bold flex items-center justify-center"
+                :class="admin.active ? 'bg-tan text-chocolate' : 'bg-chocolate/[0.08] text-chocolate/80'"
+              >
+                {{ initials(admin) }}
+              </span>
+              <div class="min-w-0">
+                <p class="font-semibold text-chocolate truncate flex items-center gap-2">
+                  {{ admin.firstName }} {{ admin.lastName }}
+                  <span
+                    v-if="admin.adminId === currentAdminId"
+                    class="rounded-md bg-chocolate px-1.5 py-0.5 text-sm font-semibold text-cream-50"
+                  >You</span>
+                </p>
+                <p class="text-sm text-chocolate/65 truncate">{{ admin.email }}</p>
+              </div>
+            </div>
+          </td>
 
-        <button
-          type="button"
-          class="inline-flex items-center justify-center gap-1.5 rounded-full bg-primary/15 text-primary-700 text-sm font-medium px-4 py-2.5 hover:bg-primary/25 transition-colors duration-300"
-          @click="emit('resetPassword', admin)"
-        >
-          <KeyIcon class="h-4 w-4" />
-          Reset Password
-        </button>
+          <td class="row-start-2 md:px-3">
+            <span
+              class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-sm font-semibold"
+              :class="admin.active ? 'bg-emerald-800/15 text-emerald-900' : 'bg-chocolate/[0.08] text-chocolate/75'"
+            >
+              <span class="h-1.5 w-1.5 rounded-full" :class="admin.active ? 'bg-emerald-600' : 'bg-chocolate/40'" />
+              {{ admin.active ? "Active" : "Deactivated" }}
+            </span>
+          </td>
 
-        <button
-          type="button"
-          class="inline-flex items-center justify-center gap-1.5 rounded-full bg-cream-100 text-chocolate text-sm font-medium px-4 py-2.5 hover:bg-cream-200 transition-colors duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
-          :disabled="admin.adminId === currentAdminId"
-          :title="admin.adminId === currentAdminId ? 'Cannot deactivate your own account' : ''"
-          @click="emit('toggleActive', admin)"
-        >
-          <CheckCircleIcon v-if="!admin.active" class="h-4 w-4" />
-          <NoSymbolIcon v-else class="h-4 w-4" />
-          {{ admin.active ? "Deactivate" : "Activate" }}
-        </button>
-
-        <button
-          type="button"
-          class="h-10 w-10 shrink-0 inline-flex items-center justify-center rounded-full bg-red-50 text-red-600 hover:bg-red-100 transition-colors duration-300 disabled:opacity-40 disabled:cursor-not-allowed"
-          aria-label="Delete"
-          :title="admin.adminId === currentAdminId ? 'Cannot delete your own account' : 'Delete'"
-          :disabled="admin.adminId === currentAdminId"
-          @click="emit('delete', admin)"
-        >
-          <TrashIcon class="h-4 w-4" />
-        </button>
-      </div>
-    </article>
+          <td class="row-span-2 row-start-1 col-start-2 md:pl-3 md:pr-5">
+            <div class="flex justify-end gap-0.5">
+              <IconAction label="Edit" :icon="PencilSquareIcon" @click="emit('edit', admin)" />
+              <IconAction label="Reset password" :icon="KeyIcon" @click="emit('resetPassword', admin)" />
+              <IconAction
+                :label="admin.active ? 'Deactivate' : 'Activate'"
+                :icon="admin.active ? NoSymbolIcon : CheckCircleIcon"
+                :disabled="admin.adminId === currentAdminId"
+                disabled-reason="You can't deactivate yourself"
+                @click="emit('toggleActive', admin)"
+              />
+              <IconAction
+                label="Delete"
+                tone="danger"
+                :icon="TrashIcon"
+                :disabled="admin.adminId === currentAdminId"
+                disabled-reason="You can't delete yourself"
+                @click="emit('delete', admin)"
+              />
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>

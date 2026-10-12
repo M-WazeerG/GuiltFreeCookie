@@ -1,11 +1,14 @@
-@import url("https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap");
+@import "@fontsource/luckiest-guy/400.css";
+@import "@fontsource-variable/nunito/index.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ============================================================
-   CrumbleMagic — Global Styles
+   GuiltFreeCookie — Global Styles
+   Shape rule: controls are full pills, cards / tiles are 16px
+   (rounded-2xl), large media panels are 28px (rounded-[28px]).
    ============================================================ */
 
 @layer base {
@@ -13,45 +16,74 @@
     --color-primary: #c59f71;
     --color-chocolate: #2e0e0b;
     --color-cream: #e2d9c8;
-    --color-background: #faf8f4;
+    --color-tan: #d0ab7b;
+    --color-background: #e3d9c8;
+    --nav-h: 76px;
+
+    /* Type scale: three sizes only (see tailwind.config.js) */
+    --fs-sm: 1.44rem; /* 14.4px = base / 1.25 */
+    --fs-base: 1.8rem; /* 18px */
+    --fs-display: clamp(4.2672rem, 3.44rem + 1.9vw, 5.6896rem); /* 42.7px -> 56.9px: base x 1.333^3 -> ^4 */
   }
 
+  /* 62.5% of the reader's default (usually 16px) = 10px, so 1rem = 10px.
+     Still relative, so a larger browser font setting scales everything. */
   html {
+    font-size: 62.5%;
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    accent-color: var(--color-chocolate);
+    caret-color: var(--color-chocolate);
   }
 
   body {
     @apply bg-background text-chocolate font-sans antialiased;
-    font-family: "Outfit", ui-sans-serif, system-ui, sans-serif;
-    font-size: 1.25rem; /* body 20px */
-    line-height: 1.7;
+    font-size: var(--fs-base);
+    line-height: 1.6;
     margin: 0;
     padding: 0;
+    font-optical-sizing: auto;
+    font-feature-settings: "kern", "liga", "calt";
   }
 
-  h1 {
-    @apply text-h1 text-chocolate;
-    font-family: "Luckiest Guy", cursive;
-    font-weight: 400;
-    line-height: 1.1;
+  /* Every heading is Nunito at base size by default. Attention-grabbing
+     headlines opt in to Luckiest Guy with `font-display text-display`. */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-sans text-base font-bold text-chocolate;
+    letter-spacing: -0.005em;
+    text-wrap: balance;
   }
 
-  h2 {
-    @apply text-h2 text-chocolate;
-    font-family: "Luckiest Guy", cursive;
-    font-weight: 400;
-    line-height: 1.15;
+  p {
+    text-wrap: pretty;
+    hanging-punctuation: first;
   }
 
-  h3 {
-    @apply text-3xl text-chocolate;
-    font-weight: 500;
+
+  a {
+    text-underline-offset: 0.2em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-chocolate);
+    outline-offset: 3px;
+    border-radius: 6px;
   }
 
   ::selection {
-    @apply bg-primary/30 text-chocolate;
+    background: var(--color-chocolate);
+    color: var(--color-cream);
+  }
+
+  ::placeholder {
+    color: rgba(46, 14, 11, 0.66);
   }
 
   /* Custom scrollbar */
@@ -60,45 +92,44 @@
     height: 10px;
   }
   ::-webkit-scrollbar-track {
-    @apply bg-cream/40;
+    @apply bg-cream-400/60;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-primary/60 rounded-full;
+    @apply bg-primary/70 rounded-full;
     border: 2px solid transparent;
     background-clip: padding-box;
   }
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-primary;
+    @apply bg-primary-600;
   }
 }
 
 @layer components {
   /* Button — primary / secondary / outline / ghost */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full font-sans text-card font-medium
+    @apply inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-full text-base font-bold whitespace-nowrap
            transition-all duration-300 ease-cookie cursor-pointer select-none
-           focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-chocolate focus-visible:ring-offset-2 focus-visible:ring-offset-background
+           active:scale-[0.98]
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .btn-primary {
-    @apply btn bg-chocolate text-cream hover:bg-chocolate-600 hover:shadow-soft-lg
-           hover:-translate-y-0.5 active:translate-y-0;
+    @apply btn bg-chocolate text-cream-50 hover:bg-chocolate-300 hover:shadow-soft-lg hover:-translate-y-0.5;
   }
   .btn-secondary {
-    @apply btn bg-primary text-chocolate hover:bg-primary-300 hover:shadow-soft
-           hover:-translate-y-0.5 active:translate-y-0;
+    @apply btn bg-primary text-chocolate hover:bg-primary-300 hover:shadow-soft hover:-translate-y-0.5;
   }
   .btn-cream {
-    @apply btn bg-cream text-chocolate hover:bg-cream-200 hover:shadow-soft
-           hover:-translate-y-0.5 active:translate-y-0;
+    @apply btn bg-chocolate/[0.07] text-chocolate hover:bg-chocolate/[0.12] hover:-translate-y-0.5;
   }
   .btn-outline {
-    @apply btn bg-transparent text-chocolate border-2 border-chocolate/20 hover:border-chocolate hover:bg-chocolate hover:text-cream
-           hover:-translate-y-0.5 active:translate-y-0;
+    @apply btn bg-transparent text-chocolate border-2 border-chocolate/25 hover:border-chocolate hover:bg-chocolate hover:text-cream-50;
   }
   .btn-light {
-    @apply btn bg-cream/95 text-chocolate hover:bg-cream hover:shadow-soft
-           hover:-translate-y-0.5 active:translate-y-0;
+    @apply btn bg-surface text-chocolate hover:bg-tan-light hover:shadow-soft hover:-translate-y-0.5;
+  }
+  .btn-danger {
+    @apply btn bg-red-700 text-white hover:bg-red-800 hover:-translate-y-0.5;
   }
   .btn-block {
     @apply w-full;
@@ -106,15 +137,12 @@
 
   /* Card surfaces */
   .card {
-    @apply bg-surface rounded-3xl shadow-soft transition-all duration-500 ease-cookie;
-  }
-  .card-dark {
-    @apply bg-chocolate-500 text-cream rounded-3xl shadow-soft-lg transition-all duration-500 ease-cookie;
+    @apply bg-surface rounded-2xl border border-chocolate/10;
   }
 
   /* Container */
   .container-magic {
-    @apply max-w-7xl mx-auto px-6 md:px-8 lg:px-12;
+    @apply max-w-7xl mx-auto px-5 sm:px-6 md:px-8 lg:px-12;
   }
 
   /* Section spacing */
@@ -122,28 +150,86 @@
     @apply py-20 md:py-28;
   }
 
+  /* The logo. Treated like an image: one fixed size everywhere, outside
+     the three-size type scale. */
+  .wordmark {
+    font-family: "Luckiest Guy", "Nunito Variable", sans-serif;
+    font-size: 3rem; /* 30px */
+    line-height: 1;
+    font-weight: 400;
+    white-space: nowrap;
+  }
+
+  /* Display type helper for non-heading elements */
+  .display {
+    @apply font-display font-normal;
+  }
+
+  /* Packaging-style lettering: cream fill, chocolate outline. Keeps
+     light display type legible on the tan colour block. */
+  .sticker {
+    color: #fbf9f4;
+    -webkit-text-stroke: 0.14em #2e0e0b;
+    paint-order: stroke fill;
+  }
+  .sticker-sm {
+    -webkit-text-stroke-width: 0.12em;
+  }
+
   /* Input field */
   .field {
-    @apply w-full bg-cream-50 border border-cream-400/60 rounded-2xl px-5 py-3.5
-           text-chocolate placeholder:text-chocolate/40
-           focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary
-           transition-all duration-300;
+    @apply w-full bg-chocolate/[0.04] border border-cream-500 rounded-xl px-4 py-3 text-base
+           text-chocolate placeholder:text-chocolate/[0.66]
+           focus:outline-none focus:ring-2 focus:ring-chocolate/25 focus:border-chocolate/60
+           disabled:bg-chocolate/[0.08] disabled:text-chocolate/55
+           transition-colors duration-200;
   }
   .field-dark {
-    @apply w-full bg-chocolate-400/60 border border-cream/15 rounded-2xl px-5 py-3.5
-           text-cream placeholder:text-cream/40
+    @apply w-full bg-chocolate-400/60 border border-cream/15 rounded-xl px-4 py-3
+           text-cream placeholder:text-cream/50
            focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary
-           transition-all duration-300;
+           transition-colors duration-200;
   }
 
-  /* Cookie image container with splash */
-  .cookie-frame {
-    @apply relative rounded-full overflow-hidden bg-cream-100 shadow-cookie;
+  /* Body text for the legal pages: base size, comfortable measure,
+     clear lists and links. */
+  .legal-prose {
+    @apply text-chocolate/85;
+  }
+  .legal-prose > * + * {
+    @apply mt-4;
+  }
+  .legal-prose p,
+  .legal-prose li {
+    max-width: 68ch;
+  }
+  .legal-prose ul {
+    @apply list-disc pl-6 space-y-2;
+  }
+  .legal-prose ol {
+    @apply list-decimal pl-6 space-y-2;
+  }
+  .legal-prose li::marker {
+    @apply text-primary-700;
+  }
+  .legal-prose h3 {
+    @apply mt-8 text-base font-bold text-chocolate;
+  }
+  .legal-prose strong {
+    @apply font-bold text-chocolate;
+  }
+  .legal-prose a {
+    @apply font-bold text-chocolate underline decoration-primary decoration-2 underline-offset-4 hover:decoration-chocolate;
   }
 
-  /* Heading eyebrow label */
+  /* Legacy helpers still used by About / Contact pages */
   .eyebrow {
-    @apply inline-block text-sm font-medium uppercase tracking-[0.2em] text-primary-600 mb-4;
+    @apply inline-block text-sm font-bold text-primary-700 mb-3;
+  }
+  .texture-dark {
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(197, 159, 113, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(197, 159, 113, 0.06) 0%, transparent 50%);
   }
 
   /* Underline grow on hover for nav links */
@@ -152,32 +238,16 @@
   }
   .nav-link::after {
     content: "";
-    @apply absolute left-0 -bottom-0.5 h-0.5 bg-primary transition-all duration-300 ease-cookie;
+    @apply absolute left-0 bottom-1.5 h-0.5 bg-current transition-all duration-300 ease-cookie;
     width: 0;
   }
   .nav-link:hover::after,
   .nav-link.router-link-active::after {
     width: 100%;
   }
-
-  /* Subtle texture for dark sections */
-  .texture-dark {
-    background-image:
-      radial-gradient(
-        circle at 20% 30%,
-        rgba(197, 159, 113, 0.08) 0%,
-        transparent 50%
-      ),
-      radial-gradient(
-        circle at 80% 70%,
-        rgba(197, 159, 113, 0.06) 0%,
-        transparent 50%
-      );
-  }
 }
 
 @layer utilities {
-  /* Scrollbar hide for carousels */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
@@ -186,20 +256,21 @@
     scrollbar-width: none;
   }
 
-  /* Animations on scroll trigger */
-  .reveal {
-    opacity: 0;
-    transform: translateY(24px);
-    transition:
-      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-  .reveal.is-visible {
-    opacity: 1;
-    transform: translateY(0);
+  .tabular {
+    font-variant-numeric: tabular-nums;
   }
 
-  /* Ripple effect base */
+  /* Reveal on scroll: visible by default, only hidden once JS opts in */
+  .reveal {
+    transition:
+      opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .js-reveal .reveal:not(.is-visible) {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+
   .ripple-container {
     position: relative;
     overflow: hidden;
@@ -213,41 +284,43 @@
     pointer-events: none;
   }
 
-  /* Shimmer placeholder */
+  /* Skeleton placeholder */
   .shimmer {
     background: linear-gradient(
       90deg,
-      rgba(226, 217, 200, 0.4) 0%,
-      rgba(226, 217, 200, 0.7) 50%,
-      rgba(226, 217, 200, 0.4) 100%
+      rgba(46, 14, 11, 0.07) 0%,
+      rgba(46, 14, 11, 0.13) 50%,
+      rgba(46, 14, 11, 0.07) 100%
     );
-    background-size: 1000px 100%;
-    animation: shimmer 2s linear infinite;
+    background-size: 600px 100%;
+    animation: shimmer 1.6s linear infinite;
   }
 }
 
 /* ============================================================
    Route transition animations
    ============================================================ */
-.page-enter-active,
-.page-leave-active {
+/* Kept short (120ms out + 220ms in) so navigation stays under ~400ms */
+.page-enter-active {
   transition:
-    opacity 0.4s ease,
-    transform 0.4s ease;
+    opacity 0.22s ease-out,
+    transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.page-leave-active {
+  transition: opacity 0.12s ease-in;
 }
 .page-enter-from {
   opacity: 0;
-  transform: translateY(12px);
+  transform: translateY(8px);
 }
 .page-leave-to {
   opacity: 0;
-  transform: translateY(-12px);
 }
 
 /* Slide-over drawer transitions */
 .drawer-enter-active,
 .drawer-leave-active {
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .drawer-enter-from,
 .drawer-leave-to {
@@ -266,20 +339,20 @@
 .modal-enter-active,
 .modal-leave-active {
   transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
+    opacity 0.25s ease,
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .modal-enter-from,
 .modal-leave-to {
   opacity: 0;
-  transform: scale(0.95) translateY(10px);
+  transform: scale(0.96) translateY(8px);
 }
 
 /* Accordion transitions */
 .accordion-enter-active,
 .accordion-leave-active {
   transition:
-    max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
     opacity 0.3s ease;
   overflow: hidden;
 }
@@ -294,8 +367,41 @@
   opacity: 1;
 }
 
+/* Long-form reading text */
+.prose-copy {
+  color: rgba(46, 14, 11, 0.82);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  max-width: 62ch;
+}
+
 .luckiest-guy {
-  font-family: "Luckiest Guy", cursive;
+  font-family: "Luckiest Guy", "Nunito Variable", sans-serif;
   font-weight: 400;
   font-style: normal;
+}
+
+/* Reduced motion: no movement, but keep the feedback. Colour and opacity
+   changes still transition so hovers, toasts and reveals stay legible. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-property: color, background-color, border-color, opacity, box-shadow, text-decoration-color !important;
+  }
+  .js-reveal .reveal:not(.is-visible) {
+    transform: none;
+  }
+  .page-enter-from,
+  .modal-enter-from,
+  .modal-leave-to,
+  .drawer-enter-from,
+  .drawer-leave-to {
+    transform: none;
+  }
 }

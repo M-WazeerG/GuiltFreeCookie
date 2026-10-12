@@ -85,7 +85,7 @@ const onPick = (i) => {
       v-if="showValue"
       :class="[
         'font-medium',
-        size === 'sm' ? 'text-xs' : 'text-sm',
+        size === 'sm' ? 'text-sm' : 'text-sm',
       ]"
       class="text-chocolate/70"
     >

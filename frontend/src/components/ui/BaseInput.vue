@@ -5,6 +5,7 @@
  */
 import { computed, useSlots } from "vue";
 import { ExclamationCircleIcon } from "@heroicons/vue/24/outline";
+import { ChevronUpDownIcon } from "@heroicons/vue/20/solid";
 
 const props = defineProps({
   modelValue: { type: [String, Number], default: "" },
@@ -27,6 +28,8 @@ const props = defineProps({
   rows: { type: Number, default: 4 },
   // Light (cream) or dark (chocolate) variant
   variant: { type: String, default: "light" }, // light | dark
+  // Accessible name when there's no visible label
+  ariaLabel: { type: String, default: "" },
 });
 
 const emit = defineEmits(["update:modelValue", "blur", "focus"]);
@@ -37,6 +40,9 @@ const fieldClass = computed(() =>
   props.variant === "dark" ? "field-dark" : "field",
 );
 const slots = useSlots();
+const describedBy = computed(() =>
+  props.error ? `${props.id}-error` : props.help ? `${props.id}-help` : undefined,
+);
 
 const onInput = (e) => {
   const v = e.target.value;
@@ -49,23 +55,23 @@ const onInput = (e) => {
     <label
       v-if="label"
       :for="id"
-      :class="[
-        'block text-card font-medium mb-2',
-        variant === 'dark' ? 'text-cream/80' : 'text-chocolate/80',
-      ]"
+      :class="[ 'block text-sm font-semibold mb-1.5', variant === 'dark' ? 'text-cream/85' : 'text-chocolate/85', ]"
     >
       {{ label }}
-      <span v-if="required" class="text-primary">*</span>
+      <span v-if="required" class="text-primary-700" aria-hidden="true">*</span>
     </label>
 
     <!-- Select -->
+    <div v-if="isSelect" class="relative">
     <select
-      v-if="isSelect"
       :id="id"
       :name="name || id"
       :value="modelValue"
       :disabled="disabled"
-      :class="[fieldClass, error ? 'ring-2 ring-red-400 border-red-300' : '']"
+      :class="[fieldClass, 'appearance-none pr-10 cursor-pointer', error ? 'border-red-600 ring-2 ring-red-600/15' : '']"
+      :aria-label="ariaLabel || undefined"
+      :aria-invalid="error ? 'true' : undefined"
+      :aria-describedby="describedBy"
       @input="onInput"
       @blur="$emit('blur', $event)"
       @focus="$emit('focus', $event)"
@@ -74,6 +80,8 @@ const onInput = (e) => {
         {{ opt.label }}
       </option>
     </select>
+      <ChevronUpDownIcon class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-chocolate/60" />
+    </div>
 
     <!-- Textarea -->
     <textarea
@@ -88,8 +96,11 @@ const onInput = (e) => {
       :class="[
         fieldClass,
         'resize-none',
-        error ? 'ring-2 ring-red-400 border-red-300' : '',
+        error ? 'border-red-600 ring-2 ring-red-600/15' : '',
       ]"
+      :aria-label="ariaLabel || undefined"
+      :aria-invalid="error ? 'true' : undefined"
+      :aria-describedby="describedBy"
       @input="onInput"
       @blur="$emit('blur', $event)"
       @focus="$emit('focus', $event)"
@@ -106,7 +117,10 @@ const onInput = (e) => {
       :disabled="disabled"
       :required="required"
       :autocomplete="autocomplete"
-      :class="[fieldClass, error ? 'ring-2 ring-red-400 border-red-300' : '']"
+      :class="[fieldClass, error ? 'border-red-600 ring-2 ring-red-600/15' : '']"
+      :aria-label="ariaLabel || undefined"
+      :aria-invalid="error ? 'true' : undefined"
+      :aria-describedby="describedBy"
       @input="onInput"
       @blur="$emit('blur', $event)"
       @focus="$emit('focus', $event)"
@@ -115,13 +129,15 @@ const onInput = (e) => {
     <!-- Error / Help text -->
     <p
       v-if="error"
-      class="mt-2 text-sm text-red-500 flex items-center gap-1.5 animate-fade-in"
+      :id="`${id}-error`"
+      class="mt-2 text-sm text-red-700 flex items-center gap-1.5 animate-fade-in"
     >
       <ExclamationCircleIcon class="h-4 w-4 shrink-0" />
       {{ error }}
     </p>
     <p
       v-else-if="help"
+      :id="`${id}-help`"
       :class="[
         'mt-2 text-sm',
         variant === 'dark' ? 'text-cream/50' : 'text-chocolate/50',

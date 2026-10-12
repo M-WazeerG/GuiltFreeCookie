@@ -1,204 +1,203 @@
-<template>
-  <div class="min-h-screen bg-[#45130d] relative">
-    <div
-      class="absolute inset-0 pointer-events-none z-0"
-      style="
-        background-image: url(&quot;/images/cookie-pattern.png&quot;);
-        background-size: cover;
-        background-position: center;
-        opacity: 0.08;
-      "
-    />
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 relative z-10">
-      <router-link
-        to="/products"
-        class="inline-flex items-center gap-1.5 text-sm font-medium text-cream-100/60 hover:text-cream-100 transition-colors mb-8"
-      >
-        <ArrowLeftIcon class="h-4 w-4" />
-        Back to Cookies
-      </router-link>
-
-      <div
-        v-if="loading"
-        class="flex flex-col items-center justify-center py-32"
-      >
-        <LoadingSpinner />
-        <p class="text-cream-100/60 mt-4">Loading cookie details...</p>
-      </div>
-
-      <div
-        v-else-if="!cookie"
-        class="flex flex-col items-center justify-center py-32 text-center"
-      >
-        <div class="text-5xl mb-4">😕</div>
-        <h3 class="text-xl font-semibold text-cream-100 mb-2">
-          Cookie Not Found
-        </h3>
-        <p class="text-cream-100/60 mb-6">
-          The cookie you're looking for doesn't exist.
-        </p>
-        <BaseButton @click="$router.push('/products')"
-          >Browse All Cookies</BaseButton
-        >
-      </div>
-
-      <template v-else>
-        <div
-          class="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-20 items-start"
-          v-reveal
-        >
-          <div class="lg:sticky lg:top-24">
-            <div
-              class="bg-[#5b2b22] rounded-[30px] p-10 flex items-center justify-center shadow-xl"
-            >
-              <img
-                :src="displayImage"
-                :alt="cookie.description"
-                class="w-full max-w-[420px] object-contain"
-              />
-            </div>
-          </div>
-
-          <div class="space-y-6">
-            <div>
-              <p class="text-sm font-medium text-cream-100/50 mb-2">
-                GuiltFreeCookie
-              </p>
-              <h1 class="text-5xl font-bold leading-tight text-cream-50 mb-3">
-                {{ cookie.description }}
-              </h1>
-
-              <div class="flex items-center gap-1.5 mb-4">
-                <StarIcon
-                  v-for="n in 5"
-                  :key="n"
-                  class="h-5 w-5"
-                  :class="
-                    n <= displayRating ? 'text-primary' : 'text-cream-100/20'
-                  "
-                />
-                <span class="text-cream-100/60 text-sm ml-1"
-                  >({{ displayRating.toFixed(1) }})</span
-                >
-              </div>
-
-              <div class="text-5xl font-bold text-cream-50">
-                R{{ cookie.price?.toFixed(2) }}
-              </div>
-            </div>
-
-            <CookieInfoCard :cookie="cookie" />
-
-            <QuantitySelector v-model="quantity" />
-
-            <p
-              v-if="cookie.longDescription"
-              class="text-cream-100/80 leading-8 max-w-xl"
-            >
-              {{ cookie.longDescription }}
-            </p>
-
-            <div class="flex flex-col sm:flex-row gap-4 pt-4">
-              <button
-                type="button"
-                class="w-56 inline-flex items-center justify-center gap-2 bg-primary text-chocolate text-lg font-semibold py-4 rounded-full hover:bg-primary-400 transition-colors duration-300"
-                @click="addToCart"
-              >
-                <ShoppingBagIcon class="h-5 w-5" />
-                Add to Cart
-              </button>
-              <button
-                type="button"
-                class="w-56 inline-flex items-center justify-center gap-2 bg-cream-50 text-chocolate text-lg font-semibold py-4 rounded-full hover:bg-cream-200 transition-colors duration-300"
-                @click="buyNow"
-              >
-                Buy Now
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div v-if="relatedCookies.length" class="mt-20">
-          <h2 class="text-3xl font-bold text-cream-50 mb-8">
-            You may also like
-          </h2>
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <RelatedCookieCard
-              v-for="related in relatedCookies"
-              :key="related.id"
-              :related="related"
-            />
-          </div>
-        </div>
-      </template>
-    </div>
-
-    <NewsletterSection />
-  </div>
-</template>
-
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import { useRoute } from "vue-router";
-import { ArrowLeftIcon, ShoppingBagIcon } from "@heroicons/vue/24/outline";
-import { StarIcon } from "@heroicons/vue/24/solid";
+import { useRoute, RouterLink } from "vue-router";
+import { ChevronRightIcon, ShoppingBagIcon } from "@heroicons/vue/20/solid";
 
 import cookieApi from "../api/cookieApi";
 import BaseButton from "../components/ui/BaseButton.vue";
-import LoadingSpinner from "../components/ui/LoadingSpinner.vue";
 import CookieInfoCard from "../components/cookieDetails/CookieInfoCard.vue";
-import QuantitySelector from "../components/cookieDetails/QuantitySelector.vue";
 import RelatedCookieCard from "../components/cookieDetails/RelatedCookieCard.vue";
-import NewsletterSection from "../components/sections/NewsletterSection.vue";
-import { useScrollReveal } from "../composables/useScrollReveal";
+import QuantitySelector from "../components/cookieDetails/QuantitySelector.vue";
+import { useCatalog, cookieImage, cookieName, imageFallback } from "../composables/useCatalog";
+import { useFormat } from "../composables/useFormat";
+import { useToast } from "../composables/useToast";
+import { formatCategoryLabel, categoryBlurb } from "../constants/cookieCategories";
 
-const { vReveal } = useScrollReveal();
 const route = useRoute();
+const { rand } = useFormat();
+const { showToast } = useToast();
+const loadFailed = ref(false);
+const { cookies: catalog, load: loadCatalog } = useCatalog();
 
 const cookie = ref(null);
-const loading = ref(false);
+const loading = ref(true);
 const quantity = ref(1);
-const relatedCookies = ref([]);
 
-const displayImage = computed(
-  () => cookieApi.getImageUrl(cookie.value?.image) || "/cookie.png",
-);
+const image = computed(() => cookieImage(cookie.value));
+const name = computed(() => cookieName(cookie.value));
+const categoryLabel = computed(() => formatCategoryLabel(cookie.value?.category));
+// The cookie's own copy if it has some, otherwise the range's one-liner.
+const blurb = computed(() => cookie.value?.longDescription?.trim() || categoryBlurb(cookie.value?.category));
+const total = computed(() => (cookie.value?.price || 0) * quantity.value);
 
-const displayRating = computed(() => cookie.value?.rating ?? 5);
+// Same range first, then the rest of the jar.
+const related = computed(() => {
+  if (!cookie.value) return [];
+  const others = catalog.value.filter((c) => c.cookieId !== cookie.value.cookieId);
+  const same = others.filter((c) => c.category === cookie.value.category);
+  const rest = others.filter((c) => c.category !== cookie.value.category);
+  return [...same, ...rest].slice(0, 4);
+});
 
-const addToCart = () => {};
-
+// Hooks for the cart feature to wire up. Until then, say so instead of
+// silently doing nothing.
+const addToCart = () => {
+  showToast("The cart is almost ready. You'll be able to order very soon.", "info");
+};
 const buyNow = () => {
   addToCart();
 };
 
+// "Not found" and "couldn't reach the server" are different problems:
+// only the second one is worth retrying.
 const fetchCookie = async () => {
   loading.value = true;
+  loadFailed.value = false;
   try {
     cookie.value = await cookieApi.getById(route.params.id);
+    if (cookie.value?.description) {
+      document.title = `${cookieName(cookie.value)} | GuiltFreeCookie`;
+    }
   } catch (error) {
     cookie.value = null;
+    loadFailed.value = !error.response || error.response.status >= 500;
   } finally {
     loading.value = false;
   }
 };
 
-const fetchRelated = async () => {
-  try {
-    const all = await cookieApi.getAll?.();
-    if (Array.isArray(all)) {
-      relatedCookies.value = all
-        .filter((c) => c.id !== route.params.id)
-        .slice(0, 2);
-    }
-  } catch (error) {
-    relatedCookies.value = [];
-  }
-};
-
-onMounted(async () => {
-  await fetchCookie();
-  fetchRelated();
+onMounted(() => {
+  fetchCookie();
+  loadCatalog();
 });
 </script>
+
+<template>
+  <div class="pt-[var(--nav-h)]">
+    <!-- Loading -->
+    <div v-if="loading" class="container-magic pt-8 pb-24" aria-busy="true" aria-label="Loading cookie">
+      <div class="shimmer h-4 w-56 rounded-full" />
+      <div class="mt-6 grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-16">
+        <div class="shimmer aspect-square rounded-[28px]" />
+        <div class="space-y-5 pt-4">
+          <div class="shimmer h-5 w-28 rounded-full" />
+          <div class="shimmer h-16 w-4/5 rounded-2xl" />
+          <div class="shimmer h-8 w-32 rounded-full" />
+          <div class="shimmer h-14 w-full rounded-full mt-10" />
+          <div class="shimmer h-40 w-full rounded-2xl mt-8" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Couldn't reach the server -->
+    <div v-else-if="loadFailed" class="container-magic py-28 max-w-lg text-center" role="alert">
+      <img src="/img/cookies/lemon-almond.webp" alt="" class="mx-auto w-32 rotate-6 drop-shadow-cookie-sm" />
+      <h1 class="mt-6 text-base font-bold">We couldn't load this cookie</h1>
+      <p class="mt-2 text-base text-chocolate/80">
+        Check your connection, then try again.
+      </p>
+      <BaseButton class="mt-8" @click="fetchCookie">Try again</BaseButton>
+    </div>
+
+    <!-- Not found -->
+    <div v-else-if="!cookie" class="container-magic py-28 max-w-lg text-center">
+      <img src="/img/cookies/cinnamon-pecan.webp" alt="" class="mx-auto w-32 -rotate-12 drop-shadow-cookie-sm" />
+      <h1 class="font-display mt-6 text-display">This one's been eaten</h1>
+      <p class="mt-3 text-base text-chocolate/80">
+        We couldn't find that cookie. It may have sold out or moved.
+      </p>
+      <BaseButton :to="{ name: 'Products' }" class="mt-8">See all cookies</BaseButton>
+    </div>
+
+    <template v-else>
+      <div class="container-magic pt-6 pb-20 md:pb-28">
+        <!-- Breadcrumb -->
+        <nav aria-label="Breadcrumb" class="mb-6">
+          <ol class="flex flex-wrap items-center gap-1 text-sm font-medium text-chocolate/70">
+            <li>
+              <RouterLink :to="{ name: 'Products' }" class="hover:text-chocolate hover:underline">Cookies</RouterLink>
+            </li>
+            <li aria-hidden="true"><ChevronRightIcon class="h-4 w-4" /></li>
+            <li>
+              <RouterLink
+                :to="{ name: 'Products', query: { category: cookie.category } }"
+                class="hover:text-chocolate hover:underline"
+              >{{ categoryLabel }}</RouterLink>
+            </li>
+            <li aria-hidden="true"><ChevronRightIcon class="h-4 w-4" /></li>
+            <li class="text-chocolate truncate max-w-[25.6rem]" aria-current="page">{{ name }}</li>
+          </ol>
+        </nav>
+
+        <div class="grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-16 items-start">
+          <!-- Media -->
+          <div class="lg:sticky lg:top-[calc(var(--nav-h)+2.4rem)]">
+            <div
+              class="relative isolate aspect-square overflow-hidden rounded-[28px] bg-chocolate flex items-center justify-center"
+            >
+              <div
+                class="absolute inset-0 -z-10 bg-[radial-gradient(50%_45%_at_50%_52%,rgba(197,159,113,0.4),transparent_72%)]"
+                aria-hidden="true"
+              />
+              <img
+                :src="image"
+                @error="imageFallback(cookie)($event)"
+                :alt="name"
+                class="w-[78%] h-[78%] object-contain drop-shadow-[0_40px_40px_rgba(0,0,0,0.45)] animate-cookie-in"
+              />
+            </div>
+          </div>
+
+          <!-- Details -->
+          <div class="lg:pt-2">
+            <RouterLink
+              :to="{ name: 'Products', query: { category: cookie.category } }"
+              class="inline-flex items-center min-h-11 rounded-full bg-tan px-4 py-1.5 text-sm font-semibold text-chocolate hover:bg-tan-dark transition-colors"
+            >
+              {{ categoryLabel }}
+            </RouterLink>
+
+            <h1 class="font-display mt-4 text-display">{{ name }}</h1>
+            <p v-if="blurb" class="mt-3 text-base text-chocolate/80">{{ blurb }}</p>
+
+            <p class="mt-5 text-base font-bold tabular">{{ rand(cookie.price) }}</p>
+
+            <!-- Purchase -->
+            <div class="mt-8 flex flex-wrap items-center gap-3">
+              <QuantitySelector v-model="quantity" />
+              <BaseButton size="lg" class="h-14 flex-1 min-w-[19.2rem]" @click="addToCart">
+                <ShoppingBagIcon class="h-5 w-5" />
+                Add to cart
+                <span class="font-normal text-cream-100/75 tabular" v-if="quantity > 1">&middot; {{ rand(total) }}</span>
+              </BaseButton>
+            </div>
+            <BaseButton variant="outline" size="lg" block class="mt-3 h-14" @click="buyNow">
+              Buy now
+            </BaseButton>
+
+            <!-- Details -->
+            <CookieInfoCard :cookie="cookie" class="mt-8" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Related -->
+      <section v-if="related.length" class="bg-background py-20 md:py-24" aria-labelledby="related-title">
+        <div class="container-magic">
+          <div class="flex flex-wrap items-end justify-between gap-4 mb-10">
+            <h2 id="related-title" class="font-display text-display">You might also like</h2>
+            <RouterLink
+              :to="{ name: 'Products' }"
+              class="inline-flex items-center min-h-11 font-semibold underline decoration-primary decoration-2 underline-offset-[6px] hover:decoration-chocolate"
+            >
+              See all cookies
+            </RouterLink>
+          </div>
+          <div class="grid md:grid-cols-2 gap-4 sm:gap-5">
+            <RelatedCookieCard v-for="c in related" :key="c.cookieId" :related="c" />
+          </div>
+        </div>
+      </section>
+    </template>
+  </div>
+</template>

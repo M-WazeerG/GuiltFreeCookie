@@ -38,7 +38,7 @@ const emit = defineEmits(["confirm", "close"]);
 
 <template>
   <BaseModal :open="open" :title="title" size="sm" @close="emit('close')">
-    <p class="text-chocolate/70 mb-6">
+    <p class="text-chocolate/80 mb-6">
       <slot>{{ message }}</slot>
     </p>
 
@@ -49,15 +49,9 @@ const emit = defineEmits(["confirm", "close"]);
       <BaseButton v-if="variant === 'primary'" variant="primary" size="sm" :loading="loading" @click="emit('confirm')">
         {{ confirmText }}
       </BaseButton>
-      <button
-        v-else
-        type="button"
-        class="btn text-sm px-5 py-2.5 bg-red-600 text-white hover:bg-red-700 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:pointer-events-none"
-        :disabled="loading"
-        @click="emit('confirm')"
-      >
+      <BaseButton v-else variant="danger" size="sm" :loading="loading" :disabled="loading" @click="emit('confirm')">
         {{ confirmText }}
-      </button>
+      </BaseButton>
     </div>
   </BaseModal>
 </template>

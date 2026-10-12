@@ -563,15 +563,15 @@ export const testimonials = [
 export const faqs = [
   {
     id: 1,
-    question: 'Are your cookies safe for diabetics and blood sugar management?',
+    question: 'Are your cookies suitable if I am managing my blood sugar?',
     answer:
-        'Yes, absolutely. We formulate our cookies using natural, zero-glycemic index sweeteners (like erythritol and stevia) and nutrient-dense almond flour. They are specifically crafted not to spike blood sugar or trigger insulin surges, making them safe for Type 1 and Type 2 diabetics.',
+        'Our diabetic friendly cookies are sweetened with erythritol and stevia, which are low-GI sweeteners, and made with almond flour instead of wheat, so they are much gentler on blood sugar than a regular cookie. Everyone responds differently, though, so if you are managing diabetes please check with your doctor or dietitian about what suits you.',
   },
   {
     id: 2,
     question: 'What are the net carbs and macros per cookie?',
     answer:
-        'Our cookies average between 1g to 3g of net carbs, around 4g to 6g of protein, and zero added sugar. Detailed nutritional info and macro breakdowns are provided on every product card and package label.',
+        'Our cookies average between 1g to 3g of net carbs, around 4g to 6g of protein, and zero added sugar. Each product page lists the ingredients and allergens, and you are welcome to contact us for a full nutritional breakdown of any cookie.',
   },
   {
     id: 3,
@@ -581,14 +581,14 @@ export const faqs = [
   },
   {
     id: 4,
-    question: 'Are all your cookies gluten-free and keto/banting friendly?',
+    question: 'Are your cookies gluten-free and keto/banting friendly?',
     answer:
-        'Yes! Because we use 100% grain-free nut flours instead of wheat, all our cookies are naturally gluten-free and perfect for Keto, Banting, and low-carb lifestyles. We also have dedicated dairy-free/vegan options.',
+        'Our Gluten free range is made without wheat or other gluten-containing ingredients, and most of our cookies are low in carbs, so they suit Keto, Banting and low-carb eating. We also have vegan, dairy-free options. Because everything is baked in the same kitchen, we cannot guarantee any cookie is free from traces of gluten, so please contact us first if you have coeliac disease.',
   },
   {
     id: 5,
     question: 'How long do they stay fresh, and can they be frozen?',
     answer:
-        'Without artificial preservatives, our cookies stay fresh for 10–14 days in an airtight container. For long-term storage, freeze them for up to 3 months — just pop one in an air fryer or microwave for 10 seconds for a warm, gooey, fresh-baked taste!',
+        'Without artificial preservatives, our cookies stay fresh for 10 to 14 days in an airtight container. For long-term storage, freeze them for up to 3 months. Just pop one in an air fryer or microwave for 10 seconds for a warm, gooey, fresh-baked taste!',
   },
 ]

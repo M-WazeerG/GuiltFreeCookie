@@ -1,0 +1,74 @@
+[
+  {
+    "file": "products-banner-original.png",
+    "width": 2752,
+    "height": 1536,
+    "mode": "RGBA",
+    "bytes": 6242311,
+    "sha256": "6eabf777a28f1a71f9da39c63341b807f9be949900236913ef63734cd40b7c9f",
+    "alphaExtrema": [
+      255,
+      255
+    ]
+  },
+  {
+    "file": "products-banner.webp",
+    "width": 1400,
+    "height": 861,
+    "mode": "RGBA",
+    "bytes": 251696,
+    "sha256": "e12747c232e7537454ec22b30dca3e187c64d7bada6bd19eb386c82325f9e603",
+    "alphaExtrema": [
+      0,
+      255
+    ]
+  },
+  {
+    "file": "about-banner-original.png",
+    "width": 2752,
+    "height": 1536,
+    "mode": "RGBA",
+    "bytes": 6218810,
+    "sha256": "6c6927a71589b2571cb5ada1037382da8e9d64e0f3f4d5af0911853015885aec",
+    "alphaExtrema": [
+      255,
+      255
+    ]
+  },
+  {
+    "file": "about-banner.webp",
+    "width": 1400,
+    "height": 788,
+    "mode": "RGBA",
+    "bytes": 199226,
+    "sha256": "15cff5041f05acbe3617360553719125983844048c8f55c33c0694dfa7141a0d",
+    "alphaExtrema": [
+      0,
+      255
+    ]
+  },
+  {
+    "file": "contact-banner-original.png",
+    "width": 2752,
+    "height": 1536,
+    "mode": "RGBA",
+    "bytes": 6424624,
+    "sha256": "a7f5ffac0cb1b38c5a3a3ee6dcd5479f5b5fc1d867b54bcf543bc6b98a25b0c3",
+    "alphaExtrema": [
+      255,
+      255
+    ]
+  },
+  {
+    "file": "contact-banner.webp",
+    "width": 1400,
+    "height": 889,
+    "mode": "RGBA",
+    "bytes": 265942,
+    "sha256": "0fb01a5447721c11c756488a45d51c94fe16db402b5480ca623878c16b06792d",
+    "alphaExtrema": [
+      0,
+      255
+    ]
+  }
+]

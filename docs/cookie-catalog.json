@@ -1,0 +1,1203 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-12",
+  "brand": "Guilt Free Cookie",
+  "status": "assets_ready_product_data_unverified",
+  "model": "nano_banana_2_1",
+  "settings": {
+    "aspectRatioRequested": "4:5",
+    "resolution": "4k",
+    "thinkingLevel": "medium"
+  },
+  "reference": {
+    "jobId": "bdbc3ffd-31b9-490a-b7f1-a84c41b2f42b",
+    "role": "approved art direction; angle, lighting, crop and thickness"
+  },
+  "credits": {
+    "startingBeforeTest": 110,
+    "startingThisTurn": 107,
+    "spentThisTurn": 33,
+    "totalGenerationSpent": 36,
+    "remaining": 74,
+    "backgroundRemovalCharged": 0
+  },
+  "products": [
+    {
+      "index": 0,
+      "category": "DIABETIC_FRIENDLY",
+      "name": "Toasted Almond & Vanilla",
+      "slug": "toasted-almond-vanilla",
+      "description": "Golden edges give way to a tender vanilla centre, with toasted almond flakes adding a delicate crunch to every bite.",
+      "proposedIngredients": "Almond flour, butter, eggs, erythritol, stevia, vanilla extract, flaked almonds, baking powder, sea salt",
+      "proposedAllergens": "Tree nuts (almonds), milk, eggs",
+      "visualBrief": "warm golden vanilla dough with a crackled tender top and a few toasted almond flakes pressed into it; no chocolate, no sugar crystals, no icing",
+      "price": null,
+      "currency": "ZAR",
+      "nutrition": null,
+      "recipeStatus": "proposed_unverified",
+      "claimStatus": "pending_recipe_and_nutrition_verification",
+      "imageStatus": "generated",
+      "originalPath": "design/generated/toasted-almond-vanilla-original.png",
+      "webPath": "frontend/public/img/cookies/toasted-almond-vanilla.webp",
+      "publicImageUrl": "/img/cookies/toasted-almond-vanilla.webp",
+      "altText": "Toasted Almond & Vanilla cookie, photographed at a tilted angle with a cracked top and thick edge",
+      "jobId": "99aa6bc7-0a8c-4f20-9965-ce84695f6ef0",
+      "creditsGeneration": 3,
+      "resultUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3KaKP7qeBPzaLBxVoolxeZcaBHb/hf_20261012_091652_99aa6bc7-0a8c-4f20-9965-ce84695f6ef0.png",
+      "categoryLabel": "Diabetic friendly",
+      "categoryVerification": "Proposed almond-flour recipes using erythritol/stevia. Category assignment is a product-development intention, not evidence of suitability for diabetes. Confirm the actual recipe, serving size and nutrition before publishing this claim; do not add blood-sugar promises.",
+      "adminName": "Toasted Almond & Vanilla",
+      "shortDescription": "Golden edges give way to a tender vanilla centre, with toasted almond flakes adding a delicate crunch to every bite.",
+      "intendedPlacement": [
+        "product card",
+        "product page",
+        "homepage section"
+      ],
+      "badges": [],
+      "isPublishReady": false,
+      "recipeVerified": false,
+      "nutritionVerified": false,
+      "allergenStatus": "proposed_verify_actual_recipe_and_suppliers",
+      "integration": {
+        "backendDescription": "Toasted Almond & Vanilla",
+        "marketingDescription": "Golden edges give way to a tender vanilla centre, with toasted almond flakes adding a delicate crunch to every bite.",
+        "imageUploadFile": "frontend/public/img/cookies/toasted-almond-vanilla.webp",
+        "backendImageValue": "Use the image field returned by the upload API; do not copy publicImageUrl into this field.",
+        "cookieId": null
+      },
+      "assetsVerified": true,
+      "assetMetadata": {
+        "slug": "toasted-almond-vanilla",
+        "original": {
+          "width": 3712,
+          "height": 4608,
+          "bytes": 23633223,
+          "sha256": "62ddd6dbc7c25c4edda9cef808fb42da0f5c2aec1a004cb628f5ce79d044fbfe",
+          "alphaExtrema": [
+            255,
+            255
+          ]
+        },
+        "web": {
+          "width": 819,
+          "height": 900,
+          "bytes": 104432,
+          "sha256": "830b2d43c8c16f0ff572ea19492a44188d6c22e1714c6de1552a84eb4beececb",
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "subjectBounds": [
+            24,
+            24,
+            795,
+            876
+          ],
+          "margins": [
+            24,
+            24,
+            24,
+            24
+          ]
+        }
+      },
+      "assetStatus": "ready",
+      "visualReview": "passed: full cookie, matching flavour cues, clean isolation on dark background",
+      "processing": "ImageMagick: connected white-background removal at 12% fuzz, 2px mask erosion, 0.5px feather at original resolution; trim, resize subject to 852px high, 24px transparent border, WebP quality 85. Originals untouched."
+    },
+    {
+      "index": 1,
+      "category": "DIABETIC_FRIENDLY",
+      "name": "Cinnamon Pecan",
+      "slug": "cinnamon-pecan",
+      "description": "A warmly spiced cookie with a soft middle, gently crisp edges and toasted pecan pieces baked through the dough.",
+      "proposedIngredients": "Almond flour, butter, eggs, erythritol, stevia, pecans, cinnamon, vanilla extract, baking powder, sea salt",
+      "proposedAllergens": "Tree nuts (almonds, pecans), milk, eggs",
+      "visualBrief": "golden cinnamon-brown dough with fine cinnamon flecks and generous toasted pecan pieces embedded on top; no sugar crust, no icing, no chocolate",
+      "price": null,
+      "currency": "ZAR",
+      "nutrition": null,
+      "recipeStatus": "proposed_unverified",
+      "claimStatus": "pending_recipe_and_nutrition_verification",
+      "imageStatus": "generated",
+      "originalPath": "design/generated/cinnamon-pecan-original.png",
+      "webPath": "frontend/public/img/cookies/cinnamon-pecan.webp",
+      "publicImageUrl": "/img/cookies/cinnamon-pecan.webp",
+      "altText": "Cinnamon Pecan cookie, photographed at a tilted angle with a cracked top and thick edge",
+      "jobId": "1609fc10-ad81-462d-8325-94fbc49ea161",
+      "creditsGeneration": 3,
+      "resultUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3KaKP7qeBPzaLBxVoolxeZcaBHb/hf_20261012_091654_1609fc10-ad81-462d-8325-94fbc49ea161.png",
+      "categoryLabel": "Diabetic friendly",
+      "categoryVerification": "Proposed almond-flour recipes using erythritol/stevia. Category assignment is a product-development intention, not evidence of suitability for diabetes. Confirm the actual recipe, serving size and nutrition before publishing this claim; do not add blood-sugar promises.",
+      "adminName": "Cinnamon Pecan",
+      "shortDescription": "A warmly spiced cookie with a soft middle, gently crisp edges and toasted pecan pieces baked through the dough.",
+      "intendedPlacement": [
+        "product card",
+        "product page"
+      ],
+      "badges": [],
+      "isPublishReady": false,
+      "recipeVerified": false,
+      "nutritionVerified": false,
+      "allergenStatus": "proposed_verify_actual_recipe_and_suppliers",
+      "integration": {
+        "backendDescription": "Cinnamon Pecan",
+        "marketingDescription": "A warmly spiced cookie with a soft middle, gently crisp edges and toasted pecan pieces baked through the dough.",
+        "imageUploadFile": "frontend/public/img/cookies/cinnamon-pecan.webp",
+        "backendImageValue": "Use the image field returned by the upload API; do not copy publicImageUrl into this field.",
+        "cookieId": null
+      },
+      "assetsVerified": true,
+      "assetMetadata": {
+        "slug": "cinnamon-pecan",
+        "original": {
+          "width": 3712,
+          "height": 4608,
+          "bytes": 24344511,
+          "sha256": "8290883b224baa613497d50c971a7817b7a7cc01e955c43c7c4ba2aa9a176d3d",
+          "alphaExtrema": [
+            255,
+            255
+          ]
+        },
+        "web": {
+          "width": 815,
+          "height": 900,
+          "bytes": 128840,
+          "sha256": "abac44f6e53d67f7bb7e9b1ebe7c65016e6fc23b29fac5227428d7a568d0c8d7",
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "subjectBounds": [
+            24,
+            24,
+            791,
+            876
+          ],
+          "margins": [
+            24,
+            24,
+            24,
+            24
+          ]
+        }
+      },
+      "assetStatus": "ready",
+      "visualReview": "passed: full cookie, matching flavour cues, clean isolation on dark background",
+      "processing": "ImageMagick: connected white-background removal at 12% fuzz, 2px mask erosion, 0.5px feather at original resolution; trim, resize subject to 852px high, 24px transparent border, WebP quality 85. Originals untouched."
+    },
+    {
+      "index": 2,
+      "category": "DIABETIC_FRIENDLY",
+      "name": "Espresso Dark Chocolate",
+      "slug": "espresso-dark-chocolate",
+      "description": "Deep espresso notes meet glossy dark chocolate pieces in a richly baked cookie with a soft centre and crisp, cocoa-brown edges.",
+      "proposedIngredients": "Almond flour, butter, eggs, erythritol, stevia, unsweetened dark chocolate, cocoa powder, espresso powder, vanilla extract, baking powder, sea salt",
+      "proposedAllergens": "Tree nuts (almonds), milk, eggs; verify chocolate supplier allergens",
+      "visualBrief": "espresso-brown dough, darker than golden vanilla but lighter than the reference cocoa cookie, with small angular dark chocolate shards distributed on the crackled top; no coffee beans, no drizzle",
+      "price": null,
+      "currency": "ZAR",
+      "nutrition": null,
+      "recipeStatus": "proposed_unverified",
+      "claimStatus": "pending_recipe_and_nutrition_verification",
+      "imageStatus": "generated",
+      "originalPath": "design/generated/espresso-dark-chocolate-original.png",
+      "webPath": "frontend/public/img/cookies/espresso-dark-chocolate.webp",
+      "publicImageUrl": "/img/cookies/espresso-dark-chocolate.webp",
+      "altText": "Espresso Dark Chocolate cookie, photographed at a tilted angle with a cracked top and thick edge",
+      "jobId": "effa7b6d-a17a-4b93-8c08-de7f32e2f873",
+      "creditsGeneration": 3,
+      "resultUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3KaKP7qeBPzaLBxVoolxeZcaBHb/hf_20261012_091652_effa7b6d-a17a-4b93-8c08-de7f32e2f873.png",
+      "categoryLabel": "Diabetic friendly",
+      "categoryVerification": "Proposed almond-flour recipes using erythritol/stevia. Category assignment is a product-development intention, not evidence of suitability for diabetes. Confirm the actual recipe, serving size and nutrition before publishing this claim; do not add blood-sugar promises.",
+      "adminName": "Espresso Dark Chocolate",
+      "shortDescription": "Deep espresso notes meet glossy dark chocolate pieces in a richly baked cookie with a soft centre and crisp, cocoa-brown edges.",
+      "intendedPlacement": [
+        "product card",
+        "product page"
+      ],
+      "badges": [],
+      "isPublishReady": false,
+      "recipeVerified": false,
+      "nutritionVerified": false,
+      "allergenStatus": "proposed_verify_actual_recipe_and_suppliers",
+      "integration": {
+        "backendDescription": "Espresso Dark Chocolate",
+        "marketingDescription": "Deep espresso notes meet glossy dark chocolate pieces in a richly baked cookie with a soft centre and crisp, cocoa-brown edges.",
+        "imageUploadFile": "frontend/public/img/cookies/espresso-dark-chocolate.webp",
+        "backendImageValue": "Use the image field returned by the upload API; do not copy publicImageUrl into this field.",
+        "cookieId": null
+      },
+      "assetsVerified": true,
+      "assetMetadata": {
+        "slug": "espresso-dark-chocolate",
+        "original": {
+          "width": 3712,
+          "height": 4608,
+          "bytes": 25138332,
+          "sha256": "8c29f5f1e89b2c08dc861fc76e9c0f0928662043930c2f65093f080f87a41f8d",
+          "alphaExtrema": [
+            255,
+            255
+          ]
+        },
+        "web": {
+          "width": 816,
+          "height": 900,
+          "bytes": 145992,
+          "sha256": "0cc767a1878d2f09a2d6638dd8d4064bcba1f90a0e9401c62b5b9f2f50ea0c37",
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "subjectBounds": [
+            24,
+            24,
+            792,
+            876
+          ],
+          "margins": [
+            24,
+            24,
+            24,
+            24
+          ]
+        }
+      },
+      "assetStatus": "ready",
+      "visualReview": "passed: full cookie, matching flavour cues, clean isolation on dark background",
+      "processing": "ImageMagick: connected white-background removal at 12% fuzz, 2px mask erosion, 0.5px feather at original resolution; trim, resize subject to 852px high, 24px transparent border, WebP quality 85. Originals untouched."
+    },
+    {
+      "index": 3,
+      "category": "HIGH_PROTEIN",
+      "name": "Double Chocolate Chunk",
+      "slug": "double-chocolate-chunk",
+      "description": "Deep cocoa dough, generous dark chocolate chunks and a crackled top come together in a thick cookie with crisp edges and a soft chocolate centre.",
+      "proposedIngredients": "Almond flour, whey protein isolate, butter, eggs, dark chocolate, cocoa powder, erythritol, vanilla extract, baking powder, sea salt",
+      "proposedAllergens": "Tree nuts (almonds), milk, eggs; verify chocolate supplier allergens",
+      "visualBrief": "deep cocoa dough with large glossy dark chocolate chunks; reuse the approved image",
+      "price": null,
+      "currency": "ZAR",
+      "nutrition": null,
+      "recipeStatus": "proposed_unverified",
+      "claimStatus": "pending_recipe_and_nutrition_verification",
+      "imageStatus": "approved",
+      "originalPath": "design/generated/double-chocolate-chunk-original.png",
+      "webPath": "frontend/public/img/cookies/double-chocolate-chunk.webp",
+      "publicImageUrl": "/img/cookies/double-chocolate-chunk.webp",
+      "altText": "Double Chocolate Chunk cookie, photographed at a tilted angle with a cracked top and thick edge",
+      "jobId": "bdbc3ffd-31b9-490a-b7f1-a84c41b2f42b",
+      "creditsGeneration": 3,
+      "resultUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3KaKP7qeBPzaLBxVoolxeZcaBHb/hf_20261012_090914_bdbc3ffd-31b9-490a-b7f1-a84c41b2f42b.png",
+      "categoryLabel": "High protein",
+      "categoryVerification": "Proposed recipes include whey protein isolate. Confirm protein content per finished serving and the applicable claim requirements before publishing “high protein”; no protein grams are supplied.",
+      "adminName": "Double Chocolate Chunk",
+      "shortDescription": "Deep cocoa dough, generous dark chocolate chunks and a crackled top come together in a thick cookie with crisp edges and a soft chocolate centre.",
+      "intendedPlacement": [
+        "product card",
+        "product page",
+        "homepage section"
+      ],
+      "badges": [],
+      "isPublishReady": false,
+      "recipeVerified": false,
+      "nutritionVerified": false,
+      "allergenStatus": "proposed_verify_actual_recipe_and_suppliers",
+      "integration": {
+        "backendDescription": "Double Chocolate Chunk",
+        "marketingDescription": "Deep cocoa dough, generous dark chocolate chunks and a crackled top come together in a thick cookie with crisp edges and a soft chocolate centre.",
+        "imageUploadFile": "frontend/public/img/cookies/double-chocolate-chunk.webp",
+        "backendImageValue": "Use the image field returned by the upload API; do not copy publicImageUrl into this field.",
+        "cookieId": null
+      },
+      "assetsVerified": true,
+      "assetMetadata": {
+        "slug": "double-chocolate-chunk",
+        "original": {
+          "width": 3712,
+          "height": 4608,
+          "bytes": 25510363,
+          "sha256": "c7ad35f6163f7a4a63db647aade81d9aecba9c7eff2cf4d846bdde0c53fd56bb",
+          "alphaExtrema": [
+            255,
+            255
+          ]
+        },
+        "web": {
+          "width": 817,
+          "height": 900,
+          "bytes": 137010,
+          "sha256": "37b49ac2d2883e9d0dc5eb66900468a2ca8f7e2473dc1bc98ff2d6c9d99e235d",
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "subjectBounds": [
+            24,
+            24,
+            793,
+            876
+          ],
+          "margins": [
+            24,
+            24,
+            24,
+            24
+          ]
+        }
+      },
+      "assetStatus": "ready",
+      "visualReview": "passed: full cookie, matching flavour cues, clean isolation on dark background",
+      "processing": "ImageMagick: connected white-background removal at 12% fuzz, 2px mask erosion, 0.5px feather at original resolution; trim, resize subject to 852px high, 24px transparent border, WebP quality 85. Originals untouched."
+    },
+    {
+      "index": 4,
+      "category": "HIGH_PROTEIN",
+      "name": "Peanut Butter Crunch",
+      "slug": "peanut-butter-crunch",
+      "description": "Roasted peanut butter brings a rich, nutty flavour to this soft-baked cookie, finished with crunchy peanut pieces and a pinch of sea salt.",
+      "proposedIngredients": "Almond flour, whey protein isolate, peanut butter, roasted peanuts, butter, eggs, erythritol, vanilla extract, baking powder, sea salt",
+      "proposedAllergens": "Peanuts, tree nuts (almonds), milk, eggs",
+      "visualBrief": "rich golden peanut-butter dough, naturally cracked top, irregular roasted peanut pieces pressed into the surface; a very subtle peanut butter ripple within dough, no chocolate",
+      "price": null,
+      "currency": "ZAR",
+      "nutrition": null,
+      "recipeStatus": "proposed_unverified",
+      "claimStatus": "pending_recipe_and_nutrition_verification",
+      "imageStatus": "generated",
+      "originalPath": "design/generated/peanut-butter-crunch-original.png",
+      "webPath": "frontend/public/img/cookies/peanut-butter-crunch.webp",
+      "publicImageUrl": "/img/cookies/peanut-butter-crunch.webp",
+      "altText": "Peanut Butter Crunch cookie, photographed at a tilted angle with a cracked top and thick edge",
+      "jobId": "ecd9e95b-77fe-470b-9875-2e82f45a60a2",
+      "creditsGeneration": 3,
+      "resultUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3KaKP7qeBPzaLBxVoolxeZcaBHb/hf_20261012_091822_ecd9e95b-77fe-470b-9875-2e82f45a60a2.png",
+      "categoryLabel": "High protein",
+      "categoryVerification": "Proposed recipes include whey protein isolate. Confirm protein content per finished serving and the applicable claim requirements before publishing “high protein”; no protein grams are supplied.",
+      "adminName": "Peanut Butter Crunch",
+      "shortDescription": "Roasted peanut butter brings a rich, nutty flavour to this soft-baked cookie, finished with crunchy peanut pieces and a pinch of sea salt.",
+      "intendedPlacement": [
+        "product card",
+        "product page"
+      ],
+      "badges": [],
+      "isPublishReady": false,
+      "recipeVerified": false,
+      "nutritionVerified": false,
+      "allergenStatus": "proposed_verify_actual_recipe_and_suppliers",
+      "integration": {
+        "backendDescription": "Peanut Butter Crunch",
+        "marketingDescription": "Roasted peanut butter brings a rich, nutty flavour to this soft-baked cookie, finished with crunchy peanut pieces and a pinch of sea salt.",
+        "imageUploadFile": "frontend/public/img/cookies/peanut-butter-crunch.webp",
+        "backendImageValue": "Use the image field returned by the upload API; do not copy publicImageUrl into this field.",
+        "cookieId": null
+      },
+      "assetsVerified": true,
+      "assetMetadata": {
+        "slug": "peanut-butter-crunch",
+        "original": {
+          "width": 3712,
+          "height": 4608,
+          "bytes": 25000226,
+          "sha256": "4b3632a247a4bf9f2a48674979b9492c1d0acd25b4c2952584a0d2d25dfa24cb",
+          "alphaExtrema": null
+        },
+        "web": {
+          "width": 812,
+          "height": 900,
+          "bytes": 121722,
+          "sha256": "2d6bc10314a5a29fd08e1b728cc8692ba2471cf2059417a712871251b5233181",
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "subjectBounds": [
+            24,
+            24,
+            788,
+            876
+          ],
+          "margins": [
+            24,
+            24,
+            24,
+            24
+          ]
+        }
+      },
+      "assetStatus": "ready",
+      "visualReview": "passed: full cookie, matching flavour cues, clean isolation on dark background",
+      "processing": "ImageMagick: connected white-background removal at 12% fuzz, 2px mask erosion, 0.5px feather at original resolution; trim, resize subject to 852px high, 24px transparent border, WebP quality 85. Originals untouched."
+    },
+    {
+      "index": 5,
+      "category": "HIGH_PROTEIN",
+      "name": "Vanilla White Chocolate",
+      "slug": "vanilla-white-chocolate",
+      "description": "A vanilla-rich cookie with creamy white chocolate chunks, a tender middle and lightly golden edges.",
+      "proposedIngredients": "Almond flour, whey protein isolate, butter, eggs, white chocolate, erythritol, vanilla extract, baking powder, sea salt",
+      "proposedAllergens": "Tree nuts (almonds), milk, eggs; verify white chocolate supplier allergens",
+      "visualBrief": "pale golden vanilla-speckled dough with large ivory white chocolate chunks softened slightly into the top; golden edges, no dark chocolate, no drizzle",
+      "price": null,
+      "currency": "ZAR",
+      "nutrition": null,
+      "recipeStatus": "proposed_unverified",
+      "claimStatus": "pending_recipe_and_nutrition_verification",
+      "imageStatus": "generated",
+      "originalPath": "design/generated/vanilla-white-chocolate-original.png",
+      "webPath": "frontend/public/img/cookies/vanilla-white-chocolate.webp",
+      "publicImageUrl": "/img/cookies/vanilla-white-chocolate.webp",
+      "altText": "Vanilla White Chocolate cookie, photographed at a tilted angle with a cracked top and thick edge",
+      "jobId": "c77d851e-9f40-4f76-8dbc-da1ee37cbc23",
+      "creditsGeneration": 3,
+      "resultUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3KaKP7qeBPzaLBxVoolxeZcaBHb/hf_20261012_091823_c77d851e-9f40-4f76-8dbc-da1ee37cbc23.png",
+      "categoryLabel": "High protein",
+      "categoryVerification": "Proposed recipes include whey protein isolate. Confirm protein content per finished serving and the applicable claim requirements before publishing “high protein”; no protein grams are supplied.",
+      "adminName": "Vanilla White Chocolate",
+      "shortDescription": "A vanilla-rich cookie with creamy white chocolate chunks, a tender middle and lightly golden edges.",
+      "intendedPlacement": [
+        "product card",
+        "product page"
+      ],
+      "badges": [],
+      "isPublishReady": false,
+      "recipeVerified": false,
+      "nutritionVerified": false,
+      "allergenStatus": "proposed_verify_actual_recipe_and_suppliers",
+      "integration": {
+        "backendDescription": "Vanilla White Chocolate",
+        "marketingDescription": "A vanilla-rich cookie with creamy white chocolate chunks, a tender middle and lightly golden edges.",
+        "imageUploadFile": "frontend/public/img/cookies/vanilla-white-chocolate.webp",
+        "backendImageValue": "Use the image field returned by the upload API; do not copy publicImageUrl into this field.",
+        "cookieId": null
+      },
+      "assetsVerified": true,
+      "assetMetadata": {
+        "slug": "vanilla-white-chocolate",
+        "original": {
+          "width": 3712,
+          "height": 4608,
+          "bytes": 23877910,
+          "sha256": "c51c79ba2227cd7d171f98939c86624ad3e80eb4677060a2a1488c396e22de22",
+          "alphaExtrema": [
+            255,
+            255
+          ]
+        },
+        "web": {
+          "width": 816,
+          "height": 900,
+          "bytes": 107698,
+          "sha256": "6abbc1ddfb1c1a4dbf9cd1cb1634c4c7a1fc6a0d0fc4546e1e8b51e8bbf41a32",
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "subjectBounds": [
+            24,
+            24,
+            792,
+            876
+          ],
+          "margins": [
+            24,
+            24,
+            24,
+            24
+          ]
+        }
+      },
+      "assetStatus": "ready",
+      "visualReview": "passed: full cookie, matching flavour cues, clean isolation on dark background",
+      "processing": "ImageMagick: connected white-background removal at 12% fuzz, 2px mask erosion, 0.5px feather at original resolution; trim, resize subject to 852px high, 24px transparent border, WebP quality 85. Originals untouched."
+    },
+    {
+      "index": 6,
+      "category": "GLUTEN_FREE",
+      "name": "Lemon Almond",
+      "slug": "lemon-almond",
+      "description": "Bright lemon zest lifts a tender almond cookie, while toasted almond flakes bring a delicate crunch to its golden top.",
+      "proposedIngredients": "Almond flour, rice flour, butter, eggs, cane sugar, lemon zest, lemon juice, flaked almonds, gluten-free baking powder, sea salt",
+      "proposedAllergens": "Tree nuts (almonds), milk, eggs; cross-contact controls require confirmation",
+      "visualBrief": "light golden almond dough with tiny natural lemon zest flecks and a small cluster of toasted almond flakes on top; no icing, no lemon slices, no sugar dusting",
+      "price": null,
+      "currency": "ZAR",
+      "nutrition": null,
+      "recipeStatus": "proposed_unverified",
+      "claimStatus": "pending_recipe_and_nutrition_verification",
+      "imageStatus": "generated",
+      "originalPath": "design/generated/lemon-almond-original.png",
+      "webPath": "frontend/public/img/cookies/lemon-almond.webp",
+      "publicImageUrl": "/img/cookies/lemon-almond.webp",
+      "altText": "Lemon Almond cookie, photographed at a tilted angle with a cracked top and thick edge",
+      "jobId": "070e0b89-a494-44c3-a06a-86a94ad9b551",
+      "creditsGeneration": 3,
+      "resultUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3KaKP7qeBPzaLBxVoolxeZcaBHb/hf_20261012_091822_070e0b89-a494-44c3-a06a-86a94ad9b551.png",
+      "categoryLabel": "Gluten free",
+      "categoryVerification": "Proposed recipes use almond, rice and/or buckwheat flour. Confirm every supplier ingredient and production cross-contact controls before claiming gluten-free; ingredient choice alone does not establish the claim.",
+      "adminName": "Lemon Almond",
+      "shortDescription": "Bright lemon zest lifts a tender almond cookie, while toasted almond flakes bring a delicate crunch to its golden top.",
+      "intendedPlacement": [
+        "product card",
+        "product page",
+        "homepage section"
+      ],
+      "badges": [],
+      "isPublishReady": false,
+      "recipeVerified": false,
+      "nutritionVerified": false,
+      "allergenStatus": "proposed_verify_actual_recipe_and_suppliers",
+      "integration": {
+        "backendDescription": "Lemon Almond",
+        "marketingDescription": "Bright lemon zest lifts a tender almond cookie, while toasted almond flakes bring a delicate crunch to its golden top.",
+        "imageUploadFile": "frontend/public/img/cookies/lemon-almond.webp",
+        "backendImageValue": "Use the image field returned by the upload API; do not copy publicImageUrl into this field.",
+        "cookieId": null
+      },
+      "assetsVerified": true,
+      "assetMetadata": {
+        "slug": "lemon-almond",
+        "original": {
+          "width": 3712,
+          "height": 4608,
+          "bytes": 24418185,
+          "sha256": "3380e2726e92102d4a59c0564db7d7f4cd894c348da9182c21679912807f5fca",
+          "alphaExtrema": null
+        },
+        "web": {
+          "width": 815,
+          "height": 900,
+          "bytes": 106604,
+          "sha256": "f3af8303a114eb26808e1124200ef4416fa276f1a8e4ce0d609967d423d85b68",
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "subjectBounds": [
+            24,
+            24,
+            791,
+            876
+          ],
+          "margins": [
+            24,
+            24,
+            24,
+            24
+          ]
+        }
+      },
+      "assetStatus": "ready",
+      "visualReview": "passed: full cookie, matching flavour cues, clean isolation on dark background",
+      "processing": "ImageMagick: connected white-background removal at 12% fuzz, 2px mask erosion, 0.5px feather at original resolution; trim, resize subject to 852px high, 24px transparent border, WebP quality 85. Originals untouched."
+    },
+    {
+      "index": 7,
+      "category": "GLUTEN_FREE",
+      "name": "Salted Chocolate Buckwheat",
+      "slug": "salted-chocolate-buckwheat",
+      "description": "Toasty buckwheat dough and generous dark chocolate chunks make a deeply satisfying pairing, finished with a light touch of flaky sea salt.",
+      "proposedIngredients": "Buckwheat flour, rice flour, butter, eggs, brown sugar, dark chocolate, vanilla extract, gluten-free baking powder, sea salt",
+      "proposedAllergens": "Milk, eggs; verify chocolate supplier allergens and cross-contact controls",
+      "visualBrief": "toasty medium brown buckwheat dough with a finely speckled surface, generous dark chocolate chunks and two or three tiny sea-salt flakes on top; no loose flour or grains",
+      "price": null,
+      "currency": "ZAR",
+      "nutrition": null,
+      "recipeStatus": "proposed_unverified",
+      "claimStatus": "pending_recipe_and_nutrition_verification",
+      "imageStatus": "generated",
+      "originalPath": "design/generated/salted-chocolate-buckwheat-original.png",
+      "webPath": "frontend/public/img/cookies/salted-chocolate-buckwheat.webp",
+      "publicImageUrl": "/img/cookies/salted-chocolate-buckwheat.webp",
+      "altText": "Salted Chocolate Buckwheat cookie, photographed at a tilted angle with a cracked top and thick edge",
+      "jobId": "02c8c021-a023-4876-aeba-31c9b8079c65",
+      "creditsGeneration": 3,
+      "resultUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3KaKP7qeBPzaLBxVoolxeZcaBHb/hf_20261012_092044_02c8c021-a023-4876-aeba-31c9b8079c65.png",
+      "categoryLabel": "Gluten free",
+      "categoryVerification": "Proposed recipes use almond, rice and/or buckwheat flour. Confirm every supplier ingredient and production cross-contact controls before claiming gluten-free; ingredient choice alone does not establish the claim.",
+      "adminName": "Salted Chocolate Buckwheat",
+      "shortDescription": "Toasty buckwheat dough and generous dark chocolate chunks make a deeply satisfying pairing, finished with a light touch of flaky sea salt.",
+      "intendedPlacement": [
+        "product card",
+        "product page"
+      ],
+      "badges": [],
+      "isPublishReady": false,
+      "recipeVerified": false,
+      "nutritionVerified": false,
+      "allergenStatus": "proposed_verify_actual_recipe_and_suppliers",
+      "integration": {
+        "backendDescription": "Salted Chocolate Buckwheat",
+        "marketingDescription": "Toasty buckwheat dough and generous dark chocolate chunks make a deeply satisfying pairing, finished with a light touch of flaky sea salt.",
+        "imageUploadFile": "frontend/public/img/cookies/salted-chocolate-buckwheat.webp",
+        "backendImageValue": "Use the image field returned by the upload API; do not copy publicImageUrl into this field.",
+        "cookieId": null
+      },
+      "assetsVerified": true,
+      "assetMetadata": {
+        "slug": "salted-chocolate-buckwheat",
+        "original": {
+          "width": 3712,
+          "height": 4608,
+          "bytes": 25081659,
+          "sha256": "3d2d0b183ba2a72b9a3e9181aa8792b7d1dfecc6050dfc4014ca291a5d6e2b7f",
+          "alphaExtrema": [
+            255,
+            255
+          ]
+        },
+        "web": {
+          "width": 816,
+          "height": 900,
+          "bytes": 141628,
+          "sha256": "9c1fb5c903e16cc37e1f95da12fe902d060e06236f0c11fb198d6041cdef0407",
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "subjectBounds": [
+            24,
+            24,
+            792,
+            876
+          ],
+          "margins": [
+            24,
+            24,
+            24,
+            24
+          ]
+        }
+      },
+      "assetStatus": "ready",
+      "visualReview": "passed: full cookie, matching flavour cues, clean isolation on dark background",
+      "processing": "ImageMagick: connected white-background removal at 12% fuzz, 2px mask erosion, 0.5px feather at original resolution; trim, resize subject to 852px high, 24px transparent border, WebP quality 85. Originals untouched."
+    },
+    {
+      "index": 8,
+      "category": "GLUTEN_FREE",
+      "name": "Coconut Macadamia",
+      "slug": "coconut-macadamia",
+      "description": "Toasted coconut and creamy macadamia pieces fill a golden cookie with a soft centre and crisp, fragrant edges.",
+      "proposedIngredients": "Almond flour, rice flour, butter, eggs, cane sugar, desiccated coconut, macadamia nuts, vanilla extract, gluten-free baking powder, sea salt",
+      "proposedAllergens": "Tree nuts (almonds, macadamias), milk, eggs; cross-contact controls require confirmation",
+      "visualBrief": "golden buttery-looking dough with ivory macadamia pieces and fine toasted coconut strands baked into its crackled top; no chocolate, no icing",
+      "price": null,
+      "currency": "ZAR",
+      "nutrition": null,
+      "recipeStatus": "proposed_unverified",
+      "claimStatus": "pending_recipe_and_nutrition_verification",
+      "imageStatus": "generated",
+      "originalPath": "design/generated/coconut-macadamia-original.png",
+      "webPath": "frontend/public/img/cookies/coconut-macadamia.webp",
+      "publicImageUrl": "/img/cookies/coconut-macadamia.webp",
+      "altText": "Coconut Macadamia cookie, photographed at a tilted angle with a cracked top and thick edge",
+      "jobId": "0f81ce3d-23dc-481b-a815-c2bfdc093efe",
+      "creditsGeneration": 3,
+      "resultUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3KaKP7qeBPzaLBxVoolxeZcaBHb/hf_20261012_092043_0f81ce3d-23dc-481b-a815-c2bfdc093efe.png",
+      "categoryLabel": "Gluten free",
+      "categoryVerification": "Proposed recipes use almond, rice and/or buckwheat flour. Confirm every supplier ingredient and production cross-contact controls before claiming gluten-free; ingredient choice alone does not establish the claim.",
+      "adminName": "Coconut Macadamia",
+      "shortDescription": "Toasted coconut and creamy macadamia pieces fill a golden cookie with a soft centre and crisp, fragrant edges.",
+      "intendedPlacement": [
+        "product card",
+        "product page"
+      ],
+      "badges": [],
+      "isPublishReady": false,
+      "recipeVerified": false,
+      "nutritionVerified": false,
+      "allergenStatus": "proposed_verify_actual_recipe_and_suppliers",
+      "integration": {
+        "backendDescription": "Coconut Macadamia",
+        "marketingDescription": "Toasted coconut and creamy macadamia pieces fill a golden cookie with a soft centre and crisp, fragrant edges.",
+        "imageUploadFile": "frontend/public/img/cookies/coconut-macadamia.webp",
+        "backendImageValue": "Use the image field returned by the upload API; do not copy publicImageUrl into this field.",
+        "cookieId": null
+      },
+      "assetsVerified": true,
+      "assetMetadata": {
+        "slug": "coconut-macadamia",
+        "original": {
+          "width": 3712,
+          "height": 4608,
+          "bytes": 23134230,
+          "sha256": "7e62ed24afef8949d6a848bd4d8192e6b9523b8a9115d7e27c5ff2069f8c854d",
+          "alphaExtrema": [
+            255,
+            255
+          ]
+        },
+        "web": {
+          "width": 818,
+          "height": 900,
+          "bytes": 98430,
+          "sha256": "2921d87964d57fb07834dd2aa878dba35eb83d994d6cd267bfb148421645e813",
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "subjectBounds": [
+            24,
+            24,
+            794,
+            876
+          ],
+          "margins": [
+            24,
+            24,
+            24,
+            24
+          ]
+        }
+      },
+      "assetStatus": "ready",
+      "visualReview": "passed: full cookie, matching flavour cues, clean isolation on dark background",
+      "processing": "ImageMagick: connected white-background removal at 12% fuzz, 2px mask erosion, 0.5px feather at original resolution; trim, resize subject to 852px high, 24px transparent border, WebP quality 85. Originals untouched."
+    },
+    {
+      "index": 9,
+      "category": "VEGAN",
+      "name": "Dark Chocolate Orange",
+      "slug": "dark-chocolate-orange",
+      "description": "Rich cocoa dough and dark chocolate chunks are lifted by bright orange zest for a fragrant cookie with a fudgy centre.",
+      "proposedIngredients": "Wheat flour, plant-based baking fat, brown sugar, dairy-free dark chocolate, cocoa powder, orange zest, ground flaxseed, water, vanilla extract, baking powder, sea salt",
+      "proposedAllergens": "Wheat; verify plant-based fat and chocolate supplier allergens and cross-contact controls",
+      "visualBrief": "deep dark cocoa dough with glossy dark chocolate shards and very fine visible orange zest threads baked into the top; no orange slices, no icing",
+      "price": null,
+      "currency": "ZAR",
+      "nutrition": null,
+      "recipeStatus": "proposed_unverified",
+      "claimStatus": "pending_recipe_and_nutrition_verification",
+      "imageStatus": "generated",
+      "originalPath": "design/generated/dark-chocolate-orange-original.png",
+      "webPath": "frontend/public/img/cookies/dark-chocolate-orange.webp",
+      "publicImageUrl": "/img/cookies/dark-chocolate-orange.webp",
+      "altText": "Dark Chocolate Orange cookie, photographed at a tilted angle with a cracked top and thick edge",
+      "jobId": "ae7f99a7-d834-4e8d-afca-31608f3caffd",
+      "creditsGeneration": 3,
+      "resultUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3KaKP7qeBPzaLBxVoolxeZcaBHb/hf_20261012_092044_ae7f99a7-d834-4e8d-afca-31608f3caffd.png",
+      "categoryLabel": "Vegan",
+      "categoryVerification": "Proposed recipes use plant-based baking fat, flax and dairy-free chocolate where applicable. Verify all compound ingredients and processing aids. Vegan does not mean allergen-free.",
+      "adminName": "Dark Chocolate Orange",
+      "shortDescription": "Rich cocoa dough and dark chocolate chunks are lifted by bright orange zest for a fragrant cookie with a fudgy centre.",
+      "intendedPlacement": [
+        "product card",
+        "product page",
+        "homepage section"
+      ],
+      "badges": [],
+      "isPublishReady": false,
+      "recipeVerified": false,
+      "nutritionVerified": false,
+      "allergenStatus": "proposed_verify_actual_recipe_and_suppliers",
+      "integration": {
+        "backendDescription": "Dark Chocolate Orange",
+        "marketingDescription": "Rich cocoa dough and dark chocolate chunks are lifted by bright orange zest for a fragrant cookie with a fudgy centre.",
+        "imageUploadFile": "frontend/public/img/cookies/dark-chocolate-orange.webp",
+        "backendImageValue": "Use the image field returned by the upload API; do not copy publicImageUrl into this field.",
+        "cookieId": null
+      },
+      "assetsVerified": true,
+      "assetMetadata": {
+        "slug": "dark-chocolate-orange",
+        "original": {
+          "width": 3712,
+          "height": 4608,
+          "bytes": 25431764,
+          "sha256": "fea2621ca0b8d13fc85d310809e376b237ba08893dcf06c48083feb27c1e4e07",
+          "alphaExtrema": [
+            255,
+            255
+          ]
+        },
+        "web": {
+          "width": 816,
+          "height": 900,
+          "bytes": 134622,
+          "sha256": "69d5f27995f92717f6bfbfe343bb72c2859b9ffbc9af72b16d90e7f3c493ce59",
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "subjectBounds": [
+            24,
+            24,
+            792,
+            876
+          ],
+          "margins": [
+            24,
+            24,
+            24,
+            24
+          ]
+        }
+      },
+      "assetStatus": "ready",
+      "visualReview": "passed: full cookie, matching flavour cues, clean isolation on dark background",
+      "processing": "ImageMagick: connected white-background removal at 12% fuzz, 2px mask erosion, 0.5px feather at original resolution; trim, resize subject to 852px high, 24px transparent border, WebP quality 85. Originals untouched."
+    },
+    {
+      "index": 10,
+      "category": "VEGAN",
+      "name": "Raspberry Coconut",
+      "slug": "raspberry-coconut",
+      "description": "Tart raspberry pieces and toasted coconut brighten a soft vanilla cookie, with lightly crisp edges and a generous bakery-style bite.",
+      "proposedIngredients": "Wheat flour, plant-based baking fat, cane sugar, raspberries, desiccated coconut, ground flaxseed, water, vanilla extract, baking powder, sea salt",
+      "proposedAllergens": "Wheat; verify plant-based fat supplier allergens and cross-contact controls",
+      "visualBrief": "golden vanilla dough studded with naturally baked ruby raspberry pieces and toasted coconut shreds embedded in the top; raspberries must look baked into dough, not fresh whole fruit on top, no icing",
+      "price": null,
+      "currency": "ZAR",
+      "nutrition": null,
+      "recipeStatus": "proposed_unverified",
+      "claimStatus": "pending_recipe_and_nutrition_verification",
+      "imageStatus": "generated",
+      "originalPath": "design/generated/raspberry-coconut-original.png",
+      "webPath": "frontend/public/img/cookies/raspberry-coconut.webp",
+      "publicImageUrl": "/img/cookies/raspberry-coconut.webp",
+      "altText": "Raspberry Coconut cookie, photographed at a tilted angle with a cracked top and thick edge",
+      "jobId": "5bdef8c1-d5d2-430b-9e91-6c7d857924df",
+      "creditsGeneration": 3,
+      "categoryLabel": "Vegan",
+      "categoryVerification": "Proposed recipes use plant-based baking fat, flax and dairy-free chocolate where applicable. Verify all compound ingredients and processing aids. Vegan does not mean allergen-free.",
+      "adminName": "Raspberry Coconut",
+      "shortDescription": "Tart raspberry pieces and toasted coconut brighten a soft vanilla cookie, with lightly crisp edges and a generous bakery-style bite.",
+      "intendedPlacement": [
+        "product card",
+        "product page"
+      ],
+      "badges": [],
+      "isPublishReady": false,
+      "recipeVerified": false,
+      "nutritionVerified": false,
+      "allergenStatus": "proposed_verify_actual_recipe_and_suppliers",
+      "integration": {
+        "backendDescription": "Raspberry Coconut",
+        "marketingDescription": "Tart raspberry pieces and toasted coconut brighten a soft vanilla cookie, with lightly crisp edges and a generous bakery-style bite.",
+        "imageUploadFile": "frontend/public/img/cookies/raspberry-coconut.webp",
+        "backendImageValue": "Use the image field returned by the upload API; do not copy publicImageUrl into this field.",
+        "cookieId": null
+      },
+      "resultUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3KaKP7qeBPzaLBxVoolxeZcaBHb/hf_20261012_092123_5bdef8c1-d5d2-430b-9e91-6c7d857924df.png",
+      "assetsVerified": true,
+      "assetMetadata": {
+        "slug": "raspberry-coconut",
+        "original": {
+          "width": 3712,
+          "height": 4608,
+          "bytes": 24510348,
+          "sha256": "5481daec5e2138144340a94978efe84ab55a26005d52eeaca85bfa411e654806",
+          "alphaExtrema": [
+            255,
+            255
+          ]
+        },
+        "web": {
+          "width": 814,
+          "height": 900,
+          "bytes": 124264,
+          "sha256": "1659d4093afe6a79aa73cc5a769b64721ffbc5274b3fc71b0e1f52605d61ed35",
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "subjectBounds": [
+            24,
+            24,
+            790,
+            876
+          ],
+          "margins": [
+            24,
+            24,
+            24,
+            24
+          ]
+        }
+      },
+      "assetStatus": "ready",
+      "visualReview": "passed: full cookie, matching flavour cues, clean isolation on dark background",
+      "processing": "ImageMagick: connected white-background removal at 12% fuzz, 2px mask erosion, 0.5px feather at original resolution; trim, resize subject to 852px high, 24px transparent border, WebP quality 85. Originals untouched."
+    },
+    {
+      "index": 11,
+      "category": "VEGAN",
+      "name": "Peanut Chocolate Ripple",
+      "slug": "peanut-chocolate-ripple",
+      "description": "Roasted peanut butter ribbons run through golden dough, with dark chocolate chunks adding rich pockets of flavour to a soft, chewy centre.",
+      "proposedIngredients": "Wheat flour, peanut butter, plant-based baking fat, brown sugar, dairy-free dark chocolate, ground flaxseed, water, vanilla extract, baking powder, sea salt",
+      "proposedAllergens": "Peanuts, wheat; verify plant-based fat and chocolate supplier allergens and cross-contact controls",
+      "visualBrief": "golden peanut-butter dough with dark chocolate chunks and two natural baked-in peanut butter ribbons across the cracked top; no drizzle, no whole peanuts",
+      "price": null,
+      "currency": "ZAR",
+      "nutrition": null,
+      "recipeStatus": "proposed_unverified",
+      "claimStatus": "pending_recipe_and_nutrition_verification",
+      "imageStatus": "generated",
+      "originalPath": "design/generated/peanut-chocolate-ripple-original.png",
+      "webPath": "frontend/public/img/cookies/peanut-chocolate-ripple.webp",
+      "publicImageUrl": "/img/cookies/peanut-chocolate-ripple.webp",
+      "altText": "Peanut Chocolate Ripple cookie, photographed at a tilted angle with a cracked top and thick edge",
+      "jobId": "d492517a-f12d-443c-9725-44bc69a0211c",
+      "creditsGeneration": 3,
+      "categoryLabel": "Vegan",
+      "categoryVerification": "Proposed recipes use plant-based baking fat, flax and dairy-free chocolate where applicable. Verify all compound ingredients and processing aids. Vegan does not mean allergen-free.",
+      "adminName": "Peanut Chocolate Ripple",
+      "shortDescription": "Roasted peanut butter ribbons run through golden dough, with dark chocolate chunks adding rich pockets of flavour to a soft, chewy centre.",
+      "intendedPlacement": [
+        "product card",
+        "product page"
+      ],
+      "badges": [],
+      "isPublishReady": false,
+      "recipeVerified": false,
+      "nutritionVerified": false,
+      "allergenStatus": "proposed_verify_actual_recipe_and_suppliers",
+      "integration": {
+        "backendDescription": "Peanut Chocolate Ripple",
+        "marketingDescription": "Roasted peanut butter ribbons run through golden dough, with dark chocolate chunks adding rich pockets of flavour to a soft, chewy centre.",
+        "imageUploadFile": "frontend/public/img/cookies/peanut-chocolate-ripple.webp",
+        "backendImageValue": "Use the image field returned by the upload API; do not copy publicImageUrl into this field.",
+        "cookieId": null
+      },
+      "resultUrl": "https://d8j0ntlcm91z4.cloudfront.net/user_3KaKP7qeBPzaLBxVoolxeZcaBHb/hf_20261012_092126_d492517a-f12d-443c-9725-44bc69a0211c.png",
+      "assetsVerified": true,
+      "assetMetadata": {
+        "slug": "peanut-chocolate-ripple",
+        "original": {
+          "width": 3712,
+          "height": 4608,
+          "bytes": 24362901,
+          "sha256": "9e36f28e1d6e02865562f8bc74832c3988a1107b1809a9f140f2d3ae4672668d",
+          "alphaExtrema": [
+            255,
+            255
+          ]
+        },
+        "web": {
+          "width": 813,
+          "height": 900,
+          "bytes": 130328,
+          "sha256": "620a7ce522eb8f1742fe475c556584b8d64a729bf25fc88d23879a8f24aef8e6",
+          "alphaExtrema": [
+            0,
+            255
+          ],
+          "subjectBounds": [
+            24,
+            24,
+            789,
+            876
+          ],
+          "margins": [
+            24,
+            24,
+            24,
+            24
+          ]
+        }
+      },
+      "assetStatus": "ready",
+      "visualReview": "passed: full cookie, matching flavour cues, clean isolation on dark background",
+      "processing": "ImageMagick: connected white-background removal at 12% fuzz, 2px mask erosion, 0.5px feather at original resolution; trim, resize subject to 852px high, 24px transparent border, WebP quality 85. Originals untouched."
+    }
+  ],
+  "prompts": [
+    {
+      "index": 3,
+      "model": "nano_banana_2_1",
+      "prompt": "Create one premium commercial bakery product photograph: a single thick freshly baked double chocolate chunk cookie, deep cocoa-brown dough, generous glossy dark chocolate chunks pressed into and melting slightly on the surface, crackled domed top, slightly crisp irregular edges and a soft thick bakery-style profile. Use the attached reference ONLY for camera angle, diagonal tilted presentation, close framing, upper-left soft studio light and clean isolation. Do not copy its drizzle, toppings or flavour. Show the top and a sliver of the thick side, approximately 60 degrees above the cookie face. Center the entire cookie, occupying 85–90% of the frame without cropping, with clear margin. Soft warm upper-left key light, gentle melted chocolate highlights, soft right fill, no harsh hotspots. Flat seamless pure white #FFFFFF background, no cast shadow, no contact shadow, no visible surface, no checkerboard pattern. Photorealistic professional independent-bakery advertising, warm, sophisticated and irresistible. Natural imperfections. No plate, props, scattered crumbs, drizzle, text, logos, watermarks, packaging, nutrition graphics, medical symbols, gym equipment, protein powder, oats, seeds or green health-food styling. Shape, thickness and chocolate texture follow this written brief; do not reproduce the reference cookie itself.",
+      "aspect_ratio": "4:5",
+      "resolution": "4k",
+      "thinking_level": "medium",
+      "count": 1,
+      "medias": [
+        {
+          "role": "image_references",
+          "value": "541a0287-dec4-4dbd-a217-9e277f865b24"
+        }
+      ],
+      "use_unlim": false
+    },
+    {
+      "index": 0,
+      "model": "nano_banana_2_1",
+      "aspect_ratio": "4:5",
+      "resolution": "4k",
+      "thinking_level": "medium",
+      "count": 1,
+      "use_unlim": false,
+      "prompt": "Generate ONE photorealistic premium bakery cookie. Use the attached APPROVED cookie photograph as the precise reference for the diagonal tilt, camera angle, thickness, warm upper-left studio key light, soft right fill, generous close framing and photographic realism. Match the composition, showing the domed top and thick side. Change ONLY the cookie flavour and its ingredient appearance as specified. Entire single cookie must be visible, centered, filling 85–90% of the portrait frame with a small clear margin. Pure white #FFFFFF seamless background, no cast shadow or contact shadow, no surface. Thick soft-baked centre, naturally crackled top, crisp irregular edge. Premium appetising food photography, no health-food aesthetic. No plate, props, scattered crumbs, powders, packaging, text, branding, watermark, labels, nutrition graphics, medical symbols, checkerboard or green health styling. Visible ingredient pieces belong within the cookie only. Flavour: Toasted Almond & Vanilla. Appearance: warm golden vanilla dough with a crackled tender top and a few toasted almond flakes pressed into it; no chocolate, no sugar crystals, no icing. Do not copy the reference's cocoa colour or chocolate topping unless requested for this flavour.",
+      "medias": [
+        {
+          "role": "image_references",
+          "value": "bdbc3ffd-31b9-490a-b7f1-a84c41b2f42b"
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "model": "nano_banana_2_1",
+      "aspect_ratio": "4:5",
+      "resolution": "4k",
+      "thinking_level": "medium",
+      "count": 1,
+      "use_unlim": false,
+      "prompt": "Generate ONE photorealistic premium bakery cookie. Use the attached APPROVED cookie photograph as the precise reference for the diagonal tilt, camera angle, thickness, warm upper-left studio key light, soft right fill, generous close framing and photographic realism. Match the composition, showing the domed top and thick side. Change ONLY the cookie flavour and its ingredient appearance as specified. Entire single cookie must be visible, centered, filling 85–90% of the portrait frame with a small clear margin. Pure white #FFFFFF seamless background, no cast shadow or contact shadow, no surface. Thick soft-baked centre, naturally crackled top, crisp irregular edge. Premium appetising food photography, no health-food aesthetic. No plate, props, scattered crumbs, powders, packaging, text, branding, watermark, labels, nutrition graphics, medical symbols, checkerboard or green health styling. Visible ingredient pieces belong within the cookie only. Flavour: Cinnamon Pecan. Appearance: golden cinnamon-brown dough with fine cinnamon flecks and generous toasted pecan pieces embedded on top; no sugar crust, no icing, no chocolate. Do not copy the reference's cocoa colour or chocolate topping unless requested for this flavour.",
+      "medias": [
+        {
+          "role": "image_references",
+          "value": "bdbc3ffd-31b9-490a-b7f1-a84c41b2f42b"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "model": "nano_banana_2_1",
+      "aspect_ratio": "4:5",
+      "resolution": "4k",
+      "thinking_level": "medium",
+      "count": 1,
+      "use_unlim": false,
+      "prompt": "Generate ONE photorealistic premium bakery cookie. Use the attached APPROVED cookie photograph as the precise reference for the diagonal tilt, camera angle, thickness, warm upper-left studio key light, soft right fill, generous close framing and photographic realism. Match the composition, showing the domed top and thick side. Change ONLY the cookie flavour and its ingredient appearance as specified. Entire single cookie must be visible, centered, filling 85–90% of the portrait frame with a small clear margin. Pure white #FFFFFF seamless background, no cast shadow or contact shadow, no surface. Thick soft-baked centre, naturally crackled top, crisp irregular edge. Premium appetising food photography, no health-food aesthetic. No plate, props, scattered crumbs, powders, packaging, text, branding, watermark, labels, nutrition graphics, medical symbols, checkerboard or green health styling. Visible ingredient pieces belong within the cookie only. Flavour: Espresso Dark Chocolate. Appearance: espresso-brown dough, darker than golden vanilla but lighter than the reference cocoa cookie, with small angular dark chocolate shards distributed on the crackled top; no coffee beans, no drizzle. Do not copy the reference's cocoa colour or chocolate topping unless requested for this flavour.",
+      "medias": [
+        {
+          "role": "image_references",
+          "value": "bdbc3ffd-31b9-490a-b7f1-a84c41b2f42b"
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "model": "nano_banana_2_1",
+      "aspect_ratio": "4:5",
+      "resolution": "4k",
+      "thinking_level": "medium",
+      "count": 1,
+      "use_unlim": false,
+      "prompt": "Generate ONE photorealistic premium bakery cookie. Use the attached APPROVED cookie photograph as the precise reference for the diagonal tilt, camera angle, thickness, warm upper-left studio key light, soft right fill, generous close framing and photographic realism. Match the composition, showing the domed top and thick side. Change ONLY the cookie flavour and its ingredient appearance as specified. Entire single cookie must be visible, centered, filling 85–90% of the portrait frame with a small clear margin. Pure white #FFFFFF seamless background, no cast shadow or contact shadow, no surface. Thick soft-baked centre, naturally crackled top, crisp irregular edge. Premium appetising food photography, no health-food aesthetic. No plate, props, scattered crumbs, powders, packaging, text, branding, watermark, labels, nutrition graphics, medical symbols, checkerboard or green health styling. Visible ingredient pieces belong within the cookie only. Flavour: Peanut Butter Crunch. Appearance: rich golden peanut-butter dough, naturally cracked top, irregular roasted peanut pieces pressed into the surface; a very subtle peanut butter ripple within dough, no chocolate. Do not copy the reference's cocoa colour or chocolate topping unless requested for this flavour.",
+      "medias": [
+        {
+          "role": "image_references",
+          "value": "bdbc3ffd-31b9-490a-b7f1-a84c41b2f42b"
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "model": "nano_banana_2_1",
+      "aspect_ratio": "4:5",
+      "resolution": "4k",
+      "thinking_level": "medium",
+      "count": 1,
+      "use_unlim": false,
+      "prompt": "Generate ONE photorealistic premium bakery cookie. Use the attached APPROVED cookie photograph as the precise reference for the diagonal tilt, camera angle, thickness, warm upper-left studio key light, soft right fill, generous close framing and photographic realism. Match the composition, showing the domed top and thick side. Change ONLY the cookie flavour and its ingredient appearance as specified. Entire single cookie must be visible, centered, filling 85–90% of the portrait frame with a small clear margin. Pure white #FFFFFF seamless background, no cast shadow or contact shadow, no surface. Thick soft-baked centre, naturally crackled top, crisp irregular edge. Premium appetising food photography, no health-food aesthetic. No plate, props, scattered crumbs, powders, packaging, text, branding, watermark, labels, nutrition graphics, medical symbols, checkerboard or green health styling. Visible ingredient pieces belong within the cookie only. Flavour: Vanilla White Chocolate. Appearance: pale golden vanilla-speckled dough with large ivory white chocolate chunks softened slightly into the top; golden edges, no dark chocolate, no drizzle. Do not copy the reference's cocoa colour or chocolate topping unless requested for this flavour.",
+      "medias": [
+        {
+          "role": "image_references",
+          "value": "bdbc3ffd-31b9-490a-b7f1-a84c41b2f42b"
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "model": "nano_banana_2_1",
+      "aspect_ratio": "4:5",
+      "resolution": "4k",
+      "thinking_level": "medium",
+      "count": 1,
+      "use_unlim": false,
+      "prompt": "Generate ONE photorealistic premium bakery cookie. Use the attached APPROVED cookie photograph as the precise reference for the diagonal tilt, camera angle, thickness, warm upper-left studio key light, soft right fill, generous close framing and photographic realism. Match the composition, showing the domed top and thick side. Change ONLY the cookie flavour and its ingredient appearance as specified. Entire single cookie must be visible, centered, filling 85–90% of the portrait frame with a small clear margin. Pure white #FFFFFF seamless background, no cast shadow or contact shadow, no surface. Thick soft-baked centre, naturally crackled top, crisp irregular edge. Premium appetising food photography, no health-food aesthetic. No plate, props, scattered crumbs, powders, packaging, text, branding, watermark, labels, nutrition graphics, medical symbols, checkerboard or green health styling. Visible ingredient pieces belong within the cookie only. Flavour: Lemon Almond. Appearance: light golden almond dough with tiny natural lemon zest flecks and a small cluster of toasted almond flakes on top; no icing, no lemon slices, no sugar dusting. Do not copy the reference's cocoa colour or chocolate topping unless requested for this flavour.",
+      "medias": [
+        {
+          "role": "image_references",
+          "value": "bdbc3ffd-31b9-490a-b7f1-a84c41b2f42b"
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "model": "nano_banana_2_1",
+      "aspect_ratio": "4:5",
+      "resolution": "4k",
+      "thinking_level": "medium",
+      "count": 1,
+      "use_unlim": false,
+      "prompt": "Generate ONE photorealistic premium bakery cookie. Use the attached APPROVED cookie photograph as the precise reference for the diagonal tilt, camera angle, thickness, warm upper-left studio key light, soft right fill, generous close framing and photographic realism. Match the composition, showing the domed top and thick side. Change ONLY the cookie flavour and its ingredient appearance as specified. Entire single cookie must be visible, centered, filling 85–90% of the portrait frame with a small clear margin. Pure white #FFFFFF seamless background, no cast shadow or contact shadow, no surface. Thick soft-baked centre, naturally crackled top, crisp irregular edge. Premium appetising food photography, no health-food aesthetic. No plate, props, scattered crumbs, powders, packaging, text, branding, watermark, labels, nutrition graphics, medical symbols, checkerboard or green health styling. Visible ingredient pieces belong within the cookie only. Flavour: Salted Chocolate Buckwheat. Appearance: toasty medium brown buckwheat dough with a finely speckled surface, generous dark chocolate chunks and two or three tiny sea-salt flakes on top; no loose flour or grains. Do not copy the reference's cocoa colour or chocolate topping unless requested for this flavour.",
+      "medias": [
+        {
+          "role": "image_references",
+          "value": "bdbc3ffd-31b9-490a-b7f1-a84c41b2f42b"
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "model": "nano_banana_2_1",
+      "aspect_ratio": "4:5",
+      "resolution": "4k",
+      "thinking_level": "medium",
+      "count": 1,
+      "use_unlim": false,
+      "prompt": "Generate ONE photorealistic premium bakery cookie. Use the attached APPROVED cookie photograph as the precise reference for the diagonal tilt, camera angle, thickness, warm upper-left studio key light, soft right fill, generous close framing and photographic realism. Match the composition, showing the domed top and thick side. Change ONLY the cookie flavour and its ingredient appearance as specified. Entire single cookie must be visible, centered, filling 85–90% of the portrait frame with a small clear margin. Pure white #FFFFFF seamless background, no cast shadow or contact shadow, no surface. Thick soft-baked centre, naturally crackled top, crisp irregular edge. Premium appetising food photography, no health-food aesthetic. No plate, props, scattered crumbs, powders, packaging, text, branding, watermark, labels, nutrition graphics, medical symbols, checkerboard or green health styling. Visible ingredient pieces belong within the cookie only. Flavour: Coconut Macadamia. Appearance: golden buttery-looking dough with ivory macadamia pieces and fine toasted coconut strands baked into its crackled top; no chocolate, no icing. Do not copy the reference's cocoa colour or chocolate topping unless requested for this flavour.",
+      "medias": [
+        {
+          "role": "image_references",
+          "value": "bdbc3ffd-31b9-490a-b7f1-a84c41b2f42b"
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "model": "nano_banana_2_1",
+      "aspect_ratio": "4:5",
+      "resolution": "4k",
+      "thinking_level": "medium",
+      "count": 1,
+      "use_unlim": false,
+      "prompt": "Generate ONE photorealistic premium bakery cookie. Use the attached APPROVED cookie photograph as the precise reference for the diagonal tilt, camera angle, thickness, warm upper-left studio key light, soft right fill, generous close framing and photographic realism. Match the composition, showing the domed top and thick side. Change ONLY the cookie flavour and its ingredient appearance as specified. Entire single cookie must be visible, centered, filling 85–90% of the portrait frame with a small clear margin. Pure white #FFFFFF seamless background, no cast shadow or contact shadow, no surface. Thick soft-baked centre, naturally crackled top, crisp irregular edge. Premium appetising food photography, no health-food aesthetic. No plate, props, scattered crumbs, powders, packaging, text, branding, watermark, labels, nutrition graphics, medical symbols, checkerboard or green health styling. Visible ingredient pieces belong within the cookie only. Flavour: Dark Chocolate Orange. Appearance: deep dark cocoa dough with glossy dark chocolate shards and very fine visible orange zest threads baked into the top; no orange slices, no icing. Do not copy the reference's cocoa colour or chocolate topping unless requested for this flavour.",
+      "medias": [
+        {
+          "role": "image_references",
+          "value": "bdbc3ffd-31b9-490a-b7f1-a84c41b2f42b"
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "model": "nano_banana_2_1",
+      "aspect_ratio": "4:5",
+      "resolution": "4k",
+      "thinking_level": "medium",
+      "count": 1,
+      "use_unlim": false,
+      "prompt": "Generate ONE photorealistic premium bakery cookie. Use the attached APPROVED cookie photograph as the precise reference for the diagonal tilt, camera angle, thickness, warm upper-left studio key light, soft right fill, generous close framing and photographic realism. Match the composition, showing the domed top and thick side. Change ONLY the cookie flavour and its ingredient appearance as specified. Entire single cookie must be visible, centered, filling 85–90% of the portrait frame with a small clear margin. Pure white #FFFFFF seamless background, no cast shadow or contact shadow, no surface. Thick soft-baked centre, naturally crackled top, crisp irregular edge. Premium appetising food photography, no health-food aesthetic. No plate, props, scattered crumbs, powders, packaging, text, branding, watermark, labels, nutrition graphics, medical symbols, checkerboard or green health styling. Visible ingredient pieces belong within the cookie only. Flavour: Raspberry Coconut. Appearance: golden vanilla dough studded with naturally baked ruby raspberry pieces and toasted coconut shreds embedded in the top; raspberries must look baked into dough, not fresh whole fruit on top, no icing. Do not copy the reference's cocoa colour or chocolate topping unless requested for this flavour.",
+      "medias": [
+        {
+          "role": "image_references",
+          "value": "bdbc3ffd-31b9-490a-b7f1-a84c41b2f42b"
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "model": "nano_banana_2_1",
+      "aspect_ratio": "4:5",
+      "resolution": "4k",
+      "thinking_level": "medium",
+      "count": 1,
+      "use_unlim": false,
+      "prompt": "Generate ONE photorealistic premium bakery cookie. Use the attached APPROVED cookie photograph as the precise reference for the diagonal tilt, camera angle, thickness, warm upper-left studio key light, soft right fill, generous close framing and photographic realism. Match the composition, showing the domed top and thick side. Change ONLY the cookie flavour and its ingredient appearance as specified. Entire single cookie must be visible, centered, filling 85–90% of the portrait frame with a small clear margin. Pure white #FFFFFF seamless background, no cast shadow or contact shadow, no surface. Thick soft-baked centre, naturally crackled top, crisp irregular edge. Premium appetising food photography, no health-food aesthetic. No plate, props, scattered crumbs, powders, packaging, text, branding, watermark, labels, nutrition graphics, medical symbols, checkerboard or green health styling. Visible ingredient pieces belong within the cookie only. Flavour: Peanut Chocolate Ripple. Appearance: golden peanut-butter dough with dark chocolate chunks and two natural baked-in peanut butter ribbons across the cracked top; no drizzle, no whole peanuts. Do not copy the reference's cocoa colour or chocolate topping unless requested for this flavour.",
+      "medias": [
+        {
+          "role": "image_references",
+          "value": "bdbc3ffd-31b9-490a-b7f1-a84c41b2f42b"
+        }
+      ]
+    }
+  ],
+  "assetArchiveUrl": "https://d2ol7oe51mr4n9.cloudfront.net/user_3KaKP7qeBPzaLBxVoolxeZcaBHb/74604b13-fe2b-43ee-818d-b577836eab6b.zip"
+}

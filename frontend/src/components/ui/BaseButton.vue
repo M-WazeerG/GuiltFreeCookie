@@ -2,7 +2,7 @@
 /**
  * BaseButton — the single button component used everywhere.
  *
- * Variants: primary | secondary | cream | outline | light
+ * Variants: primary | secondary | cream | outline | light | danger
  * Sizes:    sm | md | lg
  *
  * Usage:
@@ -17,7 +17,7 @@ const { vRipple } = useRipple();
 const slots = useSlots();
 
 const props = defineProps({
-  variant: { type: String, default: "primary" }, // primary | secondary | cream | outline | light
+  variant: { type: String, default: "primary" }, // primary | secondary | cream | outline | light | danger
   size: { type: String, default: "md" }, // sm | md | lg
   to: { type: [String, Object], default: null },
   href: { type: String, default: null },
@@ -37,6 +37,8 @@ const variantClass = computed(() => {
       return "btn-outline";
     case "light":
       return "btn-light";
+    case "danger":
+      return "btn-danger";
     case "primary":
     default:
       return "btn-primary";
@@ -46,9 +48,11 @@ const variantClass = computed(() => {
 const sizeClass = computed(() => {
   switch (props.size) {
     case "sm":
-      return "text-sm px-5 py-2.5";
+      return "text-sm px-5 py-2.5 min-h-11";
+    case "xs":
+      return "text-sm px-4 py-2 min-h-11";
     case "lg":
-      return "text-body px-9 py-4";
+      return "text-base px-8 py-4";
     case "md":
     default:
       return "";

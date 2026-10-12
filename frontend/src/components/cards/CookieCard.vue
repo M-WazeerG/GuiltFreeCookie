@@ -1,104 +1,77 @@
 <script setup>
+/**
+ * CookieCard — product tile for the product list and "you might also like".
+ * The whole card is one link to the product page.
+ */
 import { computed } from "vue";
-import { useRouter } from "vue-router";
-import { ShoppingBagIcon, EyeIcon } from "@heroicons/vue/24/outline";
-import BaseBadge from "../../components/ui/BaseBadge.vue";
+import { RouterLink } from "vue-router";
+import { ArrowUpRightIcon } from "@heroicons/vue/20/solid";
 import { useFormat } from "../../composables/useFormat";
-import cookieApi from "../../api/cookieApi";
+import { cookieImage, allergenText, cookieName, imageFallback } from "../../composables/useCatalog";
+import { formatCategoryLabel, categoryTint } from "../../constants/cookieCategories";
 
 const props = defineProps({
   cookie: {
     type: Object,
     required: true,
   },
+  // Lazy-load everything below the first row
+  eager: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-const router = useRouter();
-const { truncate } = useFormat();
+const { rand } = useFormat();
 
-const displayBadge = computed(() =>
-    props.cookie.category.replace(/_/g, " ")
-);
-
-const displayImage = computed(
-    () => cookieApi.getImageUrl(props.cookie.image) || "/cookie.png"
-);
-
-const goToDetails = () => {
-  router.push({
-    name: "ProductDetail",
-    params: {
-      id: props.cookie.cookieId,
-    },
-  });
-};
+const image = computed(() => cookieImage(props.cookie));
+const label = computed(() => formatCategoryLabel(props.cookie.category));
+const tint = computed(() => categoryTint(props.cookie.category));
+const allergens = computed(() => allergenText(props.cookie));
+const name = computed(() => cookieName(props.cookie));
 </script>
 
 <template>
-  <article
-      class="group relative overflow-hidden rounded-4xl p-6 cursor-pointer transition-all duration-500 ease-cookie bg-surface text-chocolate shadow-soft hover:shadow-soft-lg hover:-translate-y-1.5"
-      @click="goToDetails"
+  <RouterLink
+    :to="{ name: 'ProductDetail', params: { id: props.cookie.cookieId } }"
+    class="group block rounded-2xl focus-visible:outline-offset-4"
   >
     <div
-        class="absolute top-5 left-5 z-10 flex flex-col gap-1.5 items-start"
+      class="relative aspect-[4/5] overflow-hidden rounded-2xl flex items-center justify-center transition-[filter] duration-500 group-hover:brightness-[0.97]"
+      :style="{ backgroundColor: tint }"
     >
-      <BaseBadge
-          variant="chocolate"
-          size="sm"
-      >
-        {{ displayBadge }}
-      </BaseBadge>
-    </div>
-
-    <button
-        type="button"
-        class="absolute top-5 right-5 z-10 flex items-center justify-center h-10 w-10 rounded-full transition-all duration-300 bg-cream-100 text-chocolate/60 hover:bg-primary hover:text-chocolate"
-        aria-label="Quick add to cart"
-        @click.stop
-    >
-      <ShoppingBagIcon class="h-5 w-5" />
-    </button>
-
-    <div class="relative flex items-center justify-center mb-6 mt-8">
       <div
-          class="absolute inset-0 -m-4 rounded-full bg-primary/30 blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        class="absolute inset-0 bg-[radial-gradient(55%_45%_at_50%_50%,rgba(255,255,255,0.35),transparent_70%)]"
+        aria-hidden="true"
       />
-
-      <div
-          class="relative w-44 h-44 rounded-full overflow-hidden transition-transform duration-700 ease-cookie group-hover:scale-110 group-hover:rotate-6 shadow-cookie ring-4 ring-cream-100"
+      <img
+        :src="image"
+        @error="imageFallback(props.cookie)($event)"
+        :alt="name"
+        :loading="eager ? 'eager' : 'lazy'"
+        class="relative w-[74%] h-[74%] object-contain drop-shadow-cookie-sm transition-transform duration-700 ease-cookie group-hover:-rotate-[8deg] group-hover:scale-[1.06]"
+      />
+      <span
+        class="absolute top-3 right-3 h-10 w-10 rounded-full bg-chocolate text-cream-50 flex items-center justify-center opacity-0 scale-75 transition-all duration-300 ease-cookie group-hover:opacity-100 group-hover:scale-100 group-focus-visible:opacity-100 group-focus-visible:scale-100"
+        aria-hidden="true"
       >
-        <img
-            :src="displayImage"
-            :alt="props.cookie.description"
-            loading="lazy"
-            class="w-full h-full object-cover"
-        />
-      </div>
+        <ArrowUpRightIcon class="h-5 w-5" />
+      </span>
     </div>
 
-    <div class="space-y-2.5">
-      <h3 class="text-xl font-semibold text-chocolate">
-        {{ truncate(props.cookie.description, 40) }}
-      </h3>
-
-      <p class="text-card leading-relaxed min-h-[3.5rem] text-chocolate/60">
-        {{ truncate(props.cookie.ingredients, 90) }}
-      </p>
-
-      <div class="flex items-center justify-between pt-3">
-        <span class="text-2xl font-bold text-chocolate">
-          R{{ props.cookie.price }}
+    <div class="pt-4 px-1">
+      <p class="text-sm font-semibold text-primary-700">{{ label }}</p>
+      <div class="mt-0.5 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-x-3">
+        <h3 class="text-base font-semibold leading-snug text-chocolate line-clamp-2">
+          {{ name }}
+        </h3>
+        <span class="shrink-0 text-base font-semibold tabular text-chocolate">
+          {{ rand(props.cookie.price) }}
         </span>
-
-        <button
-            type="button"
-            class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-300 bg-cream-100 text-chocolate hover:bg-cream-200"
-            @click.stop="goToDetails"
-        >
-          <EyeIcon class="h-4 w-4" />
-          View More
-        </button>
       </div>
+      <p v-if="allergens" class="mt-1 text-sm text-chocolate/70 line-clamp-1">
+        Allergens: {{ allergens }}
+      </p>
     </div>
-  </article>
+  </RouterLink>
 </template>

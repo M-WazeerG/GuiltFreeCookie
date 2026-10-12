@@ -1,10 +1,45 @@
+import defaultTheme from 'tailwindcss/defaultTheme'
+
+// The root font size is 62.5% (see main.css), so 1rem = 10px instead of 16px.
+// Tailwind's built-in scales are written for a 16px rem, so every rem value
+// is multiplied by 1.6 here to keep the same pixel sizes: p-4 is still 16px
+// (now 1.6rem), max-w-7xl is still 1280px (now 128rem).
+const REM_SCALE = 1.6
+const scaleRem = (value) =>
+  typeof value === 'string'
+    ? value.replace(/(-?\d*\.?\d+)rem/g, (_, n) => `${+(parseFloat(n) * REM_SCALE).toFixed(4)}rem`)
+    : value
+const scaleAll = (obj) => Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, scaleRem(v)]))
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
+    // Three sizes only, on a modular scale from an 18px base:
+    //   sm      = base / 1.25 (major third)
+    //   base    = 1.8rem (18px)
+    //   display = base x 1.333^3 -> base x 1.333^4 (perfect fourth), fluid
+    fontSize: {
+      sm: ['var(--fs-sm)', { lineHeight: '1.5', letterSpacing: '0.01em' }],
+      base: ['var(--fs-base)', { lineHeight: '1.6' }],
+      display: ['var(--fs-display)', { lineHeight: '1.1', letterSpacing: '-0.01em' }],
+    },
+    // 10px-rem versions of Tailwind's rem-based scales (see REM_SCALE above).
+    // Everything built on spacing (padding, margin, gap, width, height, inset,
+    // translate, min/max sizes) inherits the scaled values automatically.
+    spacing: scaleAll(defaultTheme.spacing),
+    borderRadius: scaleAll(defaultTheme.borderRadius),
+    lineHeight: scaleAll(defaultTheme.lineHeight),
+    columns: scaleAll(defaultTheme.columns),
+    maxWidth: (ctx) => {
+      const spacing = ctx.theme('spacing')
+      return Object.fromEntries(
+        Object.entries(defaultTheme.maxWidth(ctx)).map(([k, v]) => [k, k in spacing ? v : scaleRem(v)]),
+      )
+    },
     extend: {
       colors: {
-        // CrumbleMagic brand palette
+        // GuiltFreeCookie brand palette
         primary: {
           DEFAULT: '#C59F71', // warm caramel
           50: '#FAF3EA',
@@ -17,6 +52,12 @@ export default {
           700: '#7E5836',
           800: '#5F4128',
           900: '#3F2B1B',
+        },
+        // The hero / showcase tan used for big colour-block sections
+        tan: {
+          DEFAULT: '#D0AB7B',
+          light: '#DCBD94',
+          dark: '#BE9563',
         },
         chocolate: {
           DEFAULT: '#2E0E0B', // dark chocolate
@@ -40,35 +81,33 @@ export default {
           400: '#D2C5AC',
           500: '#BBA98A',
         },
-        background: '#FAF8F4',
-        surface: '#FFFFFF',
+        background: '#E3D9C8', // page background, same as the showcase card
+        // Cards, panels, fields: the showcase card colour instead of white
+        surface: '#E3D9C8',
       },
       fontFamily: {
-        sans: ['Outfit', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        heading: ['Outfit', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-      },
-      fontSize: {
-        // Typography scale per spec
-        h1: ['3.25rem', { lineHeight: '1.1', fontWeight: '500' }], // 52px
-        h2: ['3rem', { lineHeight: '1.15', fontWeight: '400' }], // 48px
-        body: ['1.25rem', { lineHeight: '1.7', fontWeight: '400' }], // 20px
-        card: ['1rem', { lineHeight: '1.6', fontWeight: '400' }], // 16px
+        // Body, UI, subheads: everything that isn't a hero-style headline
+        sans: ['"Nunito Variable"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        // Attention-grabbing headlines only (hero, home sections, page titles)
+        display: ['"Luckiest Guy"', '"Nunito Variable"', 'ui-sans-serif', 'sans-serif'],
       },
       borderRadius: {
-        '4xl': '2rem',
-        '5xl': '2.5rem',
+        '4xl': '3.2rem', // 32px
+        '5xl': '4rem', // 40px
       },
       boxShadow: {
         soft: '0 4px 20px -2px rgba(46, 14, 11, 0.08)',
         'soft-lg': '0 12px 40px -4px rgba(46, 14, 11, 0.12)',
         'soft-xl': '0 24px 60px -8px rgba(46, 14, 11, 0.18)',
-        glow: '0 0 40px -8px rgba(197, 159, 113, 0.45)',
         cookie: '0 20px 50px -10px rgba(46, 14, 11, 0.35)',
+      },
+      dropShadow: {
+        cookie: '0 28px 36px rgba(46, 14, 11, 0.32)',
+        'cookie-sm': '0 14px 18px rgba(46, 14, 11, 0.25)',
       },
       backgroundImage: {
         'cookie-gradient': 'linear-gradient(135deg, #C59F71 0%, #B0855A 100%)',
         'chocolate-gradient': 'linear-gradient(160deg, #3D1F17 0%, #2E0E0B 60%, #1E0805 100%)',
-        'cream-gradient': 'linear-gradient(180deg, #FAF8F4 0%, #F2EAD9 100%)',
       },
       keyframes: {
         'fade-in': {
@@ -79,25 +118,17 @@ export default {
           '0%': { opacity: '0', transform: 'translateY(24px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
-        'fade-down': {
-          '0%': { opacity: '0', transform: 'translateY(-24px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+        'cookie-in': {
+          '0%': { opacity: '0', transform: 'translateY(40px) rotate(-14deg) scale(0.92)' },
+          '100%': { opacity: '1', transform: 'translateY(0) rotate(0) scale(1)' },
         },
-        'scale-in': {
-          '0%': { opacity: '0', transform: 'scale(0.95)' },
-          '100%': { opacity: '1', transform: 'scale(1)' },
-        },
-        float: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-12px)' },
-        },
-        'spin-slow': {
-          '0%': { transform: 'rotate(0deg)' },
-          '100%': { transform: 'rotate(360deg)' },
+        marquee: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
         },
         shimmer: {
-          '0%': { backgroundPosition: '-1000px 0' },
-          '100%': { backgroundPosition: '1000px 0' },
+          '0%': { backgroundPosition: '-600px 0' },
+          '100%': { backgroundPosition: '600px 0' },
         },
         ripple: {
           '0%': { transform: 'scale(0)', opacity: '0.6' },
@@ -106,16 +137,14 @@ export default {
       },
       animation: {
         'fade-in': 'fade-in 0.6s ease-out both',
-        'fade-up': 'fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both',
-        'fade-down': 'fade-down 0.7s cubic-bezier(0.22, 1, 0.36, 1) both',
-        'scale-in': 'scale-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both',
-        float: 'float 6s ease-in-out infinite',
-        'spin-slow': 'spin-slow 20s linear infinite',
-        shimmer: 'shimmer 2s linear infinite',
+        'fade-up': 'fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'cookie-in': 'cookie-in 1.1s cubic-bezier(0.16, 1, 0.3, 1) both',
+        marquee: 'marquee 40s linear infinite',
+        shimmer: 'shimmer 1.6s linear infinite',
         ripple: 'ripple 0.6s ease-out',
       },
       transitionTimingFunction: {
-        'cookie': 'cubic-bezier(0.22, 1, 0.36, 1)',
+        cookie: 'cubic-bezier(0.16, 1, 0.3, 1)',
       },
     },
   },
