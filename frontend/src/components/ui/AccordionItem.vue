@@ -3,6 +3,7 @@
  * AccordionItem — single expandable FAQ row.
  * Designed to be used by parent AccordionList which manages open state.
  */
+import { useId } from 'vue'
 import { PlusIcon } from '@heroicons/vue/24/outline'
 
 const props = defineProps({
@@ -13,7 +14,7 @@ const props = defineProps({
 
 defineEmits(['toggle'])
 
-const uid = `acc-${Math.random().toString(36).slice(2, 8)}`
+const uid = `acc-${useId()}`
 </script>
 
 <template>

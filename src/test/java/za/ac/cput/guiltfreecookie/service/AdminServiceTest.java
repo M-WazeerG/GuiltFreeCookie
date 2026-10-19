@@ -271,6 +271,7 @@ class AdminServiceTest {
                 "expiry should be ~24 hours out, was " + minutesUntilExpiry + " minutes");
 
         assertEquals("AD001", savedAdminCaptor.getValue().getAdminId());
+        assertEquals(1, result.getAdmin().getTokenVersion(), "a reset must invalidate existing logins");
     }
 
     @Test
@@ -297,6 +298,7 @@ class AdminServiceTest {
 
         assertEquals("hashed-brand-new-password", result.getPassword());
         assertNull(result.getPasswordExpiresAt(), "a self-chosen password should not expire");
+        assertEquals(1, result.getTokenVersion(), "a password change must invalidate existing logins");
     }
 
     @Test

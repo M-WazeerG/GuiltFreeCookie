@@ -11,6 +11,7 @@ import za.ac.cput.guiltfreecookie.repository.AdminRepository;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 @Service
@@ -25,6 +26,7 @@ public class AdminService implements IService<Admin, String> {
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
     private final SecureRandom random = new SecureRandom();
+    private volatile String dummyHash;
 
     @Autowired
     public AdminService(AdminRepository adminRepository, PasswordEncoder passwordEncoder) {
@@ -79,9 +81,18 @@ public class AdminService implements IService<Admin, String> {
     }
 
     public Admin login(String email, String password) {
+        if (email == null || password == null) {
+            return null;
+        }
+
         Admin admin = adminRepository.findByEmail(email).orElse(null);
 
-        if (admin == null || !admin.isActive()) {
+        // Always run one bcrypt check, even for an unknown email, so response
+        // time doesn't reveal which emails belong to an admin.
+        String hash = admin != null ? admin.getPassword() : dummyHash();
+        boolean passwordMatches = hash != null && passwordEncoder.matches(password, hash);
+
+        if (admin == null || !admin.isActive() || !passwordMatches) {
             return null;
         }
 
@@ -90,7 +101,14 @@ public class AdminService implements IService<Admin, String> {
             return null;
         }
 
-        return passwordEncoder.matches(password, admin.getPassword()) ? admin : null;
+        return admin;
+    }
+
+    /** True if another admin (not {@code exceptAdminId}) already uses this email. */
+    public boolean isEmailTaken(String email, String exceptAdminId) {
+        return adminRepository.findByEmail(email)
+                .filter(other -> !other.getAdminId().equals(exceptAdminId))
+                .isPresent();
     }
 
     public Admin setActive(String id, boolean active) {
@@ -120,6 +138,7 @@ public class AdminService implements IService<Admin, String> {
                 .copy(existing)
                 .setPassword(passwordEncoder.encode(temporaryPassword))
                 .setPasswordExpiresAt(LocalDateTime.now().plusHours(TEMP_PASSWORD_VALID_HOURS))
+                .setTokenVersion(existing.getTokenVersion() + 1)
                 .build();
 
         Admin saved = adminRepository.save(updated);
@@ -137,6 +156,7 @@ public class AdminService implements IService<Admin, String> {
                 .copy(existing)
                 .setPassword(passwordEncoder.encode(newPassword))
                 .setPasswordExpiresAt(null)
+                .setTokenVersion(existing.getTokenVersion() + 1)
                 .build();
 
         return adminRepository.save(updated);
@@ -148,7 +168,7 @@ public class AdminService implements IService<Admin, String> {
     @EventListener(ApplicationReadyEvent.class)
     public void migratePlaintextPasswords() {
         for (Admin admin : adminRepository.findAll()) {
-            if (!BCRYPT_HASH_PATTERN.matcher(admin.getPassword()).lookingAt()) {
+            if (admin.getPassword() != null && !BCRYPT_HASH_PATTERN.matcher(admin.getPassword()).lookingAt()) {
                 Admin rehashed = new Admin.Builder()
                         .copy(admin)
                         .setPassword(passwordEncoder.encode(admin.getPassword()))
@@ -156,6 +176,13 @@ public class AdminService implements IService<Admin, String> {
                 adminRepository.save(rehashed);
             }
         }
+    }
+
+    private String dummyHash() {
+        if (dummyHash == null) {
+            dummyHash = passwordEncoder.encode(UUID.randomUUID().toString());
+        }
+        return dummyHash;
     }
 
     private String generateTempPassword() {

@@ -12,7 +12,9 @@ import SearchBar from "../components/ui/SearchBar.vue";
 import CategoryFilter from "../components/ui/CategoryFilter.vue";
 import CookieCard from "../components/cards/CookieCard.vue";
 import BaseButton from "../components/ui/BaseButton.vue";
+import Breadcrumb from "../components/ui/Breadcrumb.vue";
 import { useCatalog } from "../composables/useCatalog";
+import { breadcrumbsFor } from "../seo/breadcrumbs";
 import {
   COOKIE_CATEGORIES,
   formatCategoryLabel,
@@ -126,6 +128,7 @@ const intro = computed(() =>
     ? "Chocolatey, sweet and properly indulgent, with less of the stuff you'd rather skip."
     : categoryBlurb(category.value),
 );
+const crumbs = computed(() => breadcrumbsFor(route));
 const resultLabel = computed(() => {
   const n = filtered.value.length;
   return `${n} cookie${n === 1 ? "" : "s"}`;
@@ -135,9 +138,10 @@ const resultLabel = computed(() => {
 <template>
   <div>
     <!-- Header band -->
-    <section class="relative overflow-hidden bg-tan pt-[calc(var(--nav-h)+4rem)] pb-12 md:pb-14">
+    <section class="relative overflow-hidden bg-tan pt-[calc(var(--nav-h)+2.4rem)] pb-12 md:pb-14">
       <div class="container-magic grid md:grid-cols-[1.1fr_1fr] items-center gap-8">
         <div>
+          <Breadcrumb :items="crumbs" class="mb-3" />
           <h1 class="font-display text-display">{{ heading }}</h1>
           <p class="mt-4 max-w-lg text-base text-chocolate/85">{{ intro }}</p>
         </div>
@@ -188,7 +192,7 @@ const resultLabel = computed(() => {
     <div class="container-magic pt-8 pb-24">
       <!-- Loading -->
       <div
-        v-if="loading && !loaded"
+        v-if="!loaded && !error"
         class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-10 sm:gap-x-6"
         aria-busy="true"
         aria-label="Loading cookies"

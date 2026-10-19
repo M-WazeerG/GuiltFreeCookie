@@ -15,7 +15,7 @@ const { toasts, removeToast } = useToast();
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport to="#teleports">
     <!-- Polite live region so screen readers announce each toast -->
     <div
       class="fixed top-4 right-4 sm:top-6 sm:right-6 z-[200] flex flex-col gap-3 w-[calc(100%-3.2rem)] max-w-sm"

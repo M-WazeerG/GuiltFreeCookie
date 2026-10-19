@@ -23,7 +23,6 @@
 ### Frontend 🎨
 - **Framework:** ![Vue 3](https://img.shields.io/badge/Vue_3-4FC08D?style=flat-square&logo=vuedotjs&logoColor=white)
 - **Build Tool:** ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)
-- **State Management:** ![Pinia](https://img.shields.io/badge/Pinia-yellow?style=flat-square&logo=vuedotjs&logoColor=black)
 - **Styling:** ![Tailwind](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)
 - **HTTP Client:** ![Axios](https://img.shields.io/badge/Axios-5A29E4?style=flat-square&logo=axios&logoColor=white)
 
@@ -31,59 +30,79 @@
 
 ## 📂 Project Architecture
 
-The application follows a **Decoupled Architecture** with a stateless REST API.
+A Spring Boot REST API plus a Vue 3 storefront that is prerendered to static HTML at build time.
 
-### Backend Structure (`za.ac.cput.guiltfreecookie`)
-- **`api/`**: Integration logic.
-- **`controller/`**: REST API Endpoints.
-- **`domain/`**: JPA Entities using the **Builder Pattern**.
-- **`repository/`**: Data Access Layer.
-- **`service/`**: Core business logic.
+### Backend (`za.ac.cput.guiltfreecookie`)
+- **`config/`**: security filter chain, CORS, headers, upload serving.
+- **`controller/`**: REST endpoints (catalogue, admins, customers, newsletter).
+- **`domain/`**: JPA entities using the **Builder Pattern**.
+- **`repository/`**: Spring Data repositories (no hand-written SQL).
+- **`security/`**: JWT authentication and per-IP rate limiting.
+- **`service/`**: business logic and image storage.
 
-### Frontend Structure (`src/`)
-- **`api/`**: Axios instance with JWT interceptors.
-- **`layout/`**: Persistent components (`TheNavbar`, `TheFooter`).
-- **`router/`**: Navigation guards and route definitions.
-- **`stores/`**: Pinia global auth state.
-- **`views/`**: Page components (`AuthView`, `HomeView`).
-
+### Frontend (`frontend/src`)
+- **`api/`**: Axios calls; the base URL comes from `VITE_API_BASE_URL`.
+- **`router/`**: routes plus each page's title, description and breadcrumb.
+- **`seo/`**: head tags, structured data, sitemap, robots.txt and llms.txt.
+- **`views/`, `components/`, `layout/`**: pages and UI.
+- **`entry-server.js` + `scripts/prerender.mjs`**: build-time rendering of every public page.
 
 ---
 
 ## 🚀 Getting Started
 
-### 1. Database Setup
-```sql
-CREATE DATABASE guiltfreecookie_db;
-```
-
-### 2. Backend Configuration
-Update `src/main/resources/application.properties`:
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/guiltfreecookie_db
-spring.datasource.username=root
-spring.datasource.password=yourpassword
-```
-
-### 3. Run the Backend
+### 1. Secrets
+No secrets live in the repository. Copy `.env.example` to `.env` (git-ignored) and fill it in:
 ```bash
-mvn clean spring-boot:run
+cp .env.example .env
+openssl rand -base64 32   # paste the output as JWT_SECRET
 ```
 
-### 4. Run the Frontend
+### 2. Run the backend
 ```bash
+./mvnw spring-boot:run
+```
+The database (`guiltFreeCookie`) is created on first run.
+
+### 3. Run the frontend
+```bash
+cd frontend
 npm install
-npm run dev
+npm run dev        # http://localhost:5173, proxies /guiltFreeCookie to :8080
 ```
+
+### 4. Production build
+```bash
+cd frontend
+PRERENDER_API_URL=https://<your-api>/guiltFreeCookie npm run build
+```
+This writes `dist/` with one real HTML page per URL (`about.html`, `product/<id>.html`, ...), plus `404.html`, `sitemap.xml`, `robots.txt` and `llms.txt`. Set `VITE_SITE_URL` if the domain isn't `https://guiltfreecookie.co.za`. Without `PRERENDER_API_URL`, product pages are left out of the prerender and the sitemap. Rebuild whenever products change.
+
+---
+
+## 🔒 Deploying safely
+
+**Backend:** run with `SPRING_PROFILES_ACTIVE=prod` and set `DB_URL`, `DB_USERNAME`, `DB_PASSWORD`, `JWT_SECRET` and `CORS_ALLOWED_ORIGINS` (the site's origin). The prod profile validates the schema instead of altering it (set `JPA_DDL_AUTO=update` for the very first deploy only), redirects HTTP to HTTPS, and shortens admin sessions to 8 hours. Use a database user with access to this schema only, not `root`.
+
+**Frontend host:** serve `dist/` over HTTPS, serve `404.html` for unknown paths, and route `/guiltFreeCookie/*` to the API (or build with `VITE_API_BASE_URL`). Add these response headers at the host; a `<meta>` tag can't set them:
+```
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Frame-Options: DENY
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+```
+The Content-Security-Policy is already in every page.
+
+**Costs:** nothing in the code calls a paid API. Set a budget alert or spend cap with your hosting and database provider; the API's rate limits and 10 MB upload cap keep abusive traffic cheap.
 
 ---
 
 ## 🍪 Key Features
 
-- ✅ **Glassmorphism UI**: High-end visual design with backdrop blurs.
-- ✅ **Dynamic Navbar**: Responsive sticky navigation that changes based on auth state.
-- ✅ **Secure CRUD**: Cookie management is protected via JWT roles.
-- ✅ **Manual POJOs**: Optimized Java objects using strict Builder patterns.
+- ✅ **Real HTML for every page**: unique titles, descriptions, canonical links, breadcrumbs, structured data and share images.
+- ✅ **Secure admin**: JWT sessions that end on password change or deactivation, rate-limited login, no password hashes in responses.
+- ✅ **Safe uploads**: images are checked by their bytes, not their name.
 - ✅ **Mobile Optimized**: Sidebar drawer for smaller screens.
 
 ---

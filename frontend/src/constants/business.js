@@ -20,6 +20,24 @@ export const BUSINESS = {
   phone: "+27 82 851 3174",
   phoneHref: "tel:+27828513174",
   address: "41 Caravel Road, Strandfontein, Cape Town, 7798",
+  // The same address split up for structured data (schema.org PostalAddress).
+  postalAddress: {
+    streetAddress: "41 Caravel Road, Strandfontein",
+    addressLocality: "Cape Town",
+    addressRegion: "Western Cape",
+    postalCode: "7798",
+    addressCountry: "ZA",
+  },
+  mapsUrl: "https://maps.google.com/?q=41+Caravel+Road,+Strandfontein,+Cape+Town,+7798",
+
+  // Full profile URLs. Leave null until the account exists: the footer and
+  // structured data only show the ones that are set.
+  socials: {
+    instagram: null,
+    facebook: null,
+    x: null,
+    linkedin: null,
+  },
 
   // Allergens handled in the kitchen (cross-contact warning on the Terms).
   // Based on the current menu's ingredients; confirm against your kitchen.

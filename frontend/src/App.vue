@@ -29,12 +29,14 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted } from "vue";
+import { defineAsyncComponent, onMounted, onUnmounted } from "vue";
 import { RouterView, useRoute } from "vue-router";
 import TheNavbar from "./layout/TheNavbar.vue";
 import TheFooter from "./layout/TheFooter.vue";
-import AdminShell from "./layout/AdminShell.vue";
 import ToastContainer from "./components/ui/ToastContainer.vue";
+
+// Only staff ever see the admin shell, so shoppers never download it.
+const AdminShell = defineAsyncComponent(() => import("./layout/AdminShell.vue"));
 import { useToast } from "./composables/useToast";
 
 const route = useRoute();

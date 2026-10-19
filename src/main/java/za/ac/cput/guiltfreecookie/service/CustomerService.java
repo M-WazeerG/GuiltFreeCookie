@@ -25,7 +25,11 @@ public class CustomerService implements IService<Customer, String> {
         return repository.findById(id).orElse(null);
     }
 
+    // Updates only: saving an unknown email would quietly create a new customer.
     public Customer update(Customer customer) {
+        if (customer.getCustomerEmail() == null || !repository.existsById(customer.getCustomerEmail())) {
+            return null;
+        }
         return repository.save(customer);
     }
 

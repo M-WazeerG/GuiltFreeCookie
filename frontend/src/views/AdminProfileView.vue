@@ -2,6 +2,8 @@
 import { ref, watch } from "vue";
 import adminApi from "../api/adminApi";
 import { cleanEmail, cleanText } from "../utils/normalize";
+import { logError } from "../utils/logError";
+import { MIN_PASSWORD_LENGTH } from "../constants/auth";
 import { useAdminAuth } from "../composables/useAdminAuth";
 import { useToast } from "../composables/useToast";
 import BaseInput from "../components/ui/BaseInput.vue";
@@ -9,7 +11,7 @@ import BaseButton from "../components/ui/BaseButton.vue";
 import ConfirmModal from "../components/ui/ConfirmModal.vue";
 import AdminPageHeader from "../components/admin/AdminPageHeader.vue";
 
-const { admin, updateAdmin } = useAdminAuth();
+const { admin, updateAdmin, updateSession } = useAdminAuth();
 const { showToast } = useToast();
 
 const profileForm = ref({ firstName: "", lastName: "", email: "" });
@@ -47,8 +49,11 @@ const confirmSaveProfile = async () => {
     updateAdmin(updated);
     showToast("Profile updated.");
   } catch (error) {
-    console.error("Failed to update profile:", error);
-    showToast("Failed to update profile.", "error");
+    logError("Failed to update profile:", error);
+    showToast(
+      error.response?.status === 409 ? "Another admin already uses that email." : "Failed to update profile.",
+      "error",
+    );
   } finally {
     savingProfile.value = false;
   }
@@ -56,7 +61,7 @@ const confirmSaveProfile = async () => {
 
 const canChangePassword = () =>
   passwordForm.value.currentPassword &&
-  passwordForm.value.newPassword &&
+  passwordForm.value.newPassword.length >= MIN_PASSWORD_LENGTH &&
   passwordForm.value.newPassword === passwordForm.value.confirmPassword;
 
 const openPasswordConfirm = () => {
@@ -74,12 +79,14 @@ const confirmChangePassword = async () => {
   showPasswordConfirm.value = false;
   changingPassword.value = true;
   try {
-    const updated = await adminApi.changePassword(
+    // Changing the password ends every other session, so the server sends
+    // back a fresh token for this one.
+    const { admin: updated, token } = await adminApi.changePassword(
       admin.value.adminId,
       passwordForm.value.currentPassword,
       passwordForm.value.newPassword,
     );
-    updateAdmin(updated);
+    updateSession(updated, token);
     passwordForm.value = { currentPassword: "", newPassword: "", confirmPassword: "" };
     showToast("Password changed.");
   } catch (error) {
@@ -126,7 +133,7 @@ const confirmChangePassword = async () => {
       <section class="card grid md:grid-cols-[25.6rem_1fr] gap-6 md:gap-10 p-6 md:p-8" aria-labelledby="profile-password">
         <div>
           <h2 id="profile-password" class="text-base font-semibold tracking-[-0.01em]">Password</h2>
-          <p class="mt-1 text-sm text-chocolate/70">You'll need the new password the next time you log in.</p>
+          <p class="mt-1 text-sm text-chocolate/70">You'll need the new password the next time you log in. Any other device you're logged in on is signed out.</p>
         </div>
         <form class="space-y-4" @submit.prevent="canChangePassword() && openPasswordConfirm()">
           <BaseInput
@@ -142,6 +149,8 @@ const confirmChangePassword = async () => {
               type="password"
               label="New password"
               autocomplete="new-password"
+              :help="`At least ${MIN_PASSWORD_LENGTH} characters.`"
+              :error="passwordForm.newPassword && passwordForm.newPassword.length < MIN_PASSWORD_LENGTH ? `Use at least ${MIN_PASSWORD_LENGTH} characters.` : ''"
               required
             />
             <BaseInput

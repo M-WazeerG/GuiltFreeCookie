@@ -1,6 +1,7 @@
 import axios from "axios";
+import { API_BASE as SERVER_BASE } from "./http";
 
-const API_BASE = "http://localhost:8080/guiltFreeCookie/admin";
+const API_BASE = `${SERVER_BASE}/admin`;
 
 export default {
   async login(email, password) {

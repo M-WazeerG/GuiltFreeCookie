@@ -1,0 +1,13 @@
+{
+  "name": "GuiltFreeCookie",
+  "short_name": "GuiltFreeCookie",
+  "description": "Low-sugar cookies baked in Cape Town.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#E3D9C8",
+  "theme_color": "#2E0E0B",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

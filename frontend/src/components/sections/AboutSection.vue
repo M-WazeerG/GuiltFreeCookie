@@ -2,7 +2,7 @@
 /**
  * AboutSection — split layout: left = hero cookie on a tan panel with a
  * floating "no added sugar" card, right = "Only the finest" copy + the
- * ingredient checklist. Ingredients mirror the FAQ in data/cookies.js.
+ * ingredient checklist. Ingredients mirror the FAQ in data/faqs.js.
  */
 import { CheckIcon, ArrowRightIcon } from "@heroicons/vue/20/solid";
 import { SparklesIcon } from "@heroicons/vue/24/outline";

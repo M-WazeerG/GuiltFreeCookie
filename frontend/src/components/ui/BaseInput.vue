@@ -3,7 +3,7 @@
  * BaseInput — labelled form field with error + help text.
  * Supports text, email, tel, password, number, textarea, select.
  */
-import { computed, useSlots } from "vue";
+import { computed, useId, useSlots } from "vue";
 import { ExclamationCircleIcon } from "@heroicons/vue/24/outline";
 import { ChevronUpDownIcon } from "@heroicons/vue/20/solid";
 
@@ -12,10 +12,7 @@ const props = defineProps({
   label: { type: String, default: "" },
   type: { type: String, default: "text" },
   placeholder: { type: String, default: "" },
-  id: {
-    type: String,
-    default: () => `field-${Math.random().toString(36).slice(2, 8)}`,
-  },
+  id: { type: String, default: "" },
   name: { type: String, default: "" },
   required: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
@@ -34,6 +31,10 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue", "blur", "focus"]);
 
+// Stable across the prerendered HTML and the browser, unlike a random id.
+const autoId = useId();
+const fieldId = computed(() => props.id || `field-${autoId}`);
+
 const isTextarea = computed(() => props.type === "textarea");
 const isSelect = computed(() => props.type === "select");
 const fieldClass = computed(() =>
@@ -41,7 +42,7 @@ const fieldClass = computed(() =>
 );
 const slots = useSlots();
 const describedBy = computed(() =>
-  props.error ? `${props.id}-error` : props.help ? `${props.id}-help` : undefined,
+  props.error ? `${fieldId.value}-error` : props.help ? `${fieldId.value}-help` : undefined,
 );
 
 const onInput = (e) => {
@@ -54,7 +55,7 @@ const onInput = (e) => {
   <div class="w-full">
     <label
       v-if="label"
-      :for="id"
+      :for="fieldId"
       :class="[ 'block text-sm font-semibold mb-1.5', variant === 'dark' ? 'text-cream/85' : 'text-chocolate/85', ]"
     >
       {{ label }}
@@ -64,8 +65,8 @@ const onInput = (e) => {
     <!-- Select -->
     <div v-if="isSelect" class="relative">
     <select
-      :id="id"
-      :name="name || id"
+      :id="fieldId"
+      :name="name || fieldId"
       :value="modelValue"
       :disabled="disabled"
       :class="[fieldClass, 'appearance-none pr-10 cursor-pointer', error ? 'border-red-600 ring-2 ring-red-600/15' : '']"
@@ -86,8 +87,8 @@ const onInput = (e) => {
     <!-- Textarea -->
     <textarea
       v-else-if="isTextarea"
-      :id="id"
-      :name="name || id"
+      :id="fieldId"
+      :name="name || fieldId"
       :value="modelValue"
       :placeholder="placeholder"
       :rows="rows"
@@ -109,8 +110,8 @@ const onInput = (e) => {
     <!-- Generic input -->
     <input
       v-else
-      :id="id"
-      :name="name || id"
+      :id="fieldId"
+      :name="name || fieldId"
       :type="type"
       :value="modelValue"
       :placeholder="placeholder"
@@ -129,7 +130,7 @@ const onInput = (e) => {
     <!-- Error / Help text -->
     <p
       v-if="error"
-      :id="`${id}-error`"
+      :id="`${fieldId}-error`"
       class="mt-2 text-sm text-red-700 flex items-center gap-1.5 animate-fade-in"
     >
       <ExclamationCircleIcon class="h-4 w-4 shrink-0" />
@@ -137,7 +138,7 @@ const onInput = (e) => {
     </p>
     <p
       v-else-if="help"
-      :id="`${id}-help`"
+      :id="`${fieldId}-help`"
       :class="[
         'mt-2 text-sm',
         variant === 'dark' ? 'text-cream/50' : 'text-chocolate/50',

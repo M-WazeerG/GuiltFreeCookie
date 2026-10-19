@@ -3,7 +3,7 @@
  * home page, product list and product detail page.
  *
  *   const { cookies, loading, error, load } = useCatalog()
- *   onMounted(load)            // no-op if already loaded
+ *   onMounted(load)            // no-op once loaded (refreshes a prerendered seed)
  *   load({ force: true })      // refetch (e.g. "Try again")
  */
 import { ref } from "vue";
@@ -15,11 +15,22 @@ const loading = ref(false);
 const error = ref(null);
 const loaded = ref(false);
 let inflight = null;
+let stale = false;
+
+// Prerendered pages ship the catalogue they were built with, so the first
+// render matches the HTML exactly. It may be out of date by now, so the
+// first load() still refreshes it, quietly, without showing a skeleton.
+export function seedCatalog(data) {
+  cookies.value = Array.isArray(data) ? data : [];
+  loaded.value = true;
+  stale = true;
+}
 
 async function load({ force = false } = {}) {
-  if (loaded.value && !force) return cookies.value;
+  if (loaded.value && !force && !stale) return cookies.value;
   if (inflight) return inflight;
 
+  stale = false;
   loading.value = true;
   error.value = null;
   inflight = cookieApi

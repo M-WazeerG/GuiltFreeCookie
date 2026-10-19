@@ -10,7 +10,8 @@
  */
 import { ref, computed, watch, onMounted, onUnmounted } from "vue";
 import { RouterLink, useRouter, useRoute } from "vue-router";
-import { cookieDropPinned } from "../composables/useCookieDropScroll";
+import { cookieDropPinned } from "../composables/cookieDropState";
+import { useToast } from "../composables/useToast";
 import {
   Bars3Icon,
   XMarkIcon,
@@ -56,6 +57,12 @@ const navLinks = [
 
 const goSearch = () => {
   router.push({ name: "Products", query: { focus: "search" } });
+};
+
+// Same message as "Add to cart" until the cart exists.
+const { showToast } = useToast();
+const openCart = () => {
+  showToast("The cart is almost ready. You'll be able to order very soon.", "info");
 };
 </script>
 
@@ -106,7 +113,7 @@ const goSearch = () => {
         >
           <MagnifyingGlassIcon class="h-[22px] w-[22px]" />
         </button>
-        <!-- Cart (wired up by the cart feature) -->
+        <!-- Cart (the cart feature replaces openCart) -->
         <button
           type="button"
           :class="[
@@ -116,6 +123,7 @@ const goSearch = () => {
               : 'bg-chocolate text-cream-50 hover:bg-chocolate-300',
           ]"
           aria-label="Open cart"
+          @click="openCart"
         >
           <ShoppingBagIcon class="h-5 w-5" />
         </button>
@@ -135,7 +143,7 @@ const goSearch = () => {
     </div>
 
     <!-- Mobile drawer -->
-    <Teleport to="body">
+    <Teleport to="#teleports">
       <Transition name="overlay">
         <div
           v-if="sidebarOpen"

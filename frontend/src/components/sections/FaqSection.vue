@@ -6,7 +6,7 @@
 import { RouterLink } from "vue-router";
 import { ArrowRightIcon } from "@heroicons/vue/20/solid";
 import AccordionList from "../../components/ui/AccordionList.vue";
-import { faqs } from "../../data/cookies";
+import { faqs } from "../../data/faqs";
 import { useScrollReveal } from "../../composables/useScrollReveal";
 
 const { vReveal } = useScrollReveal();

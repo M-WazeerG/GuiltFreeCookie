@@ -12,6 +12,7 @@ import BaseButton from "../components/ui/BaseButton.vue";
 import ConfirmModal from "../components/ui/ConfirmModal.vue";
 import AdminPageHeader from "../components/admin/AdminPageHeader.vue";
 import { PlusIcon, ArrowPathIcon } from "@heroicons/vue/20/solid";
+import { logError } from "../utils/logError";
 
 const { showToast } = useToast();
 
@@ -104,7 +105,7 @@ const loadCookies = async () => {
   try {
     cookies.value = await cookieApi.getAllForAdmin();
   } catch (error) {
-    console.error("Failed to load cookies:", error);
+    logError("Failed to load cookies:", error);
     loadError.value = true;
   } finally {
     loading.value = false;
@@ -119,8 +120,10 @@ const saveCookie = async ({ cookie, imageFile }) => {
     await loadCookies();
     showToast(isEditing ? "Cookie updated." : "Cookie added.");
   } catch (error) {
-    console.error("Failed to save cookie:", error);
-    showToast(isEditing ? "Failed to update cookie." : "Failed to add cookie.", "error");
+    logError("Failed to save cookie:", error);
+    // The API explains a rejected photo ("Upload a JPEG, PNG, WebP or GIF image").
+    const reason = typeof error.response?.data === "string" && error.response.data;
+    showToast(reason || (isEditing ? "Failed to update cookie." : "Failed to add cookie."), "error");
   }
 };
 
@@ -138,7 +141,7 @@ const deleteCookie = async () => {
     await loadCookies();
     showToast("Cookie deleted.");
   } catch (error) {
-    console.error("Failed to delete cookie:", error);
+    logError("Failed to delete cookie:", error);
     showToast("Failed to delete cookie.", "error");
   }
 };
@@ -169,7 +172,7 @@ const setCookieArchived = async (cookie, archived) => {
     }
     await loadCookies();
   } catch (error) {
-    console.error("Failed to update archive status:", error);
+    logError("Failed to update archive status:", error);
     showToast("Failed to update cookie.", "error");
   }
 };

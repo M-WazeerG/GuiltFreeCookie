@@ -9,6 +9,8 @@ import { RouterLink, useRoute } from "vue-router";
 import { ChevronDownIcon, ArrowRightIcon } from "@heroicons/vue/20/solid";
 import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline";
 import { BUSINESS, LEGAL, LEGAL_PAGES } from "../../constants/business";
+import Breadcrumb from "../ui/Breadcrumb.vue";
+import { breadcrumbsFor } from "../../seo/breadcrumbs";
 
 const props = defineProps({
   title: { type: String, required: true },
@@ -17,6 +19,7 @@ const props = defineProps({
 });
 
 const route = useRoute();
+const crumbs = computed(() => breadcrumbsFor(route));
 const otherPages = computed(() => LEGAL_PAGES.filter((p) => p.path !== route.path));
 
 // Highlight the section currently being read in the contents list.
@@ -42,8 +45,9 @@ onUnmounted(() => observer?.disconnect());
 <template>
   <div>
     <!-- Header -->
-    <section class="bg-tan pt-[calc(var(--nav-h)+4.8rem)] pb-14">
+    <section class="bg-tan pt-[calc(var(--nav-h)+2.4rem)] pb-14">
       <div class="container-magic">
+        <Breadcrumb :items="crumbs" class="mb-3" />
         <h1 class="font-display text-display">{{ title }}</h1>
         <p class="mt-4 text-sm text-chocolate/80">
           Last updated {{ LEGAL.lastUpdated }}
