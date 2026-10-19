@@ -5,27 +5,15 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.1.0</version>
+        <version>4.1.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>za.ac.cput</groupId>
     <artifactId>guiltFreeCookie</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>guiltFreeCookie</name>
-    <description>guiltFreeCookie</description>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
+    <description>REST API for the GuiltFreeCookie store: catalogue, admin accounts and newsletter sign-ups</description>
+    <url>https://github.com/YaseenKannemeyer/GuiltFreeCookie</url>
     <properties>
         <java.version>25</java.version>
     </properties>
@@ -76,11 +64,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>3.1.5</version>
-        </dependency>
         <dependency>
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>

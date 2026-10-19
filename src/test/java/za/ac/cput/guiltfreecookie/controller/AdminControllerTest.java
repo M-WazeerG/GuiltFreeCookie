@@ -3,6 +3,7 @@ package za.ac.cput.guiltfreecookie.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -15,11 +16,15 @@ import za.ac.cput.guiltfreecookie.security.JwtService;
 import za.ac.cput.guiltfreecookie.service.AdminService;
 import za.ac.cput.guiltfreecookie.service.PasswordResetResult;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -60,21 +65,91 @@ class AdminControllerTest {
         return request;
     }
 
+    private Admin newAdminRequest() {
+        return new Admin.Builder()
+                .setFirstName("Sam")
+                .setLastName("Mokoena")
+                .setEmail("sam@guiltfreecookie.com")
+                .setPassword("SecurePass123")
+                .build();
+    }
+
     @Test
     void testCreate() {
-        when(adminService.create(existingAdmin)).thenReturn(existingAdmin);
+        when(adminService.isEmailTaken("sam@guiltfreecookie.com", null)).thenReturn(false);
+        when(adminService.create(any(Admin.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        ResponseEntity<Admin> result = adminController.create(existingAdmin);
+        ResponseEntity<?> result = adminController.create(newAdminRequest());
 
         assertEquals(HttpStatus.CREATED, result.getStatusCode());
-        assertEquals("AD001", result.getBody().getAdminId());
+        assertEquals("sam@guiltfreecookie.com", ((Admin) result.getBody()).getEmail());
+    }
+
+    @Test
+    void testCreateIgnoresClientChosenIdAndFlags() {
+        Admin sneaky = new Admin.Builder()
+                .copy(newAdminRequest())
+                .setAdminId("AD001")
+                .setActive(false)
+                .setPasswordExpiresAt(LocalDateTime.now().plusYears(10))
+                .build();
+        when(adminService.isEmailTaken(anyString(), any())).thenReturn(false);
+        ArgumentCaptor<Admin> saved = ArgumentCaptor.forClass(Admin.class);
+        when(adminService.create(saved.capture())).thenAnswer(invocation -> invocation.getArgument(0));
+
+        adminController.create(sneaky);
+
+        assertNull(saved.getValue().getAdminId(), "the database must assign the id");
+        assertTrue(saved.getValue().isActive());
+        assertNull(saved.getValue().getPasswordExpiresAt());
+    }
+
+    @Test
+    void testCreateNormalisesEmail() {
+        Admin request = new Admin.Builder().copy(newAdminRequest()).setEmail("  Sam@GuiltFreeCookie.com ").build();
+        when(adminService.isEmailTaken("sam@guiltfreecookie.com", null)).thenReturn(false);
+        when(adminService.create(any(Admin.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        ResponseEntity<?> result = adminController.create(request);
+
+        assertEquals("sam@guiltfreecookie.com", ((Admin) result.getBody()).getEmail());
+    }
+
+    @Test
+    void testCreateWithDuplicateEmailReturnsConflict() {
+        when(adminService.isEmailTaken("sam@guiltfreecookie.com", null)).thenReturn(true);
+
+        ResponseEntity<?> result = adminController.create(newAdminRequest());
+
+        assertEquals(HttpStatus.CONFLICT, result.getStatusCode());
+        verify(adminService, never()).create(any(Admin.class));
+    }
+
+    @Test
+    void testCreateWithShortPasswordReturnsBadRequest() {
+        Admin weak = new Admin.Builder().copy(newAdminRequest()).setPassword("short").build();
+
+        ResponseEntity<?> result = adminController.create(weak);
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        verify(adminService, never()).create(any(Admin.class));
+    }
+
+    @Test
+    void testCreateWithPasswordOverBcryptLimitReturnsBadRequest() {
+        Admin tooLong = new Admin.Builder().copy(newAdminRequest()).setPassword("a".repeat(73)).build();
+
+        ResponseEntity<?> result = adminController.create(tooLong);
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        verify(adminService, never()).create(any(Admin.class));
     }
 
     @Test
     void testCreateWithInvalidEmailReturnsBadRequestAndNeverPersists() {
-        Admin invalid = new Admin.Builder().copy(existingAdmin).setEmail("not-an-email").build();
+        Admin invalid = new Admin.Builder().copy(newAdminRequest()).setEmail("not-an-email").build();
 
-        ResponseEntity<Admin> result = adminController.create(invalid);
+        ResponseEntity<?> result = adminController.create(invalid);
 
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         verify(adminService, never()).create(any(Admin.class));
@@ -82,9 +157,9 @@ class AdminControllerTest {
 
     @Test
     void testCreateWithMissingFirstNameReturnsBadRequestAndNeverPersists() {
-        Admin invalid = new Admin.Builder().copy(existingAdmin).setFirstName("").build();
+        Admin invalid = new Admin.Builder().copy(newAdminRequest()).setFirstName("   ").build();
 
-        ResponseEntity<Admin> result = adminController.create(invalid);
+        ResponseEntity<?> result = adminController.create(invalid);
 
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         verify(adminService, never()).create(any(Admin.class));
@@ -122,19 +197,30 @@ class AdminControllerTest {
     @Test
     void testUpdate() {
         Admin updated = new Admin.Builder().copy(existingAdmin).setFirstName("Janet").build();
-        when(adminService.update(existingAdmin)).thenReturn(updated);
+        when(adminService.isEmailTaken("jane.doe@guiltfreecookie.com", "AD001")).thenReturn(false);
+        when(adminService.update(any(Admin.class))).thenReturn(updated);
 
-        ResponseEntity<Admin> result = adminController.update(existingAdmin);
+        ResponseEntity<?> result = adminController.update(existingAdmin);
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("Janet", result.getBody().getFirstName());
+        assertEquals("Janet", ((Admin) result.getBody()).getFirstName());
+    }
+
+    @Test
+    void testUpdateToAnotherAdminsEmailReturnsConflict() {
+        when(adminService.isEmailTaken("jane.doe@guiltfreecookie.com", "AD001")).thenReturn(true);
+
+        ResponseEntity<?> result = adminController.update(existingAdmin);
+
+        assertEquals(HttpStatus.CONFLICT, result.getStatusCode());
+        verify(adminService, never()).update(any(Admin.class));
     }
 
     @Test
     void testUpdateWithInvalidEmailReturnsBadRequestAndNeverPersists() {
         Admin invalid = new Admin.Builder().copy(existingAdmin).setEmail("not-an-email").build();
 
-        ResponseEntity<Admin> result = adminController.update(invalid);
+        ResponseEntity<?> result = adminController.update(invalid);
 
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         verify(adminService, never()).update(any(Admin.class));
@@ -142,29 +228,38 @@ class AdminControllerTest {
 
     @Test
     void testUpdateWhenServiceReturnsNullReturnsNotFound() {
-        when(adminService.update(existingAdmin)).thenReturn(null);
+        when(adminService.isEmailTaken(anyString(), anyString())).thenReturn(false);
+        when(adminService.update(any(Admin.class))).thenReturn(null);
 
-        ResponseEntity<Admin> result = adminController.update(existingAdmin);
+        ResponseEntity<?> result = adminController.update(existingAdmin);
 
         assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
     }
 
     @Test
     void testDelete() {
-        ResponseEntity<Void> result = adminController.delete("AD001");
+        ResponseEntity<?> result = adminController.delete("AD002", "AD001");
 
         assertEquals(HttpStatus.NO_CONTENT, result.getStatusCode());
-        verify(adminService).delete("AD001");
+        verify(adminService).delete("AD002");
+    }
+
+    @Test
+    void testDeleteYourselfIsRefused() {
+        ResponseEntity<?> result = adminController.delete("AD001", "AD001");
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        verify(adminService, never()).delete(anyString());
     }
 
     @Test
     void testLoginSuccessReturnsAdminAndToken() {
         Admin credentials = new Admin.Builder()
-                .setEmail("jane.doe@guiltfreecookie.com")
+                .setEmail("Jane.Doe@guiltfreecookie.com")
                 .setPassword("SecurePass123")
                 .build();
         when(adminService.login("jane.doe@guiltfreecookie.com", "SecurePass123")).thenReturn(existingAdmin);
-        when(jwtService.generateToken("AD001", "jane.doe@guiltfreecookie.com")).thenReturn("fake.jwt.token");
+        when(jwtService.generateToken(existingAdmin)).thenReturn("fake.jwt.token");
 
         ResponseEntity<?> result = adminController.login(credentials);
 
@@ -193,17 +288,25 @@ class AdminControllerTest {
         Admin deactivated = new Admin.Builder().copy(existingAdmin).setActive(false).build();
         when(adminService.setActive("AD001", false)).thenReturn(deactivated);
 
-        ResponseEntity<Admin> result = adminController.setActive("AD001", false);
+        ResponseEntity<?> result = adminController.setActive("AD001", false, "AD002");
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertFalse(result.getBody().isActive());
+        assertFalse(((Admin) result.getBody()).isActive());
+    }
+
+    @Test
+    void testDeactivateYourselfIsRefused() {
+        ResponseEntity<?> result = adminController.setActive("AD001", false, "AD001");
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        verify(adminService, never()).setActive(anyString(), any(Boolean.class));
     }
 
     @Test
     void testSetActiveNotFound() {
         when(adminService.setActive("missing", true)).thenReturn(null);
 
-        ResponseEntity<Admin> result = adminController.setActive("missing", true);
+        ResponseEntity<?> result = adminController.setActive("missing", true, "AD001");
 
         assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
     }
@@ -231,11 +334,20 @@ class AdminControllerTest {
     }
 
     @Test
+    void testChangingSomeoneElsesPasswordIsForbidden() {
+        ResponseEntity<?> result = adminController.changePassword(
+                "AD002", changePasswordRequest("whatever", "NewPassword456"), "AD001");
+
+        assertEquals(HttpStatus.FORBIDDEN, result.getStatusCode());
+        verify(adminService, never()).changePassword(any(), any());
+    }
+
+    @Test
     void testChangePasswordWhenAdminNotFoundReturnsNotFound() {
         when(adminService.read("missing")).thenReturn(null);
 
         ResponseEntity<?> result = adminController.changePassword(
-                "missing", changePasswordRequest("old", "new"));
+                "missing", changePasswordRequest("old", "new"), "missing");
 
         assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
         verify(adminService, never()).changePassword(any(), any());
@@ -247,7 +359,7 @@ class AdminControllerTest {
         when(passwordEncoder.matches("WrongCurrent", existingAdmin.getPassword())).thenReturn(false);
 
         ResponseEntity<?> result = adminController.changePassword(
-                "AD001", changePasswordRequest("WrongCurrent", "NewPassword456"));
+                "AD001", changePasswordRequest("WrongCurrent", "NewPassword456"), "AD001");
 
         assertEquals(HttpStatus.UNAUTHORIZED, result.getStatusCode());
         assertEquals("Current password is incorrect", result.getBody());
@@ -260,24 +372,39 @@ class AdminControllerTest {
         when(passwordEncoder.matches("SecurePass123", existingAdmin.getPassword())).thenReturn(true);
 
         ResponseEntity<?> result = adminController.changePassword(
-                "AD001", changePasswordRequest("SecurePass123", ""));
+                "AD001", changePasswordRequest("SecurePass123", ""), "AD001");
 
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         verify(adminService, never()).changePassword(any(), any());
     }
 
     @Test
-    void testChangePasswordWithCorrectCurrentPasswordSucceeds() {
+    void testChangePasswordWithShortNewPasswordReturnsBadRequest() {
+        when(adminService.read("AD001")).thenReturn(existingAdmin);
+        when(passwordEncoder.matches("SecurePass123", existingAdmin.getPassword())).thenReturn(true);
+
+        ResponseEntity<?> result = adminController.changePassword(
+                "AD001", changePasswordRequest("SecurePass123", "short"), "AD001");
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        verify(adminService, never()).changePassword(any(), any());
+    }
+
+    @Test
+    void testChangePasswordWithCorrectCurrentPasswordReturnsFreshToken() {
         Admin changed = new Admin.Builder().copy(existingAdmin).setPassword("hashed-new-password").build();
         when(adminService.read("AD001")).thenReturn(existingAdmin);
         when(passwordEncoder.matches("SecurePass123", existingAdmin.getPassword())).thenReturn(true);
         when(adminService.changePassword("AD001", "NewPassword456")).thenReturn(changed);
+        when(jwtService.generateToken(changed)).thenReturn("fresh.jwt.token");
 
         ResponseEntity<?> result = adminController.changePassword(
-                "AD001", changePasswordRequest("SecurePass123", "NewPassword456"));
+                "AD001", changePasswordRequest("SecurePass123", "NewPassword456"), "AD001");
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals(changed, result.getBody());
+        LoginResponse body = (LoginResponse) result.getBody();
+        assertEquals(changed, body.getAdmin());
+        assertEquals("fresh.jwt.token", body.getToken());
         verify(adminService).changePassword("AD001", "NewPassword456");
     }
 }

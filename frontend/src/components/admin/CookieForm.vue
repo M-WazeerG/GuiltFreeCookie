@@ -137,7 +137,7 @@ const confirmSubmit = () => {
           <PhotoIcon class="h-8 w-8 text-chocolate/50" />
           <span class="text-sm font-semibold text-chocolate">Choose a photo</span>
           <span class="text-sm text-chocolate/65">PNG with a transparent background looks best</span>
-          <input type="file" accept="image/*" class="sr-only" @change="onImageChange" />
+          <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" class="sr-only" @change="onImageChange" />
         </label>
 
         <p v-if="isEditing && imageRemoved" class="mt-2 text-sm text-chocolate/65">

@@ -1,10 +1,10 @@
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import { useRoute, RouterLink } from "vue-router";
-import { ChevronRightIcon, ShoppingBagIcon } from "@heroicons/vue/20/solid";
+import { useRoute } from "vue-router";
+import { ShoppingBagIcon } from "@heroicons/vue/20/solid";
 
-import cookieApi from "../api/cookieApi";
 import BaseButton from "../components/ui/BaseButton.vue";
+import Breadcrumb from "../components/ui/Breadcrumb.vue";
 import CookieInfoCard from "../components/cookieDetails/CookieInfoCard.vue";
 import RelatedCookieCard from "../components/cookieDetails/RelatedCookieCard.vue";
 import QuantitySelector from "../components/cookieDetails/QuantitySelector.vue";
@@ -12,15 +12,19 @@ import { useCatalog, cookieImage, cookieName, imageFallback } from "../composabl
 import { useFormat } from "../composables/useFormat";
 import { useToast } from "../composables/useToast";
 import { formatCategoryLabel, categoryBlurb } from "../constants/cookieCategories";
+import { breadcrumbsFor } from "../seo/breadcrumbs";
+import { applyHead, findCookie, headForRoute } from "../seo/head";
 
 const route = useRoute();
 const { rand } = useFormat();
 const { showToast } = useToast();
 const loadFailed = ref(false);
-const { cookies: catalog, load: loadCatalog } = useCatalog();
+const { cookies: catalog, error: catalogError, load: loadCatalog } = useCatalog();
 
-const cookie = ref(null);
-const loading = ref(true);
+// Start from the catalogue when it has this cookie (always, on a
+// prerendered page), so the first render is the finished page.
+const cookie = ref(findCookie(catalog.value, route.params.id));
+const loading = ref(!cookie.value);
 const quantity = ref(1);
 
 const image = computed(() => cookieImage(cookie.value));
@@ -29,6 +33,7 @@ const categoryLabel = computed(() => formatCategoryLabel(cookie.value?.category)
 // The cookie's own copy if it has some, otherwise the range's one-liner.
 const blurb = computed(() => cookie.value?.longDescription?.trim() || categoryBlurb(cookie.value?.category));
 const total = computed(() => (cookie.value?.price || 0) * quantity.value);
+const crumbs = computed(() => breadcrumbsFor(route, { cookie: cookie.value }));
 
 // Same range first, then the rest of the jar.
 const related = computed(() => {
@@ -48,28 +53,26 @@ const buyNow = () => {
   addToCart();
 };
 
-// "Not found" and "couldn't reach the server" are different problems:
-// only the second one is worth retrying.
-const fetchCookie = async () => {
-  loading.value = true;
+// The product comes from the same catalogue as the rest of the site (one
+// shared request, already loaded when arriving from the product list), so
+// a cookie that's gone or archived is simply "not found". "Couldn't reach
+// the server" is different: only that one is worth retrying, and a cookie
+// already on screen stays there if the refresh fails.
+const fetchCookie = async ({ retry = false } = {}) => {
+  if (!cookie.value) loading.value = true;
   loadFailed.value = false;
-  try {
-    cookie.value = await cookieApi.getById(route.params.id);
-    if (cookie.value?.description) {
-      document.title = `${cookieName(cookie.value)} | GuiltFreeCookie`;
-    }
-  } catch (error) {
-    cookie.value = null;
-    loadFailed.value = !error.response || error.response.status >= 500;
-  } finally {
-    loading.value = false;
+  const list = await loadCatalog({ force: retry });
+  loading.value = false;
+
+  if (catalogError.value) {
+    loadFailed.value = !cookie.value;
+    return;
   }
+  cookie.value = findCookie(list, route.params.id);
+  applyHead(headForRoute(route, { cookie: cookie.value, missing: !cookie.value }));
 };
 
-onMounted(() => {
-  fetchCookie();
-  loadCatalog();
-});
+onMounted(() => fetchCookie());
 </script>
 
 <template>
@@ -96,7 +99,7 @@ onMounted(() => {
       <p class="mt-2 text-base text-chocolate/80">
         Check your connection, then try again.
       </p>
-      <BaseButton class="mt-8" @click="fetchCookie">Try again</BaseButton>
+      <BaseButton class="mt-8" @click="fetchCookie({ retry: true })">Try again</BaseButton>
     </div>
 
     <!-- Not found -->
@@ -111,23 +114,7 @@ onMounted(() => {
 
     <template v-else>
       <div class="container-magic pt-6 pb-20 md:pb-28">
-        <!-- Breadcrumb -->
-        <nav aria-label="Breadcrumb" class="mb-6">
-          <ol class="flex flex-wrap items-center gap-1 text-sm font-medium text-chocolate/70">
-            <li>
-              <RouterLink :to="{ name: 'Products' }" class="hover:text-chocolate hover:underline">Cookies</RouterLink>
-            </li>
-            <li aria-hidden="true"><ChevronRightIcon class="h-4 w-4" /></li>
-            <li>
-              <RouterLink
-                :to="{ name: 'Products', query: { category: cookie.category } }"
-                class="hover:text-chocolate hover:underline"
-              >{{ categoryLabel }}</RouterLink>
-            </li>
-            <li aria-hidden="true"><ChevronRightIcon class="h-4 w-4" /></li>
-            <li class="text-chocolate truncate max-w-[25.6rem]" aria-current="page">{{ name }}</li>
-          </ol>
-        </nav>
+        <Breadcrumb :items="crumbs" class="mb-6" />
 
         <div class="grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-16 items-start">
           <!-- Media -->
@@ -143,6 +130,7 @@ onMounted(() => {
                 :src="image"
                 @error="imageFallback(cookie)($event)"
                 :alt="name"
+                fetchpriority="high"
                 class="w-[78%] h-[78%] object-contain drop-shadow-[0_40px_40px_rgba(0,0,0,0.45)] animate-cookie-in"
               />
             </div>

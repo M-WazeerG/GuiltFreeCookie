@@ -5,6 +5,7 @@ import BaseInput from "../ui/BaseInput.vue";
 import BaseButton from "../ui/BaseButton.vue";
 import ConfirmModal from "../ui/ConfirmModal.vue";
 import { cleanEmail, cleanText } from "../../utils/normalize";
+import { MIN_PASSWORD_LENGTH } from "../../constants/auth";
 
 const props = defineProps({
   open: {
@@ -42,12 +43,16 @@ watch(
   { immediate: true },
 );
 
+const passwordTooShort = computed(
+  () => !isEditing.value && form.value.password.length > 0 && form.value.password.length < MIN_PASSWORD_LENGTH,
+);
+
 const canSubmit = computed(
   () =>
     form.value.firstName &&
     form.value.lastName &&
     form.value.email &&
-    (isEditing.value || form.value.password),
+    (isEditing.value || form.value.password.length >= MIN_PASSWORD_LENGTH),
 );
 
 const openConfirm = () => {
@@ -86,7 +91,8 @@ const confirmSubmit = () => {
         type="password"
         label="Password"
         autocomplete="new-password"
-        help="They can change it from their profile after logging in."
+        :help="`At least ${MIN_PASSWORD_LENGTH} characters. They can change it from their profile after logging in.`"
+        :error="passwordTooShort ? `Use at least ${MIN_PASSWORD_LENGTH} characters.` : ''"
         required
       />
       <p v-else class="text-sm text-chocolate/70">

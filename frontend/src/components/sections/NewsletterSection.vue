@@ -1,14 +1,17 @@
 <script setup>
 /**
- * NewsletterSection — "Join in and get 10% off" sign-up.
+ * NewsletterSection — "Join in and get 10% off" sign-up. Saves the address
+ * through POST /newsletter/subscribe; admins export the list from
+ * GET /newsletter/subscribers.
  * tone="dark" is the band at the top of the footer; tone="light" works as
  * a standalone section on cream.
  */
-import { ref, computed } from "vue";
+import { ref, computed, useId } from "vue";
 import { RouterLink } from "vue-router";
 import { EnvelopeIcon } from "@heroicons/vue/24/outline";
 import { ArrowRightIcon, CheckIcon } from "@heroicons/vue/20/solid";
 import { cleanEmail, isEmail } from "../../utils/normalize";
+import newsletterApi from "../../api/newsletterApi";
 
 const props = defineProps({
   tone: { type: String, default: "light" }, // light | dark
@@ -17,18 +20,32 @@ const props = defineProps({
 const email = ref("");
 const error = ref("");
 const subscribed = ref(false);
+const submitting = ref(false);
 const dark = computed(() => props.tone === "dark");
-const inputId = `newsletter-${Math.random().toString(36).slice(2, 7)}`;
+const inputId = `newsletter-${useId()}`;
 
-const subscribe = () => {
+const subscribe = async () => {
   error.value = "";
   email.value = cleanEmail(email.value);
   if (!isEmail(email.value)) {
     error.value = "Enter an email address like you@example.co.za.";
     return;
   }
-  subscribed.value = true;
-  email.value = "";
+  submitting.value = true;
+  try {
+    await newsletterApi.subscribe(email.value);
+    subscribed.value = true;
+    email.value = "";
+  } catch (err) {
+    error.value =
+      err.response?.status === 429
+        ? "Lots of sign-ups from this connection. Try again in a little while."
+        : err.response?.status === 400
+          ? "Enter an email address like you@example.co.za."
+          : "We couldn't sign you up just now. Check your connection and try again.";
+  } finally {
+    submitting.value = false;
+  }
 };
 </script>
 
@@ -73,7 +90,7 @@ const subscribe = () => {
           <span class="h-8 w-8 shrink-0 rounded-full bg-primary text-chocolate flex items-center justify-center">
             <CheckIcon class="h-5 w-5" />
           </span>
-          You're in. Check your inbox for your code.
+          You're on the list. We'll email your 10% code.
         </p>
 
         <form v-else class="w-full" novalidate @submit.prevent="subscribe">
@@ -95,8 +112,12 @@ const subscribe = () => {
                 :class="[ 'w-full h-14 rounded-full pl-14 pr-5 text-base focus:outline-none focus:ring-2 transition-shadow', dark ? 'bg-chocolate-300 border border-cream-50/15 text-cream-50 placeholder:text-cream-100/50 focus:ring-primary' : 'bg-surface border border-cream-400 text-chocolate focus:ring-chocolate/25', ]"
               />
             </div>
-            <button type="submit" :class="[dark ? 'btn-secondary' : 'btn-primary', 'h-14 px-7']">
-              Subscribe
+            <button
+              type="submit"
+              :disabled="submitting"
+              :class="[dark ? 'btn-secondary' : 'btn-primary', 'h-14 px-7', submitting ? 'opacity-60 cursor-wait' : '']"
+            >
+              {{ submitting ? "Subscribing" : "Subscribe" }}
               <ArrowRightIcon class="h-5 w-5" />
             </button>
           </div>

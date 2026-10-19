@@ -1,6 +1,5 @@
 import axios from "axios";
-
-const SERVER_BASE = "http://localhost:8080/guiltFreeCookie";
+import { API_BASE as SERVER_BASE } from "./http";
 const API_BASE = `${SERVER_BASE}/cookie`;
 
 function toFormData(cookie, imageFile) {

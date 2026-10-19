@@ -1,0 +1,202 @@
+package za.ac.cput.guiltfreecookie.security;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
+import za.ac.cput.guiltfreecookie.config.SecurityConfig;
+import za.ac.cput.guiltfreecookie.controller.AdminController;
+import za.ac.cput.guiltfreecookie.controller.CookieController;
+import za.ac.cput.guiltfreecookie.controller.CustomerController;
+import za.ac.cput.guiltfreecookie.controller.NewsletterController;
+import za.ac.cput.guiltfreecookie.domain.Admin;
+import za.ac.cput.guiltfreecookie.repository.AdminRepository;
+import za.ac.cput.guiltfreecookie.service.AdminService;
+import za.ac.cput.guiltfreecookie.service.CookieService;
+import za.ac.cput.guiltfreecookie.service.CustomerService;
+import za.ac.cput.guiltfreecookie.service.ImageStorageService;
+import za.ac.cput.guiltfreecookie.service.NewsletterService;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+/** The real filter chain: who may call what, and which headers come back. */
+@WebMvcTest(controllers = {
+        AdminController.class, CookieController.class, CustomerController.class, NewsletterController.class})
+@Import({SecurityConfig.class, JwtService.class})
+@TestPropertySource(properties = {
+        "app.jwt.secret=dGVzdC1vbmx5LXNlY3JldC10aGF0LWlzLTMyLWJ5dGVzISE=",
+        "app.jwt.expiration-minutes=60",
+        "app.cors.allowed-origins=https://guiltfreecookie.co.za",
+        "app.security.require-https=false"
+})
+class SecurityConfigTest {
+
+    @Autowired
+    private MockMvc mvc;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @MockitoBean
+    private AdminRepository adminRepository;
+    @MockitoBean
+    private AdminService adminService;
+    @MockitoBean
+    private CookieService cookieService;
+    @MockitoBean
+    private CustomerService customerService;
+    @MockitoBean
+    private ImageStorageService imageStorageService;
+    @MockitoBean
+    private NewsletterService newsletterService;
+
+    private final Admin jane = new Admin.Builder()
+            .setAdminId("AD001")
+            .setFirstName("Jane")
+            .setLastName("Doe")
+            .setEmail("jane@guiltfreecookie.com")
+            .setPassword("$2a$10$abcdefghijklmnopqrstuuabcdefghijklmnopqrstuvwxyz012")
+            .setActive(true)
+            .build();
+
+    private String bearer(Admin admin) {
+        return "Bearer " + jwtService.generateToken(admin);
+    }
+
+    private static RequestPostProcessor from(String ip) {
+        return request -> {
+            request.setRemoteAddr(ip);
+            return request;
+        };
+    }
+
+    @Test
+    void theCatalogueIsPublic() throws Exception {
+        when(cookieService.getAllActive()).thenReturn(List.of());
+
+        mvc.perform(get("/cookie/getAll")).andExpect(status().isOk());
+    }
+
+    @Test
+    void customerRecordsNeedAnAdmin() throws Exception {
+        mvc.perform(get("/api/v1/customers")).andExpect(status().isUnauthorized());
+        mvc.perform(delete("/api/v1/customers/someone@example.com")).andExpect(status().isUnauthorized());
+        mvc.perform(post("/api/v1/customers").contentType(MediaType.APPLICATION_JSON).content("{}"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void adminEndpointsNeedAToken() throws Exception {
+        mvc.perform(get("/admin/getAll")).andExpect(status().isUnauthorized());
+        mvc.perform(get("/cookie/getAllForAdmin")).andExpect(status().isUnauthorized());
+        mvc.perform(get("/newsletter/subscribers")).andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void aValidTokenGetsInAndPasswordHashesNeverComeBack() throws Exception {
+        when(adminRepository.findById("AD001")).thenReturn(Optional.of(jane));
+        when(adminService.getAll()).thenReturn(List.of(jane));
+
+        mvc.perform(get("/admin/getAll").header(HttpHeaders.AUTHORIZATION, bearer(jane)))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("jane@guiltfreecookie.com")))
+                .andExpect(content().string(not(containsString("\"password\""))))
+                .andExpect(content().string(not(containsString("$2a$"))));
+    }
+
+    @Test
+    void aDeactivatedAdminsTokenStopsWorking() throws Exception {
+        String token = bearer(jane);
+        when(adminRepository.findById("AD001"))
+                .thenReturn(Optional.of(new Admin.Builder().copy(jane).setActive(false).build()));
+
+        mvc.perform(get("/admin/getAll").header(HttpHeaders.AUTHORIZATION, token))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void aTokenFromBeforeAPasswordChangeStopsWorking() throws Exception {
+        String token = bearer(jane);
+        when(adminRepository.findById("AD001"))
+                .thenReturn(Optional.of(new Admin.Builder().copy(jane).setTokenVersion(1).build()));
+
+        mvc.perform(get("/admin/getAll").header(HttpHeaders.AUTHORIZATION, token))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void aForgedTokenIsRejected() throws Exception {
+        JwtService attacker = new JwtService("YXR0YWNrZXItY2hvc2VuLXNlY3JldC10aGF0LWlzLTMyLWJ5dGVz", 60);
+        String forged = "Bearer " + attacker.generateToken(jane);
+
+        mvc.perform(get("/admin/getAll").header(HttpHeaders.AUTHORIZATION, forged))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void newsletterSignUpIsPublic() throws Exception {
+        mvc.perform(post("/newsletter/subscribe").with(from("198.51.100.20"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"email\":\"thandi@example.co.za\"}"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void responsesCarrySecurityHeaders() throws Exception {
+        when(cookieService.getAllActive()).thenReturn(List.of());
+
+        mvc.perform(get("/cookie/getAll"))
+                .andExpect(header().string("X-Content-Type-Options", "nosniff"))
+                .andExpect(header().string("X-Frame-Options", "DENY"))
+                .andExpect(header().string("Content-Security-Policy", containsString("default-src 'none'")))
+                .andExpect(header().string("Referrer-Policy", "strict-origin-when-cross-origin"))
+                .andExpect(header().string("Permissions-Policy", containsString("camera=()")));
+    }
+
+    @Test
+    void corsAllowsOnlyTheConfiguredOrigin() throws Exception {
+        mvc.perform(options("/cookie/getAll")
+                        .header(HttpHeaders.ORIGIN, "https://guiltfreecookie.co.za")
+                        .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "GET"))
+                .andExpect(status().isOk())
+                .andExpect(header().string(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "https://guiltfreecookie.co.za"));
+
+        mvc.perform(options("/cookie/getAll")
+                        .header(HttpHeaders.ORIGIN, "https://evil.example")
+                        .header(HttpHeaders.ACCESS_CONTROL_REQUEST_METHOD, "GET"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void loginIsRateLimited() throws Exception {
+        String body = "{\"email\":\"jane@guiltfreecookie.com\",\"password\":\"wrong-password\"}";
+        for (int i = 0; i < 10; i++) {
+            mvc.perform(post("/admin/login").with(from("203.0.113.99"))
+                            .contentType(MediaType.APPLICATION_JSON).content(body))
+                    .andExpect(status().isUnauthorized());
+        }
+
+        mvc.perform(post("/admin/login").with(from("203.0.113.99"))
+                        .contentType(MediaType.APPLICATION_JSON).content(body))
+                .andExpect(status().isTooManyRequests())
+                .andExpect(header().exists("Retry-After"));
+    }
+}

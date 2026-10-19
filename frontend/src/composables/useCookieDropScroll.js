@@ -16,10 +16,10 @@
  *   const drop = createCookieDrop(stageEl)
  *   drop.destroy()   // kills the trigger, unpins, removes listeners
  */
-import { ref } from "vue";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { COOKIE_DROP_VIDEO as CLIP, HERO_ARTWORK as ART } from "../constants/cookieDrop";
+import { cookieDropPinned } from "./cookieDropState";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -41,9 +41,6 @@ const FLIGHTS = [
   { order: 7, lift: 0.06, spin: -34, depth: 0.9 },
 ];
 
-// True while the sequence is pinned on screen: the navbar stays transparent
-// over it, as it does over the resting hero.
-export const cookieDropPinned = ref(false);
 
 const pct = (n) => `${+(n * 100).toFixed(2)}%`;
 

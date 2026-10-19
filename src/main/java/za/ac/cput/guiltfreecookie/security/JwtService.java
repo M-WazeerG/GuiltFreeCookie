@@ -1,17 +1,23 @@
 package za.ac.cput.guiltfreecookie.security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import za.ac.cput.guiltfreecookie.domain.Admin;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.Optional;
 
 @Component
 public class JwtService {
+
+    // The admin's token version when the token was issued (see Admin.tokenVersion).
+    public static final String VERSION_CLAIM = "ver";
 
     private final SecretKey key;
     private final long expirationMillis;
@@ -19,40 +25,39 @@ public class JwtService {
     public JwtService(
             @Value("${app.jwt.secret}") String secret,
             @Value("${app.jwt.expiration-minutes}") long expirationMinutes) {
-        this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret));
+        if (secret == null || secret.isBlank()) {
+            throw new IllegalStateException(
+                    "JWT_SECRET is not set. Generate one with: openssl rand -base64 32");
+        }
+        // Rejects keys shorter than 256 bits.
+        this.key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secret.trim()));
         this.expirationMillis = expirationMinutes * 60_000;
     }
 
-    public String generateToken(String adminId, String email) {
+    public String generateToken(Admin admin) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + expirationMillis);
 
         return Jwts.builder()
-                .subject(adminId)
-                .claim("email", email)
+                .subject(admin.getAdminId())
+                .claim("email", admin.getEmail())
+                .claim(VERSION_CLAIM, admin.getTokenVersion())
                 .issuedAt(now)
                 .expiration(expiry)
                 .signWith(key)
                 .compact();
     }
 
-    public String extractAdminId(String token) {
-        return parseClaims(token).getSubject();
-    }
-
-    public boolean isTokenValid(String token) {
+    /** The token's claims if its signature checks out and it hasn't expired. */
+    public Optional<Claims> parse(String token) {
         try {
-            return parseClaims(token).getExpiration().after(new Date());
-        } catch (Exception e) {
-            return false;
+            return Optional.of(Jwts.parser()
+                    .verifyWith(key)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload());
+        } catch (JwtException | IllegalArgumentException e) {
+            return Optional.empty();
         }
-    }
-
-    private Claims parseClaims(String token) {
-        return Jwts.parser()
-                .verifyWith(key)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
     }
 }

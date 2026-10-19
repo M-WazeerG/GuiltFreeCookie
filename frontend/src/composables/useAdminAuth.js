@@ -62,6 +62,14 @@ function updateAdmin(adminRecord) {
   persist(localStorage.getItem(STORAGE_KEY) !== null);
 }
 
+// Swaps in a fresh token (after a password change) without changing where
+// the session is stored.
+function updateSession(adminRecord, authToken) {
+  admin.value = adminRecord;
+  token = authToken;
+  persist(localStorage.getItem(STORAGE_KEY) !== null);
+}
+
 // Plain functions (not computed/refs) so the router guard and the axios
 // interceptors can read them outside component context.
 export function isAdminLoggedIn() {
@@ -79,5 +87,6 @@ export function useAdminAuth() {
     login,
     logout,
     updateAdmin,
+    updateSession,
   };
 }

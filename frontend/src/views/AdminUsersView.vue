@@ -6,6 +6,7 @@ import AdminPageHeader from "../components/admin/AdminPageHeader.vue";
 import adminApi from "../api/adminApi";
 import { useToast } from "../composables/useToast";
 import { useAdminAuth } from "../composables/useAdminAuth";
+import { logError } from "../utils/logError";
 import AdminForm from "../components/admin/AdminForm.vue";
 import AdminList from "../components/admin/AdminList.vue";
 import AdminDeleteModal from "../components/admin/AdminDeleteModal.vue";
@@ -45,7 +46,7 @@ const loadAdmins = async () => {
   try {
     admins.value = await adminApi.getAll();
   } catch (error) {
-    console.error("Failed to load admins:", error);
+    logError("Failed to load admins:", error);
     loadError.value = true;
   } finally {
     loading.value = false;
@@ -54,6 +55,12 @@ const loadAdmins = async () => {
 
 const saveAdmin = async (admin) => {
   const isEditing = !!admin.adminId;
+  // Caught here when the list already shows it; the server checks too.
+  const emailTaken = admins.value.some((a) => a.email?.toLowerCase() === admin.email && a.adminId !== admin.adminId);
+  if (emailTaken) {
+    showToast("An admin with that email already exists.", "error");
+    return;
+  }
   try {
     if (isEditing) {
       await adminApi.update(admin);
@@ -64,9 +71,13 @@ const saveAdmin = async (admin) => {
     await loadAdmins();
     showToast(isEditing ? "Admin updated." : "Admin added.");
   } catch (error) {
-    console.error("Failed to save admin:", error);
+    logError("Failed to save admin:", error);
     showToast(
-      isEditing ? "Failed to update admin." : "Failed to add admin.",
+      error.response?.status === 409
+        ? "An admin with that email already exists."
+        : isEditing
+          ? "Failed to update admin."
+          : "Failed to add admin.",
       "error",
     );
   }
@@ -86,7 +97,7 @@ const deleteAdmin = async () => {
     await loadAdmins();
     showToast("Admin deleted.");
   } catch (error) {
-    console.error("Failed to delete admin:", error);
+    logError("Failed to delete admin:", error);
     showToast("Failed to delete admin.", "error");
   }
 };
@@ -112,7 +123,7 @@ const setAdminActive = async (admin, active) => {
     await loadAdmins();
     showToast(active ? "Admin activated." : "Admin deactivated.");
   } catch (error) {
-    console.error("Failed to update admin status:", error);
+    logError("Failed to update admin status:", error);
     showToast("Failed to update admin status.", "error");
   }
 };

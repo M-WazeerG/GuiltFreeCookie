@@ -59,6 +59,7 @@ pnpm-debug.log*
 # Vue / Vite
 # ==========================
 dist/
+dist-ssr/
 .vite/
 .cache/
 

@@ -12,19 +12,27 @@ import { nextTick, onBeforeUnmount, onMounted, ref } from "vue";
 import { ArrowRightIcon } from "@heroicons/vue/20/solid";
 import BaseButton from "../ui/BaseButton.vue";
 import CookieLineup from "./CookieLineup.vue";
-import { createCookieDrop } from "../../composables/useCookieDropScroll";
 import { COOKIE_DROP_VIDEO as CLIP, HERO_ARTWORK as ART } from "../../constants/cookieDrop";
 
 // lg, where the split turns vertical. No mobile framing of the clip exists.
-const cinematicQuery = window.matchMedia("(min-width: 1024px) and (prefers-reduced-motion: no-preference)");
-const cinematic = ref(cinematicQuery.matches);
+const CINEMATIC_QUERY = "(min-width: 1024px) and (prefers-reduced-motion: no-preference)";
+
+// Starts false everywhere, including the prerendered HTML, and switches on
+// once mounted: the server can't know the visitor's screen.
+const cinematic = ref(false);
 const videoReady = ref(false);
 const videoFailed = ref(false);
 const stage = ref(null);
+let cinematicQuery = null;
 let drop = null;
+let unmounted = false;
 
-function startDrop() {
-  if (cinematic.value && stage.value && !drop) drop = createCookieDrop(stage.value);
+// GSAP and the timeline are only downloaded where the sequence plays.
+async function startDrop() {
+  if (!cinematic.value || !stage.value || drop) return;
+  const { createCookieDrop } = await import("../../composables/useCookieDropScroll");
+  if (unmounted || !cinematic.value || drop) return;
+  drop = createCookieDrop(stage.value);
 }
 function stopDrop() {
   drop?.destroy();
@@ -32,20 +40,23 @@ function stopDrop() {
 }
 
 // Unpin before Vue re-renders: the pin wraps the stage in a spacer element.
-async function onQueryChange(event) {
+async function setCinematic(matches) {
   stopDrop();
   videoReady.value = false;
-  cinematic.value = event.matches;
+  cinematic.value = matches;
   await nextTick();
   startDrop();
 }
+const onQueryChange = (event) => setCinematic(event.matches);
 
 onMounted(() => {
+  cinematicQuery = window.matchMedia(CINEMATIC_QUERY);
   cinematicQuery.addEventListener("change", onQueryChange);
-  startDrop();
+  if (cinematicQuery.matches) setCinematic(true);
 });
 onBeforeUnmount(() => {
-  cinematicQuery.removeEventListener("change", onQueryChange);
+  unmounted = true;
+  cinematicQuery?.removeEventListener("change", onQueryChange);
   stopDrop();
 });
 </script>

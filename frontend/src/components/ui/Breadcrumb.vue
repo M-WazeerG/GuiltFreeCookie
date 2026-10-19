@@ -1,46 +1,32 @@
 <script setup>
 /**
- * Breadcrumb — accessible trail with router-link support.
+ * Breadcrumb — accessible trail. Items come from seo/breadcrumbs.js, which
+ * also feeds the BreadcrumbList structured data, so both say the same thing.
+ * The last item is the current page.
  *
- * Usage:
- *   <Breadcrumb :items="[{label:'Home', to:'/'}, {label:'Menu', to:'/menu'}, {label:'Caramel'}]" />
+ *   <Breadcrumb :items="breadcrumbsFor(route)" />
  */
-import { ChevronRightIcon, HomeIcon } from '@heroicons/vue/20/solid'
-import { RouterLink } from 'vue-router'
+import { ChevronRightIcon } from "@heroicons/vue/20/solid";
+import { RouterLink } from "vue-router";
 
 defineProps({
-  items: { type: Array, default: () => [] }, // [{label, to?}]
-  showHome: { type: Boolean, default: true },
-})
+  items: { type: Array, default: () => [] }, // [{ label, to }]
+});
 </script>
 
 <template>
-  <nav aria-label="Breadcrumb" class="w-full">
-    <ol class="flex items-center flex-wrap gap-1 text-sm">
-      <li v-if="showHome" class="flex items-center">
+  <nav v-if="items.length" aria-label="Breadcrumb">
+    <ol class="flex flex-wrap items-center gap-1 text-sm font-medium text-chocolate/80">
+      <li v-for="(item, i) in items" :key="item.path" class="flex items-center gap-1 min-w-0">
         <RouterLink
-          to="/"
-          class="text-chocolate/60 hover:text-primary transition-colors inline-flex items-center"
-        >
-          <HomeIcon class="h-4 w-4" />
-        </RouterLink>
-        <ChevronRightIcon class="h-4 w-4 text-chocolate/30 mx-1" />
-      </li>
-      <li v-for="(item, i) in items" :key="i" class="flex items-center">
-        <RouterLink
-          v-if="item.to && i < items.length - 1"
-          :to="item.to"
-          class="text-chocolate/60 hover:text-primary transition-colors"
-        >
-          {{ item.label }}
-        </RouterLink>
-        <span v-else class="text-chocolate font-medium" aria-current="page">
-          {{ item.label }}
-        </span>
-        <ChevronRightIcon
           v-if="i < items.length - 1"
-          class="h-4 w-4 text-chocolate/30 mx-1"
-        />
+          :to="item.to"
+          class="inline-flex items-center min-h-11 hover:text-chocolate hover:underline underline-offset-4"
+        >
+          {{ item.label }}
+        </RouterLink>
+        <span v-else class="text-chocolate truncate max-w-[25.6rem]" aria-current="page">{{ item.label }}</span>
+        <ChevronRightIcon v-if="i < items.length - 1" class="h-4 w-4 shrink-0" aria-hidden="true" />
       </li>
     </ol>
   </nav>

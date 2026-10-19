@@ -5,6 +5,7 @@ import BaseModal from "../ui/BaseModal.vue";
 import BaseButton from "../ui/BaseButton.vue";
 import adminApi from "../../api/adminApi";
 import { useToast } from "../../composables/useToast";
+import { logError } from "../../utils/logError";
 
 const props = defineProps({
   open: {
@@ -40,7 +41,7 @@ const confirmReset = async () => {
     tempPassword.value = result.temporaryPassword;
     emit("reset", result.admin);
   } catch (error) {
-    console.error("Failed to reset password:", error);
+    logError("Failed to reset password:", error);
     showToast("Failed to reset password.", "error");
     emit("close");
   } finally {

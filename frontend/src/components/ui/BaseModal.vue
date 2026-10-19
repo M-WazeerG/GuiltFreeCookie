@@ -7,7 +7,7 @@
  *     ...content...
  *   </BaseModal>
  */
-import { watch, onUnmounted } from 'vue'
+import { watch, onUnmounted, useId } from 'vue'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
 
 const props = defineProps({
@@ -18,7 +18,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close'])
-const titleId = `modal-${Math.random().toString(36).slice(2, 8)}`
+const titleId = `modal-${useId()}`
 
 const sizeClass = {
   sm: 'max-w-md',
@@ -47,7 +47,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <Teleport to="body">
+  <Teleport to="#teleports">
     <Transition name="overlay">
       <div
         v-if="open"

@@ -3,6 +3,7 @@ package za.ac.cput.guiltfreecookie.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
@@ -56,14 +58,6 @@ class CookieControllerTest {
     }
 
     @Test
-    void testTest() {
-        ResponseEntity<String> result = cookieController.test();
-
-        assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("Cookie API is working!", result.getBody());
-    }
-
-    @Test
     void testGetAllDelegatesToActiveOnlyList() {
         when(cookieService.getAllActive()).thenReturn(List.of(existingCookie));
 
@@ -92,19 +86,71 @@ class CookieControllerTest {
         when(imageStorageService.store(image)).thenReturn("cookies/new.jpg");
         when(cookieService.create(any(Cookie.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        ResponseEntity<Cookie> result = cookieController.create(existingCookie, image);
+        ResponseEntity<?> result = cookieController.create(existingCookie, image);
 
         assertEquals(HttpStatus.CREATED, result.getStatusCode());
         assertNotNull(result.getBody());
-        assertEquals("cookies/new.jpg", result.getBody().getImage());
+        assertEquals("cookies/new.jpg", ((Cookie) result.getBody()).getImage());
         verify(cookieService).create(any(Cookie.class));
+    }
+
+    @Test
+    void testCreateLetsTheDatabaseAssignTheId() {
+        when(imageStorageService.store(image)).thenReturn("cookies/new.jpg");
+        ArgumentCaptor<Cookie> saved = ArgumentCaptor.forClass(Cookie.class);
+        when(cookieService.create(saved.capture())).thenAnswer(invocation -> invocation.getArgument(0));
+
+        cookieController.create(existingCookie, image);
+
+        assertNull(saved.getValue().getCookieId(), "a client-supplied id could overwrite another cookie");
+    }
+
+    @Test
+    void testCreateTrimsTextFields() {
+        Cookie padded = new Cookie.Builder().copy(existingCookie).setDescription("  Coconut Cookie \u0007").build();
+        when(imageStorageService.store(image)).thenReturn("cookies/new.jpg");
+        when(cookieService.create(any(Cookie.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        ResponseEntity<?> result = cookieController.create(padded, image);
+
+        assertEquals("Coconut Cookie", ((Cookie) result.getBody()).getDescription());
+    }
+
+    @Test
+    void testCreateWithoutCategoryReturnsBadRequest() {
+        Cookie invalid = new Cookie.Builder().copy(existingCookie).setCategory(null).build();
+
+        ResponseEntity<?> result = cookieController.create(invalid, image);
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        verify(cookieService, never()).create(any(Cookie.class));
+    }
+
+    @Test
+    void testCreateWithOverlongDescriptionReturnsBadRequest() {
+        Cookie invalid = new Cookie.Builder().copy(existingCookie).setDescription("x".repeat(256)).build();
+
+        ResponseEntity<?> result = cookieController.create(invalid, image);
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        verify(cookieService, never()).create(any(Cookie.class));
+    }
+
+    @Test
+    void testCreateWithAbsurdPriceReturnsBadRequest() {
+        Cookie invalid = new Cookie.Builder().copy(existingCookie).setPrice(1_000_000.0).build();
+
+        ResponseEntity<?> result = cookieController.create(invalid, image);
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+        verify(cookieService, never()).create(any(Cookie.class));
     }
 
     @Test
     void testCreateWithMissingDescriptionReturnsBadRequestAndNeverPersists() {
         Cookie invalid = new Cookie.Builder().copy(existingCookie).setDescription("").build();
 
-        ResponseEntity<Cookie> result = cookieController.create(invalid, image);
+        ResponseEntity<?> result = cookieController.create(invalid, image);
 
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         verify(imageStorageService, never()).store(any());
@@ -115,7 +161,7 @@ class CookieControllerTest {
     void testCreateWithNonPositivePriceReturnsBadRequestAndNeverPersists() {
         Cookie invalid = new Cookie.Builder().copy(existingCookie).setPrice(0.0).build();
 
-        ResponseEntity<Cookie> result = cookieController.create(invalid, image);
+        ResponseEntity<?> result = cookieController.create(invalid, image);
 
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         verify(imageStorageService, never()).store(any());
@@ -126,7 +172,7 @@ class CookieControllerTest {
     void testCreateWithInvalidImageReturnsBadRequestAndNeverPersists() {
         when(imageStorageService.store(image)).thenThrow(new IllegalArgumentException("Uploaded file must be an image"));
 
-        ResponseEntity<Cookie> result = cookieController.create(existingCookie, image);
+        ResponseEntity<?> result = cookieController.create(existingCookie, image);
 
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         verify(cookieService, never()).create(any(Cookie.class));
@@ -143,6 +189,16 @@ class CookieControllerTest {
     }
 
     @Test
+    void testReadArchivedCookieIsNotFound() {
+        Cookie archived = new Cookie.Builder().copy(existingCookie).setArchived(true).build();
+        when(cookieService.read("CK099")).thenReturn(archived);
+
+        ResponseEntity<Cookie> result = cookieController.read("CK099");
+
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
+    }
+
+    @Test
     void testReadNotFound() {
         when(cookieService.read("missing")).thenReturn(null);
 
@@ -155,7 +211,7 @@ class CookieControllerTest {
     void testUpdateWhenCookieMissingReturnsNotFoundAndSkipsImageWork() {
         when(cookieService.read("missing")).thenReturn(null);
 
-        ResponseEntity<Cookie> result = cookieController.update("missing", existingCookie, null);
+        ResponseEntity<?> result = cookieController.update("missing", existingCookie, null);
 
         assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
         verify(imageStorageService, never()).store(any());
@@ -168,10 +224,10 @@ class CookieControllerTest {
         when(cookieService.read("CK099")).thenReturn(existingCookie);
         when(cookieService.update(any(Cookie.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        ResponseEntity<Cookie> result = cookieController.update("CK099", existingCookie, null);
+        ResponseEntity<?> result = cookieController.update("CK099", existingCookie, null);
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("cookies/existing.jpg", result.getBody().getImage());
+        assertEquals("cookies/existing.jpg", ((Cookie) result.getBody()).getImage());
         verify(imageStorageService, never()).store(any());
         verify(imageStorageService, never()).delete(any());
     }
@@ -181,7 +237,7 @@ class CookieControllerTest {
         when(cookieService.read("CK099")).thenReturn(existingCookie);
         Cookie invalid = new Cookie.Builder().copy(existingCookie).setAllergies("").build();
 
-        ResponseEntity<Cookie> result = cookieController.update("CK099", invalid, null);
+        ResponseEntity<?> result = cookieController.update("CK099", invalid, null);
 
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         verify(imageStorageService, never()).store(any());
@@ -195,10 +251,10 @@ class CookieControllerTest {
         when(imageStorageService.store(image)).thenReturn("cookies/replacement.jpg");
         when(cookieService.update(any(Cookie.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        ResponseEntity<Cookie> result = cookieController.update("CK099", existingCookie, image);
+        ResponseEntity<?> result = cookieController.update("CK099", existingCookie, image);
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
-        assertEquals("cookies/replacement.jpg", result.getBody().getImage());
+        assertEquals("cookies/replacement.jpg", ((Cookie) result.getBody()).getImage());
         verify(imageStorageService).delete("cookies/existing.jpg");
     }
 
@@ -207,7 +263,7 @@ class CookieControllerTest {
         when(cookieService.read("CK099")).thenReturn(existingCookie);
         when(imageStorageService.store(image)).thenThrow(new IllegalArgumentException("Uploaded file must be an image"));
 
-        ResponseEntity<Cookie> result = cookieController.update("CK099", existingCookie, image);
+        ResponseEntity<?> result = cookieController.update("CK099", existingCookie, image);
 
         assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
         verify(imageStorageService, never()).delete(any());
@@ -219,7 +275,7 @@ class CookieControllerTest {
         when(cookieService.read("CK099")).thenReturn(existingCookie);
         when(cookieService.update(any(Cookie.class))).thenReturn(null);
 
-        ResponseEntity<Cookie> result = cookieController.update("CK099", existingCookie, null);
+        ResponseEntity<?> result = cookieController.update("CK099", existingCookie, null);
 
         assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
     }
